@@ -1,4 +1,3 @@
-import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaFacebookF, FaInstagram } from 'react-icons/fa';
@@ -24,7 +23,7 @@ export default function Header() {
       {/* LOGO */}
       <div className={styles.logoContainer}>
         <Link href="/">
-          <Image src="/logo.png" alt="Logo" width={60} height={60} />
+          <Image src="/logo.png" alt="Logo" width={60} height={60} unoptimized/>
         </Link>
       </div>
 
