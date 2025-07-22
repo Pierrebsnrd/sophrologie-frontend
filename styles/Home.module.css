@@ -46,6 +46,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -249,9 +250,12 @@
 
 /* ANIMATIONS */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -268,21 +272,25 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .hero {
     height: 60vh;
     min-height: 400px;
   }
-  
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+  }
+
   .heroTitle {
     padding: 0 1rem;
   }
-  
+
   .section,
   .sectionAlt {
     padding: 2rem 1rem;
   }
-  
+
   .button {
     width: 100%;
     max-width: 300px;
@@ -294,7 +302,7 @@
   .card {
     padding: 1.5rem 1rem;
   }
-  
+
   .sectionInner p {
     font-size: 1rem;
   }
