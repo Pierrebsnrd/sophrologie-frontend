@@ -1,54 +1,84 @@
+import Link from "next/link";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Image from "next/image";
+import styles from "../styles/QuiSuisJe.module.css";
 
 export default function QuiSuisJe() {
-    return (
-        <>
-            <Header/>
-    <div style={styles.container}>
-                <div style={styles.content}>
-                    <h1 style={styles.title}>Qui suis-je ?</h1>
-                    <p style={styles.text}>
-                        Je m'appelle [Votre Nom], sophrologue certifiée, passionnée par l'accompagnement des personnes vers un mieux-être global.
-                        Après un parcours personnel et professionnel riche, j’ai choisi la sophrologie comme voie pour aider chacun à se reconnecter à lui-même.
-                    </p>
-                    <p style={styles.text}>
-                        Mon approche est bienveillante, à l’écoute de vos besoins, et adaptée à chaque étape de votre vie : gestion du stress, confiance en soi, préparation mentale, troubles du sommeil, accompagnement à la parentalité, etc.
-                    </p>
-                    <p style={styles.text}>
-                        Je vous accueille dans un cadre chaleureux et confidentiel, où chaque séance est un moment privilégié pour vous.
-                    </p>
-                </div>
-            </div>
-        </>
-    );
-}
+  return (
+    <>
+      <Header />
+      <div className={styles.pageContainer}>
+        
+        {/* HERO SECTION */}
+        <section className={styles.hero}>
+          <Image
+            src="/musique.jpg"
+            alt="Note de musique symbolisant l'harmonie et l'équilibre"
+            layout="fill"
+            objectFit="cover"
+            className={styles.heroImage}
+            priority
+          />
+          <div className={styles.heroOverlay}>
+            <h1 className={styles.heroTitle}>Qui suis-je ?</h1>
+          </div>
+        </section>
 
-const styles = {
-    container: {
-        minHeight: '100vh',
-        backgroundColor: '#f3f4f6',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '40px 20px',
-    },
-    content: {
-        maxWidth: '800px',
-        backgroundColor: '#fff',
-        padding: '40px',
-        borderRadius: '20px',
-        boxShadow: '0 15px 30px rgba(0,0,0,0.1)',
-    },
-    title: {
-        fontSize: '2.5rem',
-        fontWeight: '700',
-        color: '#2c3e50',
-        marginBottom: '30px',
-    },
-    text: {
-        fontSize: '1.2rem',
-        lineHeight: '1.7',
-        color: '#444',
-        marginBottom: '20px',
-    },
-};
+        {/* CONTENU PRINCIPAL */}
+        <div className={styles.content}>
+          
+          {/* SECTION PRÉSENTATION */}
+          <section className={styles.presentationSection}>
+            <div className={styles.imageContainer}>
+              <Image
+                src="/sophrologue.jpg"
+                alt="Stéphanie Habert, Sophrologue certifiée à Villepreux"
+                width={300}
+                height={300}
+                className={styles.image}
+              />
+            </div>
+            
+            <div className={styles.textContainer}>
+              <h2 className={styles.title}>Stéphanie Habert</h2>
+              <p className={styles.paragraph}>
+                Je m'appelle Stéphanie Habert, Sophrologue certifiée, je vous propose un accompagnement personnalisé basé sur l'écoute, la bienveillance et le respect de votre individualité. Mon objectif est de vous aider à retrouver un équilibre intérieur et à développer vos propres ressources pour faire face aux défis de la vie.
+              </p>
+              <p className={styles.paragraph}>
+                Dans mon cabinet à Villepreux ou en visioconférence, je crée un espace de sécurité et de confiance où chacun peut se reconnecter à ses sensations, ses émotions et ses ressources intérieures. Ma pratique s'adapte aux besoins spécifiques de chaque personne, que ce soit pour la gestion du stress, l'amélioration du sommeil, ou le renforcement de la confiance en soi.
+              </p>
+            </div>
+          </section>
+
+          {/* SECTION HISTOIRE */}
+          <section className={styles.historySection}>
+            <h2 className={styles.historyTitle}>Mon parcours unique</h2>
+            <p className={styles.paragraph}>
+              Chanteuse d'opéra de formation, j'ai découvert la sophrologie à un moment où j'en avais vraiment besoin. Confrontée aux défis de la scène et aux exigences de la performance artistique, j'ai trouvé dans cette discipline un véritable chemin vers l'équilibre et la sérénité.
+            </p>
+            <p className={styles.paragraph}>
+              Grâce à la sophrologie, j'ai retrouvé confiance en moi et j'ai enfin osé laisser ma voix s'exprimer pleinement sur scène. Cette transformation personnelle profonde m'a naturellement menée vers le désir d'accompagner à mon tour d'autres personnes dans leur propre cheminement.
+            </p>
+            <p className={styles.paragraph}>
+              Mon parcours unique d'artiste influence aujourd'hui mon approche thérapeutique. Je puise dans cette expérience de la sensibilité artistique et de la vulnérabilité créative pour créer un espace bienveillant, dans un cadre chaleureux, propice au retour à soi, à la détente et à la gestion harmonieuse des émotions.
+            </p>
+          </section>
+
+          {/* SECTION CTA */}
+          <section className={styles.ctaSection}>
+            <p className={styles.ctaParagraph}>
+              Prêt(e) à commencer votre propre voyage vers l'équilibre et le mieux-être ?
+            </p>
+            <Link href="/rdv">
+              <button className={styles.ctaButton}>
+                📅 Prendre rendez-vous
+              </button>
+            </Link>
+          </section>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
+}

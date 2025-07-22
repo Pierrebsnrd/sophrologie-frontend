@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import api from '../utils/api';
+import styles from '../styles/RdvForm.module.css'; // ✅ Import correct du CSS module
 
-export default function RdvForm() {
+export default function RdvForms() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,34 +39,33 @@ export default function RdvForm() {
     }
   };
 
-  // Calculer la date minimum (aujourd'hui)
   const today = new Date();
   const minDate = today.toISOString().slice(0, 16);
 
   return (
-    <div style={styles.container}>
-      <div style={styles.formContainer}>
-        <h1 style={styles.title}>Prendre rendez-vous</h1>
-        <p style={styles.subtitle}>
+    <div className={styles.container}>
+      <div className={styles.formContainer}>
+        <h1 className={styles.title}>Prendre rendez-vous</h1>
+        <p className={styles.subtitle}>
           Remplissez le formulaire ci-dessous pour demander un rendez-vous.
           Nous vous confirmerons rapidement la disponibilité.
         </p>
 
         {success && (
-          <div style={styles.successMessage}>
+          <div className={styles.successMessage}>
             ✅ Votre demande a été envoyée avec succès ! Vous recevrez un email de confirmation.
           </div>
         )}
 
         {error && (
-          <div style={styles.errorMessage}>
+          <div className={styles.errorMessage}>
             ❌ {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Nom complet *</label>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Nom complet *</label>
             <input
               type="text"
               name="name"
@@ -73,12 +73,12 @@ export default function RdvForm() {
               onChange={handleChange}
               placeholder="Votre nom complet"
               required
-              style={styles.input}
+              className={styles.input}
             />
           </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Email *</label>
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Email *</label>
             <input
               type="email"
               name="email"
@@ -86,24 +86,24 @@ export default function RdvForm() {
               onChange={handleChange}
               placeholder="votre.email@exemple.com"
               required
-              style={styles.input}
+              className={styles.input}
             />
           </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Téléphone</label>
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Téléphone</label>
             <input
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
               placeholder="06 12 34 56 78"
-              style={styles.input}
+              className={styles.input}
             />
           </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Date et heure souhaitées *</label>
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Date et heure souhaitées *</label>
             <input
               type="datetime-local"
               name="date"
@@ -111,29 +111,30 @@ export default function RdvForm() {
               onChange={handleChange}
               min={minDate}
               required
-              style={styles.input}
+              className={styles.input}
             />
           </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Message (optionnel)</label>
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Message (optionnel)</label>
             <textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
               placeholder="Précisez vos besoins ou questions..."
               rows={4}
-              style={{...styles.input, resize: 'vertical'}}
+              className={styles.input}
+              style={{ resize: 'vertical' }}
             />
           </div>
 
           <button 
             type="submit" 
             disabled={loading} 
+            className={styles.submitButton}
             style={{
-              ...styles.submitButton,
               opacity: loading ? 0.7 : 1,
-              cursor: loading ? 'not-allowed' : 'pointer'
+              cursor: loading ? 'not-allowed' : 'pointer',
             }}
           >
             {loading ? 'Envoi en cours...' : 'Envoyer la demande'}
@@ -143,83 +144,3 @@ export default function RdvForm() {
     </div>
   );
 }
-
-const styles = {
-  container: {
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    padding: '40px 20px',
-  },
-  formContainer: {
-    maxWidth: '600px',
-    margin: '0 auto',
-    background: '#fff',
-    borderRadius: '20px',
-    padding: '40px',
-    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    fontSize: '2.5rem',
-    fontWeight: 'bold',
-    marginBottom: '10px',
-    color: '#2c3e50',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: '1.1rem',
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: '40px',
-    lineHeight: '1.6',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '25px',
-  },
-  inputGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  label: {
-    fontSize: '1rem',
-    fontWeight: '600',
-    marginBottom: '8px',
-    color: '#2c3e50',
-  },
-  input: {
-    padding: '12px 16px',
-    border: '2px solid #e1e8ed',
-    borderRadius: '8px',
-    fontSize: '1rem',
-    transition: 'border-color 0.3s ease',
-    outline: 'none',
-  },
-  submitButton: {
-    padding: '16px 32px',
-    backgroundColor: '#27ae60',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '1.1rem',
-    fontWeight: '600',
-    transition: 'background-color 0.3s ease',
-    marginTop: '20px',
-  },
-  successMessage: {
-    padding: '16px',
-    backgroundColor: '#d4edda',
-    color: '#155724',
-    border: '1px solid #c3e6cb',
-    borderRadius: '8px',
-    marginBottom: '25px',
-  },
-  errorMessage: {
-    padding: '16px',
-    backgroundColor: '#f8d7da',
-    color: '#721c24',
-    border: '1px solid #f5c6cb',
-    borderRadius: '8px',
-    marginBottom: '25px',
-  },
-};

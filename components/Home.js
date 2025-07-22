@@ -1,154 +1,89 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from './Header';
+import Footer from './Footer';
+import styles from '../styles/Home.module.css';
 
 export default function Home() {
   return (
-    <div style={styles.container}>
-      {/* HEADER + NAVIGATION */}
-      <header style={styles.header}>
-       <Header />
-      </header>
+    <>
+      <Header />
 
       {/* HERO */}
-      <div style={styles.hero}>
-        <h1 style={styles.title}>Cabinet de Sophrologie</h1>
-        <p style={styles.subtitle}>
-          Retrouvez votre équilibre et votre bien-être grâce à la sophrologie.
-          Prenez rendez-vous facilement en ligne.
-        </p>
-
-        {/* DEFINITION */}
-        <section style={styles.definition}>
-          <h2 style={styles.defTitle}>Ma définition de la Sophrologie :</h2>
-          <p>
-            La sophrologie est fondée dans les années 1960 par le Docteur Alfonso Caycedo, médecin psychiatre.
-            Cette discipline est une approche centrée sur la personne qui vise à harmoniser le corps et l'esprit, 
-            en mobilisant ses propres ressources pour développer un mieux-être au quotidien.
-          </p>
-          <p>
-            Par des exercices de respiration, de relaxation dynamique et de visualisation libre et neutre, 
-            elle aide chacun à mieux se connaître, à renforcer ses ressources intérieures et à accueillir 
-            les défis de la vie avec sérénité.
-          </p>
-          <p>
-            Cette discipline vise à apporter à ses consultants une amélioration de la qualité de vie. 
-            Sa pratique nécessite un entrainement quotidien du corps et de l'esprit.
-            Elle favorise le bien-être global de la personne. Accessible à tous, la sophrologie est une voie 
-            vers l'épanouissement personnel et la pleine présence à soi-même.
-          </p>
-        </section>
-
-        {/* FEATURES */}
-        <div style={styles.features}>
-          <div style={styles.feature}>
-            <span style={styles.icon}>🧘‍♀️</span>
-            <h3>Relaxation</h3>
-            <p>Techniques de relaxation pour gérer le stress</p>
-          </div>
-          <div style={styles.feature}>
-            <span style={styles.icon}>💭</span>
-            <h3>Bien-être mental</h3>
-            <p>Accompagnement personnalisé pour votre épanouissement</p>
-          </div>
-          <div style={styles.feature}>
-            <span style={styles.icon}>⚖️</span>
-            <h3>Équilibre</h3>
-            <p>Retrouvez l'harmonie entre corps et esprit</p>
-          </div>
+      <section className={styles.hero}>
+        <Image
+          src="/banniere.jpg"
+          alt="Bannière"
+          layout="fill"
+          objectFit="cover"
+          className={styles.heroImage}
+          priority
+        />
+        <div className={styles.heroOverlay}>
+          <h1 className={styles.heroTitle}>Stéphanie Habert Sophrologue</h1>
         </div>
+      </section>
 
-        <Link href="/rdv">
-          <button style={styles.ctaButton}>📅 Prendre rendez-vous</button>
-        </Link>
-      </div>
-    </div>
+      {/* PRÉSENTATION */}
+      <section className={styles.section}>
+        <div className={styles.sectionInner}>
+          <h2>Un moment pour soi, à Villepreux</h2>
+          <p>
+            Bienvenue chez Stéphanie Habert Sophrologue à Villepreux. Offrez-vous un espace de bienveillance, d'écoute inconditionnelle et de confidentialité pour un retour à soi et une prise de conscience.
+          </p>
+        </div>
+      </section>
+
+      {/* SOPHROLOGIE */}
+      <section className={styles.sectionAlt}>
+        <div className={styles.sectionInner}>
+          <h2>Qu'est-ce que la sophrologie ?</h2>
+          <p>La sophrologie est une méthode psychocorporelle qui vise à renforcer l'équilibre entre les émotions, les pensées et le corps.</p>
+          <p>Elle se pratique en séances individuelles ou collectives, et favorise la détente, la conscience de soi et la gestion du stress.</p>
+          <p>Elle vous aide à retrouver l’harmonie entre corps et esprit et à retrouver confiance.</p>
+        </div>
+      </section>
+
+      {/* BIENFAITS */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Les bienfaits de la sophrologie</h2>
+        <div className={styles.grid}>
+          <div className={styles.card}><h3>Gestion du stress</h3><p>Apprenez à vous détendre</p></div>
+          <div className={styles.card}><h3>Sommeil réparateur</h3><p>Améliorez votre sommeil</p></div>
+          <div className={styles.card}><h3>Confiance en soi</h3><p>Renforcez votre estime</p></div>
+        </div>
+      </section>
+
+      {/* MON APPROCHE */}
+      <section className={styles.sectionAlt}>
+        <div className={styles.sectionInner}>
+          <h2>Mon approche</h2>
+          <p>Au cabinet ou en visio, je vous propose des séances sur-mesure basées sur l’écoute, la bienveillance et la confidentialité.</p>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className={styles.section}>
+        <h2>Envie de découvrir la sophrologie ?</h2>
+        <p>Prenez rendez-vous dès maintenant pour une première séance.</p>
+        <Link href="/rdv"><button className={styles.button}>📅 Prendre rendez-vous</button></Link>
+
+        <h2>Besoin d'un renseignement ?</h2>
+        <Link href="/tarifs"><button className={styles.button}>Mes tarifs et prestations</button></Link>
+        <Link href="/contact"><button className={styles.button}>Me contacter</button></Link>
+      </section>
+
+      {/* EN SAVOIR PLUS */}
+      <section className={styles.sectionAlt}>
+        <div className={styles.sectionInner}>
+          <h2>Envie d'en savoir plus</h2>
+          <p>Je vous accompagne pour retrouver un équilibre intérieur et développer vos ressources personnelles.</p>
+          <Link href="/qui-suis-je"><button className={styles.button}>🔍 Découvrir</button></Link>
+        </div>
+      </section>
+
+      <Footer />
+    </>
   );
 }
-
-const styles = {
-  container: {
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    padding: '0 20px',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '20px 0',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
-  logoContainer: {
-    width: '120px',
-  },
-  nav: {
-    display: 'flex',
-    gap: '20px',
-    fontWeight: 600,
-    fontSize: '0.95rem',
-  },
-  hero: {
-    textAlign: 'center',
-    maxWidth: '900px',
-    background: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: '20px',
-    padding: '60px 40px',
-    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-    margin: '0 auto',
-  },
-  title: {
-    fontSize: '3.5rem',
-    fontWeight: '700',
-    marginBottom: '20px',
-    color: '#2c3e50',
-  },
-  subtitle: {
-    fontSize: '1.4rem',
-    marginBottom: '40px',
-    color: '#555',
-    lineHeight: '1.6',
-  },
-  definition: {
-    textAlign: 'left',
-    fontSize: '1.1rem',
-    lineHeight: '1.7',
-    color: '#333',
-    marginBottom: '40px',
-  },
-  defTitle: {
-    fontSize: '1.8rem',
-    fontWeight: 'bold',
-    marginBottom: '20px',
-    color: '#2c3e50',
-  },
-  features: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '30px',
-    marginBottom: '50px',
-  },
-  feature: {
-    padding: '30px 20px',
-    background: '#f8f9fa',
-    borderRadius: '15px',
-  },
-  icon: {
-    fontSize: '3rem',
-    display: 'block',
-    marginBottom: '15px',
-  },
-  ctaButton: {
-    padding: '18px 36px',
-    fontSize: '1.2rem',
-    backgroundColor: '#27ae60',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '50px',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(39, 174, 96, 0.3)',
-    fontWeight: '600',
-  },
-};

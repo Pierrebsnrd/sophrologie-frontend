@@ -1,37 +1,58 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { FaFacebookF, FaInstagram } from 'react-icons/fa';
+import styles from '../styles/Header.module.css';
+import { useRouter } from 'next/router';
+
+const navLinks = [
+  { href: '/', label: 'Accueil' },
+  { href: '/qui-suis-je', label: 'Qui suis-je ?' },
+  { href: '/tarifs', label: 'Tarifs' },
+  { href: '/rdv', label: 'Prendre rendez-vous' },
+  { href: '/temoignages', label: 'Témoignages' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/charte', label: 'Charte éthique' },
+];
+
 
 export default function Header() {
+  const router = useRouter();
+
   return (
-    <nav className="w-full bg-white shadow-md py-4 px-6 flex items-center justify-between">
-      <div className="flex items-center space-x-4">
-        <Image src="logo.png" alt="Logo" width={50} height={50} />
-        <h1 className="text-xl font-semibold text-gray-800">Cabinet de Sophrologie</h1>
+    <header className={styles.headerContainer}>
+      {/* LOGO */}
+      <div className={styles.logoContainer}>
+        <Link href="/">
+          <Image src="/logo.png" alt="Logo" width={60} height={60} />
+        </Link>
       </div>
-      <ul className="flex space-x-6 text-gray-700 font-medium">
-        <li>
-          <Link href="/">Accueil</Link>
-        </li>
-        <li>
-          <Link href="/qui-suis-je">Qui suis-je ?</Link>
-        </li>
-        <li>
-          <Link href="/tarifs">Tarifs</Link>
-        </li>
-        <li>
-          <Link href="/rdv">Prendre rendez-vous</Link>
-        </li>
-        <li>
-          <Link href="/offres-entreprise">Offres entreprise</Link>
-        </li>
-        <li>
-          <Link href="/contact">Contact</Link>
-        </li>
-        <li>
-          <Link href="/faq">FAQ</Link>
-        </li>
-      </ul>
-    </nav>
+
+      {/* NAVIGATION */}
+      <nav className={styles.navbar}>
+        <ul className={styles.navList}>
+          {navLinks.map(({ href, label }) => (
+            <li key={href}>
+              <Link
+                href={href}
+                className={`${styles.navLink} ${router.pathname === href ? styles.active : ''}`}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* RESEAUX SOCIAUX */}
+      <div className={styles.socialIcons}>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <FaFacebookF />
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <FaInstagram />
+        </a>
+      </div>
+    </header>
   );
 }
