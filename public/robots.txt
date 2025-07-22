@@ -1,4 +1,9 @@
+# *
 User-agent: *
 Allow: /
 
-Sitemap: https://www.tonsite.com/sitemap.xml
+# Host
+Host: https://www.sophrologuevillepreux.fr/
+
+# Sitemaps
+Sitemap: https://www.sophrologuevillepreux.fr/sitemap.xml
