@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../utils/api';
 import styles from '../styles/RdvForm.module.css'; // ✅ Import correct du CSS module
+import Image from 'next/image';
 
 export default function RdvForms() {
   const [formData, setFormData] = useState({
@@ -43,7 +44,21 @@ export default function RdvForms() {
   const minDate = today.toISOString().slice(0, 16);
 
   return (
-    <div className={styles.container}>
+
+    <div className={styles.pageContainer}>
+      {/* HERO SECTION */}
+      <section className={styles.hero}>
+        <Image
+          src="/musique.jpg"
+          alt="Note de musique symbolisant l'harmonie et l'équilibre"
+          fill
+          priority
+          className={styles.heroImage}
+        />
+        <div className={styles.heroOverlay}>
+          <h1 className={styles.heroTitle}>Contact</h1>
+        </div>
+      </section>
       <div className={styles.formContainer}>
         <h1 className={styles.title}>Prendre rendez-vous</h1>
         <p className={styles.subtitle}>
@@ -128,9 +143,9 @@ export default function RdvForms() {
             />
           </div>
 
-          <button 
-            type="submit" 
-            disabled={loading} 
+          <button
+            type="submit"
+            disabled={loading}
             className={styles.submitButton}
             style={{
               opacity: loading ? 0.7 : 1,
