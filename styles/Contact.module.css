@@ -1,0 +1,225 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* HERO SECTION */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.heroImage {
+  object-fit: cover;
+  z-index: 1;
+}
+
+.heroOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroTitle {
+  color: #fff;
+  font-size: 3rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
+}
+
+/* CONTENU PRINCIPAL */
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background-color: #f9f9f9;
+}
+
+/* CARTE DE CONTACT */
+.contactSection {
+  width: 100%;
+  max-width: 700px;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contactSection h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.contactSection h2 {
+  margin-top: 2rem;
+  font-size: 1.25rem;
+  color: #555;
+}
+
+.contactSection p,
+.contactSection li {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: #444;
+}
+
+.contactSection a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.contactSection a:hover {
+  text-decoration: underline;
+}
+
+/* RESEAUX SOCIAUX */
+.socialIcons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.socialIcons a {
+  font-size: 1.5rem;
+  color: #333;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.socialIcons a:hover {
+  transform: scale(1.1);
+  color: #0070f3;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .contactSection {
+    padding: 1.5rem;
+  }
+}
+
+.contactFormMapSection {
+  margin-top: 3rem;
+  width: 100%;
+  max-width: 1000px;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem;
+  background-color: #f9f9f9;
+  gap: 3rem;
+}
+
+.flexContainer {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: stretch; /* POUR ÉGALISER LA HAUTEUR DES COLONNES */
+}
+
+.formContainer {
+   flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactForm label {
+  font-weight: 500;
+}
+
+.contactForm input,
+.contactForm textarea {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.contactForm button {
+  background-color: #0070f3;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.contactForm button:hover {
+  background-color: #005ac1;
+}
+
+.mapContainer {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* Pour suivre la hauteur totale du parent */
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* CARTE */
+.mapContainer iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+}
+
+/* LOCALISATION */
+.locationText {
+  padding: 1rem;
+  background-color: #f3f3f3;
+  font-size: 1rem;
+  text-align: center;
+  line-height: 1.5;
+  color: #333;
+  border-top: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .flexContainer {
+    flex-direction: column;
+  }
+
+  .mapContainer iframe {
+    height: 250px;
+  }
+}
