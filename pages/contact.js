@@ -12,8 +12,8 @@ export default function Contact() {
                 {/* HERO SECTION */}
                 <section className={styles.hero}>
                     <Image
-                        src="/musique.jpg"
-                        alt="Note de musique symbolisant l'harmonie et l'équilibre"
+                        src="/contact.jpg"
+                        alt="Contact"
                         fill
                         priority
                         className={styles.heroImage}

@@ -10,10 +10,9 @@ export default function Temoignages() {
             {/* HERO SECTION */}
             <section className={styles.hero}>
                 <Image
-                    src="/musique.jpg"
-                    alt="Note de musique symbolisant l'harmonie et l'équilibre"
-                    layout="fill"
-                    objectFit="cover"
+                    src="/temoignage.jpg"
+                    alt="Feedback"
+                    fill
                     className={styles.heroImage}
                     priority
                 />

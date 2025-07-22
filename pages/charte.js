@@ -11,8 +11,8 @@ export default function Charte() {
                 {/* HERO SECTION */}
                 <section className={styles.hero}>
                     <Image
-                        src="/musique.jpg"
-                        alt="Note de musique symbolisant l'harmonie et l'équilibre"
+                        src="/charte.jpg"
+                        alt="Charte"
                         fill
                         priority
                         className={styles.heroImage}

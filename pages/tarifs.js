@@ -12,10 +12,9 @@ export default function Tarifs() {
                 {/* HERO SECTION */}
                 <section className={styles.hero}>
                     <Image
-                        src="/musique.jpg"
-                        alt="Note de musique symbolisant l'harmonie et l'équilibre"
-                        layout="fill"
-                        objectFit="cover"
+                        src="/tarifs.jpg"
+                        alt="Paysage"
+                        fill
                         className={styles.heroImage}
                         priority
                     />

@@ -15,10 +15,9 @@ export default function QuiSuisJe() {
           <Image
             src="/musique.jpg"
             alt="Note de musique symbolisant l'harmonie et l'équilibre"
-            layout="fill"
-            objectFit="cover"
-            className={styles.heroImage}
+            fill
             priority
+            className={styles.heroImage}
           />
           <div className={styles.heroOverlay}>
             <h1 className={styles.heroTitle}>Qui suis-je ?</h1>

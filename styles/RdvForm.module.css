@@ -2,8 +2,8 @@
 /* HERO */
 .hero {
   position: relative;
-  height: 60vh;
-  min-height: 400px;
+  height: 40vh;
+  min-height: 200px;
   overflow: hidden;
 }
 
@@ -27,7 +27,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(0.5px);
 }
 
 .heroTitle {

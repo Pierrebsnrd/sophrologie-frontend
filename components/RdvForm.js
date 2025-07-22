@@ -49,14 +49,14 @@ export default function RdvForms() {
       {/* HERO SECTION */}
       <section className={styles.hero}>
         <Image
-          src="/musique.jpg"
-          alt="Note de musique symbolisant l'harmonie et l'équilibre"
+          src="/rdv.jpg"
+          alt="Bureau"
           fill
           priority
           className={styles.heroImage}
         />
         <div className={styles.heroOverlay}>
-          <h1 className={styles.heroTitle}>Contact</h1>
+          <h1 className={styles.heroTitle}>Prendre rendez-vous</h1>
         </div>
       </section>
       <div className={styles.formContainer}>
