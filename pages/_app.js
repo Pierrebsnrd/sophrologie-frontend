@@ -5,7 +5,7 @@ function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Cabinet de Sophrologie - Rendez-vous en ligne</title>
+        <title>Stéphanie Habert Sophrologue</title>
         <meta name="description" content="Prenez rendez-vous facilement avec notre cabinet de sophrologie" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
