@@ -279,6 +279,7 @@
   }
 
   .heroTitle {
+    font-size: clamp(2.2rem, 5vw, 4rem);
     padding: 0 1rem;
   }
 
