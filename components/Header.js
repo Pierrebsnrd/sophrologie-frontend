@@ -23,7 +23,7 @@ export default function Header() {
       {/* LOGO */}
       <div className={styles.logoContainer}>
         <Link href="/">
-          <Image src="/logo.png" alt="Logo" width={60} height={60} unoptimized/>
+          <Image src="/logo.png" alt="logo" width={60} height={60} />
         </Link>
       </div>
 
