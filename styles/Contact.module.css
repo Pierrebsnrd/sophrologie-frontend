@@ -31,10 +31,15 @@
 }
 
 .heroTitle {
-  color: #fff;
-  font-size: 3rem;
-  font-weight: bold;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
+ color: white;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  text-align: center;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  animation: fadeInUp 1.5s ease-out 0.5s forwards;
+  font-family: 'Georgia', serif;
 }
 
 /* CONTENU PRINCIPAL */
