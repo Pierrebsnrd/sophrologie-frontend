@@ -33,7 +33,7 @@ export default function AdminDashboard() {
     setUpdating(rdvId);
     try {
       await api.patch(`/admin/rdv/${rdvId}/status`, { status: newStatus });
-      setRdvs(prev => prev.map(rdv => 
+      setRdvs(prev => prev.map(rdv =>
         rdv._id === rdvId ? { ...rdv, status: newStatus } : rdv
       ));
     } catch (err) {
@@ -86,92 +86,98 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 style={styles.title}>Dashboard Admin</h1>
-        <button onClick={logout} style={styles.logoutButton}>
-          Déconnexion
-        </button>
-      </div>
-
-      {error && (
-        <div style={styles.errorMessage}>
-          ❌ {error}
+    <>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+        <title>Page administrateur</title>
+      </Head>
+      <div style={styles.container}>
+        <div style={styles.header}>
+          <h1 style={styles.title}>Dashboard Admin</h1>
+          <button onClick={logout} style={styles.logoutButton}>
+            Déconnexion
+          </button>
         </div>
-      )}
 
-      <div style={styles.stats}>
-        <div style={styles.statCard}>
-          <h3>{rdvs.filter(rdv => rdv.status === 'pending').length}</h3>
-          <p>En attente</p>
-        </div>
-        <div style={styles.statCard}>
-          <h3>{rdvs.filter(rdv => rdv.status === 'confirmed').length}</h3>
-          <p>Confirmés</p>
-        </div>
-        <div style={styles.statCard}>
-          <h3>{rdvs.filter(rdv => rdv.status === 'cancelled').length}</h3>
-          <p>Annulés</p>
-        </div>
-      </div>
-
-      <div style={styles.rdvList}>
-        <h2 style={styles.sectionTitle}>Rendez-vous ({rdvs.length})</h2>
-        
-        {rdvs.length === 0 ? (
-          <div style={styles.emptyState}>
-            <p>Aucun rendez-vous pour le moment</p>
-          </div>
-        ) : (
-          <div style={styles.rdvGrid}>
-            {rdvs.map((rdv) => (
-              <div key={rdv._id} style={styles.rdvCard}>
-                <div style={styles.rdvHeader}>
-                  <h3 style={styles.rdvName}>{rdv.name}</h3>
-                  <span 
-                    style={{
-                      ...styles.statusBadge,
-                      backgroundColor: getStatusColor(rdv.status)
-                    }}
-                  >
-                    {getStatusText(rdv.status)}
-                  </span>
-                </div>
-                
-                <div style={styles.rdvInfo}>
-                  <p><strong>Email:</strong> {rdv.email}</p>
-                  {rdv.phone && <p><strong>Téléphone:</strong> {rdv.phone}</p>}
-                  <p><strong>Date:</strong> {formatDate(rdv.date)}</p>
-                  {rdv.message && <p><strong>Message:</strong> {rdv.message}</p>}
-                  <p style={styles.createdAt}>
-                    Demandé le {formatDate(rdv.createdAt)}
-                  </p>
-                </div>
-
-                {rdv.status === 'pending' && (
-                  <div style={styles.actions}>
-                    <button
-                      onClick={() => updateRdvStatus(rdv._id, 'confirmed')}
-                      disabled={updating === rdv._id}
-                      style={{...styles.actionButton, ...styles.confirmButton}}
-                    >
-                      {updating === rdv._id ? '...' : '✅ Confirmer'}
-                    </button>
-                    <button
-                      onClick={() => updateRdvStatus(rdv._id, 'cancelled')}
-                      disabled={updating === rdv._id}
-                      style={{...styles.actionButton, ...styles.cancelButton}}
-                    >
-                      {updating === rdv._id ? '...' : '❌ Annuler'}
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
+        {error && (
+          <div style={styles.errorMessage}>
+            ❌ {error}
           </div>
         )}
+
+        <div style={styles.stats}>
+          <div style={styles.statCard}>
+            <h3>{rdvs.filter(rdv => rdv.status === 'pending').length}</h3>
+            <p>En attente</p>
+          </div>
+          <div style={styles.statCard}>
+            <h3>{rdvs.filter(rdv => rdv.status === 'confirmed').length}</h3>
+            <p>Confirmés</p>
+          </div>
+          <div style={styles.statCard}>
+            <h3>{rdvs.filter(rdv => rdv.status === 'cancelled').length}</h3>
+            <p>Annulés</p>
+          </div>
+        </div>
+
+        <div style={styles.rdvList}>
+          <h2 style={styles.sectionTitle}>Rendez-vous ({rdvs.length})</h2>
+
+          {rdvs.length === 0 ? (
+            <div style={styles.emptyState}>
+              <p>Aucun rendez-vous pour le moment</p>
+            </div>
+          ) : (
+            <div style={styles.rdvGrid}>
+              {rdvs.map((rdv) => (
+                <div key={rdv._id} style={styles.rdvCard}>
+                  <div style={styles.rdvHeader}>
+                    <h3 style={styles.rdvName}>{rdv.name}</h3>
+                    <span
+                      style={{
+                        ...styles.statusBadge,
+                        backgroundColor: getStatusColor(rdv.status)
+                      }}
+                    >
+                      {getStatusText(rdv.status)}
+                    </span>
+                  </div>
+
+                  <div style={styles.rdvInfo}>
+                    <p><strong>Email:</strong> {rdv.email}</p>
+                    {rdv.phone && <p><strong>Téléphone:</strong> {rdv.phone}</p>}
+                    <p><strong>Date:</strong> {formatDate(rdv.date)}</p>
+                    {rdv.message && <p><strong>Message:</strong> {rdv.message}</p>}
+                    <p style={styles.createdAt}>
+                      Demandé le {formatDate(rdv.createdAt)}
+                    </p>
+                  </div>
+
+                  {rdv.status === 'pending' && (
+                    <div style={styles.actions}>
+                      <button
+                        onClick={() => updateRdvStatus(rdv._id, 'confirmed')}
+                        disabled={updating === rdv._id}
+                        style={{ ...styles.actionButton, ...styles.confirmButton }}
+                      >
+                        {updating === rdv._id ? '...' : '✅ Confirmer'}
+                      </button>
+                      <button
+                        onClick={() => updateRdvStatus(rdv._id, 'cancelled')}
+                        disabled={updating === rdv._id}
+                        style={{ ...styles.actionButton, ...styles.cancelButton }}
+                      >
+                        {updating === rdv._id ? '...' : '❌ Annuler'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
