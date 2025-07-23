@@ -104,11 +104,18 @@
 }
 
 .image {
-  border-radius: 25px;
+  border-radius: 50%;
+  /* Cercle parfait */
   box-shadow: 0 15px 35px rgba(72, 187, 120, 0.2);
   transition: all 0.4s ease;
   border: 4px solid rgba(255, 255, 255, 0.8);
   position: relative;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  /* Maintient les proportions et centre l'image */
+  object-position: center top;
+  /* Centre horizontalement et remonte légèrement l'image */
 }
 
 .image:hover {
@@ -116,31 +123,18 @@
   box-shadow: 0 25px 50px rgba(72, 187, 120, 0.3);
 }
 
-.imageContainer::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  bottom: -10px;
-  left: -10px;
-  background: linear-gradient(45deg, #48bb78, #38a169, #2f855a, #48bb78);
-  border-radius: 35px;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  animation: rotate 4s linear infinite;
-}
-
-.imageContainer:hover::after {
-  opacity: 0.3;
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
+/* RESPONSIVE pour l'image */
+@media (max-width: 768px) {
+  .image {
+    width: 250px;
+    height: 250px;
   }
-  100% {
-    transform: rotate(360deg);
+}
+
+@media (max-width: 480px) {
+  .image {
+    width: 200px;
+    height: 200px;
   }
 }
 
@@ -212,7 +206,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background: 
+  background:
     radial-gradient(circle at 20% 20%, rgba(72, 187, 120, 0.05) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(56, 161, 105, 0.05) 0%, transparent 50%);
   pointer-events: none;
@@ -311,6 +305,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -338,27 +333,27 @@
     height: 50vh;
     min-height: 350px;
   }
-  
+
   .content {
     padding: 2rem 1rem;
     gap: 3rem;
   }
-  
+
   .presentationSection,
   .historySection,
   .ctaSection {
     padding: 2rem 1.5rem;
   }
-  
+
   .image {
     width: 250px;
     height: 250px;
   }
-  
+
   .paragraph {
     text-align: left;
   }
-  
+
   .ctaButton {
     width: 100%;
     max-width: 350px;
@@ -366,17 +361,18 @@
 }
 
 @media (max-width: 480px) {
+
   .presentationSection,
   .historySection,
   .ctaSection {
     padding: 1.5rem 1rem;
   }
-  
+
   .image {
     width: 200px;
     height: 200px;
   }
-  
+
   .paragraph {
     font-size: 1rem;
   }
