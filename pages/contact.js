@@ -17,6 +17,10 @@ export default function Contact() {
                         fill
                         priority
                         className={styles.heroImage}
+                        style={{
+                            objectFit: 'cover',
+                            objectPosition: 'center 63%'
+                        }}
                     />
                     <div className={styles.heroOverlay}>
                         <h1 className={styles.heroTitle}>Contact</h1>
@@ -76,7 +80,6 @@ export default function Contact() {
                                 <iframe
                                     title="Cabinet Stéphanie Habert"
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.4126037209037!2d1.9877313156759884!3d48.828308979286794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e68b780bffb055%3A0x2c2a75f8e34365cd!2sVillepreux%2078450!5e0!3m2!1sfr!2sfr!4v1697890000000!5m2!1sfr!2sfr"
-                                    /* src="https://www.google.com/maps?q=18-36+Av.+du+Grand+Parc,+78450+Villepreux&hl=fr&z=16&output=embed" */
                                     width="100%"
                                     height="100%"
                                     style={{ border: 0 }}
@@ -89,12 +92,10 @@ export default function Contact() {
                                         Stéphanie Habert - Sophrologue<br />
                                         Villepreux, France</p>
                                 </div>
-
                             </div>
                         </div>
                     </section>
                 </div>
-
             </div>
             <Footer />
         </>
