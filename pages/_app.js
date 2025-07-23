@@ -8,7 +8,8 @@ function App({ Component, pageProps }) {
         <title>Stéphanie Habert Sophrologue</title>
         <meta name="description" content="Prenez rendez-vous facilement avec notre cabinet de sophrologie" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+
       </Head>
       <Component {...pageProps} />
       <style jsx global>{`
