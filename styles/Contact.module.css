@@ -350,8 +350,8 @@
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .hero {
-    height: 60vh;
-    min-height: 400px;
+    height: 50vh;
+    min-height: 300px;
   }
 
   .contentWrapper {
@@ -379,6 +379,10 @@
 }
 
 @media (max-width: 480px) {
+  .hero {
+    height: 45vh;
+    min-height: 250px;
+  }
   .contactSection,
   .contactFormMapSection {
     padding: 1.5rem;

@@ -274,8 +274,8 @@
   }
 
   .hero {
-    height: 60vh;
-    min-height: 400px;
+    height: 50vh;
+    min-height: 300px;
   }
 
   .heroTitle {
@@ -296,6 +296,11 @@
 }
 
 @media (max-width: 480px) {
+  .hero {
+    height: 45vh;
+    min-height: 250px;
+  }
+  
   .card {
     padding: 1.5rem 1rem;
   }

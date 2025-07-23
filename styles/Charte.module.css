@@ -242,21 +242,19 @@
 }
 
 /* RESPONSIVE */
-@media (min-width: 768px) {
-  .content {
-    gap: 5rem;
-  }
-}
-
 @media (max-width: 768px) {
   .hero {
-    height: 60vh;
-    min-height: 400px;
+    height: 50vh;
+    min-height: 300px;
   }
-
+ 
   .content {
     padding: 2rem 1rem;
     gap: 3rem;
+  }
+
+  .content {
+    gap: 5rem;
   }
 
   .charteSection {
@@ -273,6 +271,11 @@
 }
 
 @media (max-width: 480px) {
+  .hero {
+    height: 45vh;
+    min-height: 250px;
+  }
+
   .charteSection {
     padding: 1.5rem;
   }

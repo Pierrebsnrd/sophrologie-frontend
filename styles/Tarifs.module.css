@@ -58,12 +58,6 @@
   position: relative;
 }
 
-@media (min-width: 768px) {
-  .content {
-    gap: 5rem;
-  }
-}
-
 /* SECTION TARIFS PRINCIPALE */
 .tarifSection {
   background: rgba(255, 255, 255, 0.95);
@@ -405,6 +399,9 @@
     padding: 2rem 1rem;
     gap: 3rem;
   }
+    .content {
+    gap: 5rem;
+  }
   
   .tarifSection,
   .tarifSection .solidaireInfo,
@@ -429,6 +426,11 @@
 }
 
 @media (max-width: 480px) {
+  .hero {
+    height: 45vh;
+    min-height: 250px;
+  }
+  
   .tarifSection,
   .tarifSection .solidaireInfo,
   .tarifSection .remboursementInfo,
