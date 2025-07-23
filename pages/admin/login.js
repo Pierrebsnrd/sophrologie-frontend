@@ -1,6 +1,6 @@
-// pages/admin/login.jsx
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head'; // 👈 Ajout ici
 import api from '../../utils/api';
 import styles from '../../styles/login.module.css';
 
@@ -47,65 +47,72 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.formWrapper}>
-        <h2 className={styles.title}>Administration</h2>
-        <p className={styles.subtitle}>Connexion à l'espace administrateur</p>
+    <>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+        <title>Connexion administrateur</title>
+      </Head>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputGroup}>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              className={styles.input}
-              placeholder="Adresse email"
-              value={credentials.email}
-              onChange={handleChange}
-              disabled={loading}
-            />
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              className={styles.input}
-              placeholder="Mot de passe"
-              value={credentials.password}
-              onChange={handleChange}
-              disabled={loading}
-            />
-          </div>
+      <div className={styles.container}>
+        <div className={styles.formWrapper}>
+          <h2 className={styles.title}>Administration</h2>
+          <p className={styles.subtitle}>Connexion à l'espace administrateur</p>
 
-          {error && (
-            <div className={styles.errorBox}>
-              <div className={styles.errorIcon}>⚠️</div>
-              <div>
-                <h3 className={styles.errorTitle}>Erreur de connexion</h3>
-                <p className={styles.errorMessage}>{error}</p>
-              </div>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.inputGroup}>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className={styles.input}
+                placeholder="Adresse email"
+                value={credentials.email}
+                onChange={handleChange}
+                disabled={loading}
+              />
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className={styles.input}
+                placeholder="Mot de passe"
+                value={credentials.password}
+                onChange={handleChange}
+                disabled={loading}
+              />
             </div>
-          )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={styles.submitButton}
-          >
-            {loading ? (
-              <div className={styles.loadingWrapper}>
-                <div className={styles.spinner} />
-                Connexion en cours...
+            {error && (
+              <div className={styles.errorBox}>
+                <div className={styles.errorIcon}>⚠️</div>
+                <div>
+                  <h3 className={styles.errorTitle}>Erreur de connexion</h3>
+                  <p className={styles.errorMessage}>{error}</p>
+                </div>
               </div>
-            ) : (
-              'Se connecter'
             )}
-          </button>
-        </form>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={styles.submitButton}
+            >
+              {loading ? (
+                <div className={styles.loadingWrapper}>
+                  <div className={styles.spinner} />
+                  Connexion en cours...
+                </div>
+              ) : (
+                'Se connecter'
+              )}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
