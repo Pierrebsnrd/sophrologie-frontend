@@ -49,7 +49,7 @@ export default function RdvForms() {
       {/* HERO SECTION */}
       <section className={styles.hero}>
         <Image
-          src="/rdv.jpg"
+          src="/bannieres/rdv.jpg"
           alt="Bureau"
           fill
           priority

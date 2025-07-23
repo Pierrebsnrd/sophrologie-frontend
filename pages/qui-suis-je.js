@@ -13,7 +13,7 @@ export default function QuiSuisJe() {
         {/* HERO SECTION */}
         <section className={styles.hero}>
           <Image
-            src="/musique.jpg"
+            src="/bannieres/musique.jpg"
             alt="Note de musique symbolisant l'harmonie et l'équilibre"
             fill
             priority
@@ -31,7 +31,7 @@ export default function QuiSuisJe() {
           <section className={styles.presentationSection}>
             <div className={styles.imageContainer}>
               <Image
-                src="/sophrologue.jpg"
+                src="/profile/sophrologue.jpg"
                 alt="Stéphanie Habert, Sophrologue certifiée à Villepreux"
                 width={300}
                 height={300}

@@ -12,8 +12,8 @@ export default function Home() {
       {/* HERO */}
       <section className={styles.hero}>
         <Image
-          src="/banniere.jpg"
-          alt="Bannière"
+          src="/bannieres/accueil.jpg"
+          alt="Paysage"
           layout="fill"
           objectFit="cover"
           className={styles.heroImage}

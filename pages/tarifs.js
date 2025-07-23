@@ -12,7 +12,7 @@ export default function Tarifs() {
                 {/* HERO SECTION */}
                 <section className={styles.hero}>
                     <Image
-                        src="/tarifs.jpg"
+                        src="/bannieres/tarifs.jpg"
                         alt="Paysage"
                         fill
                         className={styles.heroImage}

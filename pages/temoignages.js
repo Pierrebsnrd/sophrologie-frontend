@@ -10,7 +10,7 @@ export default function Temoignages() {
             {/* HERO SECTION */}
             <section className={styles.hero}>
                 <Image
-                    src="/temoignage.jpg"
+                    src="/bannieres/temoignage.jpg"
                     alt="Feedback"
                     fill
                     className={styles.heroImage}

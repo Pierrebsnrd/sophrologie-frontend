@@ -12,7 +12,7 @@ export default function Contact() {
                 {/* HERO SECTION */}
                 <section className={styles.hero}>
                     <Image
-                        src="/contact.jpg"
+                        src="/bannieres/contact.jpg"
                         alt="Contact"
                         fill
                         priority

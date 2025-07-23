@@ -11,7 +11,7 @@ export default function Charte() {
                 {/* HERO SECTION */}
                 <section className={styles.hero}>
                     <Image
-                        src="/charte.jpg"
+                        src="/bannieres/charte.jpg"
                         alt="Charte"
                         fill
                         priority
