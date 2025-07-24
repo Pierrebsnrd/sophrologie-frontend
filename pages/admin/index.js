@@ -6,6 +6,7 @@ import api from '../../utils/api';
 export default function AdminDashboard() {
   const [rdvs, setRdvs] = useState([]);
   const [temoignages, setTemoignages] = useState([]);
+  const [contactMessages, setContactMessages] = useState([]); // <-- Ajout
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [updatingRdv, setUpdatingRdv] = useState(null);
@@ -23,12 +24,14 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const [rdvRes, temoignageRes] = await Promise.all([
+      const [rdvRes, temoignageRes, contactRes] = await Promise.all([
         api.get('/admin/rdv'),
         api.get('/admin/temoignages'),
+        api.get('/admin/contact-messages'), // <-- Ajout
       ]);
       setRdvs(rdvRes.data);
       setTemoignages(temoignageRes.data);
+      setContactMessages(contactRes.data); // <-- Ajout
     } catch (err) {
       setError('Erreur lors du chargement des données');
     } finally {
@@ -260,6 +263,33 @@ export default function AdminDashboard() {
                       </button>
                     </div>
                   )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Liste Messages de contact */}
+        <div style={{ ...styles.rdvList, marginTop: '40px' }}>
+          <h2 style={styles.sectionTitle}>Messages de contact ({contactMessages.length})</h2>
+          {contactMessages.length === 0 ? (
+            <div style={styles.emptyState}>
+              <p>Aucun message de contact pour le moment</p>
+            </div>
+          ) : (
+            <div style={styles.rdvGrid}>
+              {contactMessages.map((msg) => (
+                <div key={msg._id} style={styles.rdvCard}>
+                  <div style={styles.rdvHeader}>
+                    <h3 style={styles.rdvName}>{msg.name}</h3>
+                  </div>
+                  <div style={styles.rdvInfo}>
+                    <p><strong>Email:</strong> {msg.email}</p>
+                    <p><strong>Message:</strong> {msg.message}</p>
+                    <p style={styles.createdAt}>
+                      Reçu le {formatDate(msg.createdAt)}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
