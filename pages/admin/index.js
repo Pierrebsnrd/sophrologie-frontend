@@ -282,17 +282,25 @@ export default function AdminDashboard() {
                 <div key={msg._id} style={styles.rdvCard}>
                   <div style={styles.rdvHeader}>
                     <h3 style={styles.rdvName}>{msg.name}</h3>
-                    <button
-                      style={{
-                        ...styles.replyButton,
-                        backgroundColor: msg.answered ? '#27ae60' : '#f39c12', // vert si répondu, orange sinon
-                        color: '#fff',
-                      }}
-                      disabled={msg.answered}
-                      onClick={() => handleReply(msg)}
-                    >
-                      {msg.answered ? 'Répondu' : 'Répondre'}
-                    </button>
+                    <div>
+                      <button
+                        style={{
+                          ...styles.replyButton,
+                          backgroundColor: msg.answered ? '#27ae60' : '#f39c12',
+                          color: '#fff',
+                        }}
+                        disabled={msg.answered}
+                        onClick={() => handleReply(msg)}
+                      >
+                        {msg.answered ? 'Répondu' : 'Répondre'}
+                      </button>
+                      <button
+                        style={styles.deleteButton}
+                        onClick={() => handleDelete(msg._id)}
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   </div>
                   <div style={styles.rdvInfo}>
                     <p><strong>Email:</strong> {msg.email}</p>
@@ -461,6 +469,18 @@ const styles = {
     marginLeft: '10px',
     transition: 'background 0.3s',
   },
+  deleteButton: {
+    padding: '8px 18px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    marginLeft: '10px',
+    backgroundColor: '#e74c3c',
+    color: '#fff',
+    transition: 'background 0.3s',
+  },
 };
 
 // Ajoute la fonction handleReply (exemple simple) :
@@ -476,5 +496,17 @@ async function handleReply(msg) {
     );
   } catch (err) {
     setError('Erreur lors du changement de statut du message');
+  }
+}
+
+// Fonction de suppression avec confirmation
+async function handleDelete(id) {
+  if (window.confirm('Voulez-vous vraiment supprimer ce message ?')) {
+    try {
+      await api.delete(`/admin/contact-messages/${id}`);
+      setContactMessages(prev => prev.filter(m => m._id !== id));
+    } catch (err) {
+      setError('Erreur lors de la suppression du message');
+    }
   }
 }
