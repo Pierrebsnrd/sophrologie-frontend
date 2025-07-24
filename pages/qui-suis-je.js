@@ -8,55 +8,30 @@ import { useRouter } from "next/router";
 import BackgroundMusic from "../components/BackgroundMusic";
 
 export default function QuiSuisJe() {
-  const [playMusic, setPlayMusic] = useState(false);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
   const router = useRouter();
-  const hasTriggeredAutoPlay = useRef(false);
+  const hasInitialized = useRef(false);
 
   // Démarrage automatique de la musique au chargement de la page
   useEffect(() => {
-    if (!hasTriggeredAutoPlay.current) {
+    if (!hasInitialized.current) {
       // Vérifier si on arrive depuis le menu
       const shouldPlay = sessionStorage.getItem("playMusic") === "true";
       
       if (shouldPlay) {
-        setPlayMusic(true);
         sessionStorage.removeItem("playMusic");
-      } else {
-        // Démarrage automatique même sans clic sur le menu
-        setPlayMusic(true);
       }
       
-      hasTriggeredAutoPlay.current = true;
+      // Toujours déclencher l'autoplay sur cette page
+      setShouldAutoPlay(true);
+      hasInitialized.current = true;
     }
   }, []);
-
-  // Arrêter la musique lors du changement de page
-  useEffect(() => {
-    const handleRouteChange = () => {
-      setPlayMusic(false);
-      setIsMusicPlaying(false);
-    };
-
-    router.events.on('routeChangeStart', handleRouteChange);
-
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange);
-    };
-  }, [router.events]);
-
-  // Callback pour suivre l'état de la musique
-  const handlePlayStateChange = (isPlaying) => {
-    setIsMusicPlaying(isPlaying);
-  };
 
   return (
     <>
       <Header />
-      <BackgroundMusic 
-        play={playMusic} 
-        onPlayStateChange={handlePlayStateChange}
-      />
+      <BackgroundMusic autoPlay={shouldAutoPlay} />
 
       <div className={styles.pageContainer}>
         {/* HERO SECTION */}

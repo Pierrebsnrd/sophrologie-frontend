@@ -3,23 +3,26 @@ import { useRef, useState, useEffect } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import styles from '../styles/BackgroundMusic.module.css';
 
-export default function BackgroundMusic({ play, onPlayStateChange }) {
+export default function BackgroundMusic({ autoPlay = false }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const hasAutoPlayed = useRef(false);
 
-  // Lecture automatique si `play` vient du parent
+  // Lecture automatique uniquement au premier rendu si autoPlay est true
   useEffect(() => {
-    if (play && audioRef.current && !isPlaying) {
-      audioRef.current.play()
-        .then(() => {
-          setIsPlaying(true);
-          onPlayStateChange?.(true);
-        })
-        .catch(err => {
-          console.warn("Erreur lecture audio :", err);
-        });
+    if (autoPlay && !hasAutoPlayed.current && audioRef.current) {
+      hasAutoPlayed.current = true;
+      
+      // Délai pour éviter les conflits avec l'initialisation
+      setTimeout(() => {
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(err => {
+            console.warn("Erreur lecture audio :", err);
+          });
+      }, 100);
     }
-  }, [play, isPlaying, onPlayStateChange]);
+  }, [autoPlay]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -28,13 +31,9 @@ export default function BackgroundMusic({ play, onPlayStateChange }) {
     if (isPlaying) {
       audio.pause();
       setIsPlaying(false);
-      onPlayStateChange?.(false);
     } else {
       audio.play()
-        .then(() => {
-          setIsPlaying(true);
-          onPlayStateChange?.(true);
-        })
+        .then(() => setIsPlaying(true))
         .catch((err) => console.warn("Erreur lecture audio :", err));
     }
   };
@@ -56,24 +55,20 @@ export default function BackgroundMusic({ play, onPlayStateChange }) {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const handlePlay = () => {
-      setIsPlaying(true);
-      onPlayStateChange?.(true);
-    };
-    
-    const handlePause = () => {
-      setIsPlaying(false);
-      onPlayStateChange?.(false);
-    };
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleEnded = () => setIsPlaying(false);
 
     audio.addEventListener('play', handlePlay);
     audio.addEventListener('pause', handlePause);
+    audio.addEventListener('ended', handleEnded);
 
     return () => {
       audio.removeEventListener('play', handlePlay);
       audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('ended', handleEnded);
     };
-  }, [onPlayStateChange]);
+  }, []);
 
   return (
     <div className={styles.container}>
