@@ -7,41 +7,44 @@ export default function BackgroundMusic({ play }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Lecture automatique si `play` vient du parent (ex: clic sur menu)
+  // Synchroniser l'état local avec l'état réel de l'audio
   useEffect(() => {
-    if (play && audioRef.current && !isPlaying) {
-      audioRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch(err => {
-          console.warn("Erreur lecture audio :", err);
-        });
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+
+    return () => {
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+    };
+  }, []);
+
+  // Démarrage automatique si `play === true`
+  useEffect(() => {
+    if (play && audioRef.current && audioRef.current.paused) {
+      audioRef.current
+        .play()
+        .catch((err) => console.warn("Erreur lecture auto :", err));
     }
-  }, [play, isPlaying]);
+  }, [play]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
+    if (audio.paused) {
+      audio
+        .play()
+        .catch((err) => console.warn("Erreur lecture manuelle :", err));
     } else {
-      audio.play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => console.warn("Erreur lecture audio :", err));
+      audio.pause();
     }
   };
-  
-  // Pour stopper le son lors du démontage du composant (quand on change de page)
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        setIsPlaying(false);
-      }
-    };
-  }, []);
 
   return (
     <div className={styles.container}>
