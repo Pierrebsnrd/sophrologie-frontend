@@ -3,20 +3,23 @@ import { useRef, useState, useEffect } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import styles from '../styles/BackgroundMusic.module.css';
 
-export default function BackgroundMusic({ play }) {
+export default function BackgroundMusic({ play, onPlayStateChange }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Lecture automatique si `play` vient du parent (ex: clic sur menu)
+  // Lecture automatique si `play` vient du parent
   useEffect(() => {
     if (play && audioRef.current && !isPlaying) {
       audioRef.current.play()
-        .then(() => setIsPlaying(true))
+        .then(() => {
+          setIsPlaying(true);
+          onPlayStateChange?.(true);
+        })
         .catch(err => {
           console.warn("Erreur lecture audio :", err);
         });
     }
-  }, [play, isPlaying]);
+  }, [play, isPlaying, onPlayStateChange]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -25,29 +28,58 @@ export default function BackgroundMusic({ play }) {
     if (isPlaying) {
       audio.pause();
       setIsPlaying(false);
+      onPlayStateChange?.(false);
     } else {
       audio.play()
-        .then(() => setIsPlaying(true))
+        .then(() => {
+          setIsPlaying(true);
+          onPlayStateChange?.(true);
+        })
         .catch((err) => console.warn("Erreur lecture audio :", err));
     }
   };
   
-  // Pour stopper le son lors du démontage du composant (quand on change de page)
+  // Nettoyage lors du démontage du composant
   useEffect(() => {
+    const audio = audioRef.current;
+    
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        // setIsPlaying(false); <-- retiré ici pour éviter problème navigation
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
       }
     };
   }, []);
+
+  // Écouter les événements audio pour synchroniser l'état
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handlePlay = () => {
+      setIsPlaying(true);
+      onPlayStateChange?.(true);
+    };
+    
+    const handlePause = () => {
+      setIsPlaying(false);
+      onPlayStateChange?.(false);
+    };
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+
+    return () => {
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+    };
+  }, [onPlayStateChange]);
 
   return (
     <div className={styles.container}>
       <audio ref={audioRef} loop preload="auto">
         <source src="/music/music.mp3" type="audio/mpeg" />
-        Votre navigateur ne supporte pas l’audio HTML5.
+        Votre navigateur ne supporte pas l'audio HTML5.
       </audio>
       <button
         onClick={togglePlay}
