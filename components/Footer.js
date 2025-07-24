@@ -9,7 +9,7 @@ export default function Footer() {
         <p>© {new Date().getFullYear()} Stéphanie Habert Sophrologue Villepreux</p>
         <div className={styles.socialIcons}>
           <a
-            href="https://www.instagram.com/tonprofil"
+            href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -17,7 +17,7 @@ export default function Footer() {
             <FaInstagram className={styles.icon} />
           </a>
           <a
-            href="https://www.facebook.com/tonprofil"
+            href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"

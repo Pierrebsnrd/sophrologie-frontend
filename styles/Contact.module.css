@@ -46,19 +46,20 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+/* CONTENU PRINCIPAL */
 .pageContainer {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* CONTENU PRINCIPAL */
 .contentWrapper {
   flex: 1;
   padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 2rem);
@@ -236,7 +237,7 @@
 .contactForm {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .contactForm label {
@@ -262,6 +263,35 @@
   box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
   outline: none;
   background: white;
+}
+
+/* Styles pour les messages de confirmation et d'erreur */
+.confirmationMessage,
+.errorMessage {
+  color: #2ecc71;
+  margin: 10px 0;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+}
+
+.errorMessage {
+  color: #e74c3c;
+}
+
+/* Nouveau style pour le message d'erreur d'email */
+.labelErrorContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emailErrorMessage {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: left;
 }
 
 .contactForm button {
@@ -335,9 +365,12 @@
 
 /* ANIMATIONS */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -383,6 +416,7 @@
     height: 45vh;
     min-height: 250px;
   }
+
   .contactSection,
   .contactFormMapSection {
     padding: 1.5rem;
