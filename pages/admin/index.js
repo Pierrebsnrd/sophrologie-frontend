@@ -11,6 +11,8 @@ export default function AdminDashboard() {
   const [error, setError] = useState('');
   const [updatingRdv, setUpdatingRdv] = useState(null);
   const [updatingTemoignage, setUpdatingTemoignage] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -119,6 +121,26 @@ export default function AdminDashboard() {
       </div>
     );
   }
+
+  // Ouvre la modale
+  const confirmDelete = (id) => {
+    setDeleteId(id);
+    setShowDeleteModal(true);
+  };
+
+  // Supprime après confirmation
+  const handleDeleteConfirmed = async () => {
+    try {
+      await api.delete(`/admin/contact-messages/${deleteId}`);
+      await fetchData();
+      setShowDeleteModal(false);
+      setDeleteId(null);
+    } catch (err) {
+      setError('Erreur lors de la suppression du message');
+      setShowDeleteModal(false);
+      setDeleteId(null);
+    }
+  };
 
   return (
     <>
@@ -296,7 +318,7 @@ export default function AdminDashboard() {
                       </button>
                       <button
                         style={styles.deleteButton}
-                        onClick={() => handleDelete(msg._id)}
+                        onClick={() => confirmDelete(msg._id)}
                       >
                         Supprimer
                       </button>
@@ -314,6 +336,24 @@ export default function AdminDashboard() {
             </div>
           )}
         </div>
+
+        {/* Modale de confirmation */}
+        {showDeleteModal && (
+          <div style={styles.modalOverlay}>
+            <div style={styles.modalContent}>
+              <h3>Confirmer la suppression</h3>
+              <p>Voulez-vous vraiment supprimer ce message ?</p>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                <button style={styles.cancelButton} onClick={() => setShowDeleteModal(false)}>
+                  Annuler
+                </button>
+                <button style={styles.deleteButton} onClick={handleDeleteConfirmed}>
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
@@ -481,6 +521,23 @@ const styles = {
     color: '#fff',
     transition: 'background 0.3s',
   },
+  modalOverlay: {
+    position: 'fixed',
+    top: 0, left: 0, right: 0, bottom: 0,
+    background: 'rgba(0,0,0,0.3)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  },
+  modalContent: {
+    background: '#fff',
+    borderRadius: '10px',
+    padding: '30px',
+    minWidth: '300px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+    textAlign: 'center',
+  },
 };
 
 // Ajoute la fonction handleReply (exemple simple) :
@@ -496,17 +553,5 @@ async function handleReply(msg) {
     );
   } catch (err) {
     setError('Erreur lors du changement de statut du message');
-  }
-}
-
-// Fonction de suppression avec confirmation
-async function handleDelete(id) {
-  if (window.confirm('Voulez-vous vraiment supprimer ce message ?')) {
-    try {
-      await api.delete(`/admin/contact-messages/${id}`);
-      setContactMessages(prev => prev.filter(m => m._id !== id));
-    } catch (err) {
-      setError('Erreur lors de la suppression du message');
-    }
   }
 }
