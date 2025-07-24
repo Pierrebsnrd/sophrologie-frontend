@@ -88,10 +88,10 @@ export default function Contact() {
                         <p><strong>Email :</strong> <a href="mailto:stephaniehabert.sophrologue@gmail.com">stephaniehabert.sophrologue@gmail.com</a></p>
                         <h2>Réseaux sociaux</h2>
                         <div className={styles.socialIcons}>
-                            <a href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <a href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                                 <FaFacebookF />
                             </a>
-                            <a href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <a href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                                 <FaInstagram />
                             </a>
                         </div>
