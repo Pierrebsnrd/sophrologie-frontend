@@ -11,6 +11,7 @@ export default function Temoignages() {
     const [message, setMessage] = useState("");
     const [confirmation, setConfirmation] = useState("");
     const [error, setError] = useState("");
+    const [showAll, setShowAll] = useState(false);
 
     useEffect(() => {
         fetchTemoignages();
@@ -41,6 +42,10 @@ export default function Temoignages() {
         }
     };
 
+    // Trie les témoignages par date décroissante
+    const sortedTemoignages = [...temoignages].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const visibleTemoignages = showAll ? sortedTemoignages : sortedTemoignages.slice(0, 4);
+
     return (
         <>
             <Header />
@@ -64,32 +69,54 @@ export default function Temoignages() {
                 {/* SECTION TEMOIGNAGES */}
                 <section className={styles.temoignage}>
                     {/* Témoignages statiques */}
-                    <div className={styles.temoignageCard}>
+                     <div className={styles.temoignageCard}>
                         <p className={styles.temoignageText}>
                             “Grâce à Stéphanie, j'ai appris à mieux gérer mon stress et à retrouver un sommeil réparateur.”
                         </p>
-                        <p className={styles.temoignageAuthor}>– Sophie Martin</p>
+                        <div className={styles.temoignageFooter}>
+                            <p className={styles.temoignageDate}>Publié le 12/03/2025</p>
+                            <p className={styles.temoignageAuthor}>– Sophie Martin</p>
+                        </div>
                     </div>
                     <div className={styles.temoignageCard}>
                         <p className={styles.temoignageText}>
                             “La sophrologie avec Stéphanie m'a permis de renforcer ma confiance en moi et d'aborder les défis du quotidien avec plus de sérénité.”
                         </p>
-                        <p className={styles.temoignageAuthor}>– Luc Dubois</p>
+                        <div className={styles.temoignageFooter}>
+                            <p className={styles.temoignageDate}>Publié le 28/04/2025</p>
+                            <p className={styles.temoignageAuthor}>– Luc Dubois</p>
+                        </div>
                     </div>
                     <div className={styles.temoignageCard}>
                         <p className={styles.temoignageText}>
                             “Un accompagnement bienveillant et professionnel. Stéphanie a su créer un espace de confiance où j'ai pu me reconnecter à moi-même.”
                         </p>
-                        <p className={styles.temoignageAuthor}>– Marie Lemoine</p>
+                        <div className={styles.temoignageFooter}>
+                            <p className={styles.temoignageDate}>Publié le 15/06/2025</p>
+                            <p className={styles.temoignageAuthor}>– Marie Lemoine</p>
+                        </div>
                     </div>
 
                     {/* Témoignages depuis la BDD */}
-                    {temoignages.map((t, index) => (
+                    {visibleTemoignages.map((t, index) => (
                         <div key={index} className={styles.temoignageCard}>
                             <p className={styles.temoignageText}>"{t.message}"</p>
-                            <p className={styles.temoignageAuthor}>– {t.name}</p>
+                            <div className={styles.temoignageFooter}>
+                                <p className={styles.temoignageDate}>
+                                    {t.createdAt ? `Publié le ${new Date(t.createdAt).toLocaleDateString('fr-FR')}` : ''}
+                                </p>
+                                <p className={styles.temoignageAuthor}>– {t.name}</p>
+                            </div>
                         </div>
                     ))}
+                    {sortedTemoignages.length > 4 && (
+                        <div className={styles.loadMoreContainer}>
+                            <button className={styles.submitButton} onClick={() => setShowAll(!showAll)}>
+                                {showAll ? 'Masquer les anciens témoignages' : 'Afficher tous les témoignages'}
+                            </button>
+                        </div>
+                    )}
+
                 </section>
 
                 {/* FORMULAIRE DE SOUMISSION */}
@@ -104,7 +131,7 @@ export default function Temoignages() {
 
                     <input
                         type="text"
-                        placeholder="Votre prénom"
+                        placeholder="Votre prénom et nom"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className={styles.textarea}

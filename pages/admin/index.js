@@ -4,9 +4,10 @@ import { useRouter } from 'next/router';
 import api from '../../utils/api';
 
 export default function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState('rdv');
   const [rdvs, setRdvs] = useState([]);
   const [temoignages, setTemoignages] = useState([]);
-  const [contactMessages, setContactMessages] = useState([]); // <-- Ajout
+  const [contactMessages, setContactMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [updatingRdv, setUpdatingRdv] = useState(null);
@@ -27,15 +28,16 @@ export default function AdminDashboard() {
   }, [router]);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const [rdvRes, temoignageRes, contactRes] = await Promise.all([
         api.get('/admin/rdv'),
         api.get('/admin/temoignages'),
-        api.get('/admin/contact-messages'), // <-- Ajout
+        api.get('/admin/contact-messages'),
       ]);
       setRdvs(rdvRes.data);
       setTemoignages(temoignageRes.data);
-      setContactMessages(contactRes.data); // <-- Ajout
+      setContactMessages(contactRes.data);
     } catch (err) {
       setError('Erreur lors du chargement des données');
     } finally {
@@ -43,94 +45,48 @@ export default function AdminDashboard() {
     }
   };
 
-  const updateRdvStatus = async (rdvId, newStatus) => {
-    setUpdatingRdv(rdvId);
+  // RDV
+  const updateRdvStatus = async (id, status) => {
+    setUpdatingRdv(id);
     try {
-      await api.patch(`/admin/rdv/${rdvId}/status`, { status: newStatus });
-      setRdvs(prev => prev.map(rdv =>
-        rdv._id === rdvId ? { ...rdv, status: newStatus } : rdv
-      ));
-    } catch {
-      setError('Erreur lors de la mise à jour du rendez-vous');
+      await api.patch(`/admin/rdv/${id}/status`, { status });
+      await fetchData();
+    } catch (err) {
+      setError('Erreur lors de la mise à jour du statut');
     } finally {
       setUpdatingRdv(null);
     }
   };
 
-  const updateTemoignageStatus = async (temoignageId, newStatus) => {
-    setUpdatingTemoignage(temoignageId);
+  // Témoignage
+  const updateTemoignageStatus = async (id, status) => {
+    setUpdatingTemoignage(id);
     try {
-      await api.patch(`/admin/temoignages/${temoignageId}/status`, { status: newStatus });
-      setTemoignages(prev => prev.map(t =>
-        t._id === temoignageId ? { ...t, status: newStatus } : t
-      ));
-    } catch {
-      setError('Erreur lors de la mise à jour du témoignage');
+      await api.patch(`/admin/temoignages/${id}/status`, { status });
+      await fetchData();
+    } catch (err) {
+      setError('Erreur lors de la mise à jour du statut');
     } finally {
       setUpdatingTemoignage(null);
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('adminToken');
-    router.push('/admin/login');
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'pending': return '#f39c12';
-      case 'confirmed': return '#27ae60';
-      case 'cancelled': return '#e74c3c';
-      case 'validated': return '#27ae60';
-      case 'rejected': return '#e74c3c';
-      default: return '#95a5a6';
+  // Contact
+  async function handleReply(msg) {
+    window.location.href = `mailto:${msg.email}?subject=Réponse à votre message`;
+    try {
+      await api.patch(`/admin/contact-messages/${msg._id}/answered`);
+      await fetchData();
+    } catch (err) {
+      setError('Erreur lors du changement de statut du message');
     }
-  };
-
-  const getStatusTextRdv = (status) => {
-    switch (status) {
-      case 'pending': return 'En attente';
-      case 'confirmed': return 'Confirmé';
-      case 'cancelled': return 'Annulé';
-      default: return status;
-    }
-  };
-
-  const getStatusTextTemoignage = (status) => {
-    switch (status) {
-      case 'pending': return 'En attente';
-      case 'validated': return 'Validé';
-      case 'rejected': return 'Rejeté';
-      default: return status;
-    }
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString('fr-FR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  if (loading) {
-    return (
-      <div style={styles.loadingContainer}>
-        <div style={styles.spinner}></div>
-        <p>Chargement...</p>
-      </div>
-    );
   }
 
-  // Ouvre la modale
+  // Suppression Contact
   const confirmDelete = (id) => {
     setDeleteId(id);
     setShowDeleteModal(true);
   };
-
-  // Supprime après confirmation
   const handleDeleteConfirmed = async () => {
     try {
       await api.delete(`/admin/contact-messages/${deleteId}`);
@@ -144,13 +100,11 @@ export default function AdminDashboard() {
     }
   };
 
-  // Ouvre la modale de suppression témoignage
+  // Suppression Témoignage
   const confirmDeleteTemoignage = (id) => {
     setDeleteTemoignageId(id);
     setShowDeleteTemoignageModal(true);
   };
-
-  // Supprime le témoignage après confirmation
   const handleDeleteTemoignageConfirmed = async () => {
     try {
       await api.delete(`/admin/temoignages/${deleteTemoignageId}`);
@@ -162,6 +116,33 @@ export default function AdminDashboard() {
       setShowDeleteTemoignageModal(false);
       setDeleteTemoignageId(null);
     }
+  };
+
+  // Logout
+  const logout = () => {
+    localStorage.removeItem('adminToken');
+    router.replace('/admin/login');
+  };
+
+  // Helpers
+  const formatDate = (date) => new Date(date).toLocaleString('fr-FR');
+  const getStatusColor = (status) => {
+    if (status === 'pending') return '#f39c12';
+    if (status === 'confirmed' || status === 'validated') return '#27ae60';
+    if (status === 'cancelled' || status === 'rejected') return '#e74c3c';
+    return '#7f8c8d';
+  };
+  const getStatusTextRdv = (status) => {
+    if (status === 'pending') return 'En attente';
+    if (status === 'confirmed') return 'Confirmé';
+    if (status === 'cancelled') return 'Annulé';
+    return status;
+  };
+  const getStatusTextTemoignage = (status) => {
+    if (status === 'pending') return 'En attente';
+    if (status === 'validated') return 'Validé';
+    if (status === 'rejected') return 'Rejeté';
+    return status;
   };
 
   return (
@@ -184,188 +165,263 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Stats RDV */}
-        <div style={styles.stats}>
-          <div style={styles.statCard}>
-            <h3>{rdvs.filter(rdv => rdv.status === 'pending').length}</h3>
-            <p>RDV En attente</p>
-          </div>
-          <div style={styles.statCard}>
-            <h3>{rdvs.filter(rdv => rdv.status === 'confirmed').length}</h3>
-            <p>RDV Confirmés</p>
-          </div>
-          <div style={styles.statCard}>
-            <h3>{rdvs.filter(rdv => rdv.status === 'cancelled').length}</h3>
-            <p>RDV Annulés</p>
-          </div>
+        {/* Onglets */}
+        <div style={styles.tabs}>
+          <button
+            style={{
+              ...styles.tabButton,
+              ...(activeTab === 'rdv' ? styles.activeTabButton : {}),
+            }}
+            onClick={() => setActiveTab('rdv')}
+          >
+            Rendez-vous
+          </button>
+          <button
+            style={{
+              ...styles.tabButton,
+              ...(activeTab === 'temoignage' ? styles.activeTabButton : {}),
+            }}
+            onClick={() => setActiveTab('temoignage')}
+          >
+            Témoignages
+          </button>
+          <button
+            style={{
+              ...styles.tabButton,
+              ...(activeTab === 'contact' ? styles.activeTabButton : {}),
+            }}
+            onClick={() => setActiveTab('contact')}
+          >
+            Contact
+          </button>
         </div>
 
-        {/* Liste RDV */}
-        <div style={styles.rdvList}>
-          <h2 style={styles.sectionTitle}>Rendez-vous ({rdvs.length})</h2>
-
-          {rdvs.length === 0 ? (
-            <div style={styles.emptyState}>
-              <p>Aucun rendez-vous pour le moment</p>
-            </div>
-          ) : (
-            <div style={styles.rdvGrid}>
-              {rdvs.map((rdv) => (
-                <div key={rdv._id} style={styles.rdvCard}>
-                  <div style={styles.rdvHeader}>
-                    <h3 style={styles.rdvName}>{rdv.name}</h3>
-                    <span
-                      style={{
-                        ...styles.statusBadge,
-                        backgroundColor: getStatusColor(rdv.status)
-                      }}
-                    >
-                      {getStatusTextRdv(rdv.status)}
-                    </span>
-                  </div>
-
-                  <div style={styles.rdvInfo}>
-                    <p><strong>Email:</strong> {rdv.email}</p>
-                    {rdv.phone && <p><strong>Téléphone:</strong> {rdv.phone}</p>}
-                    <p><strong>Date:</strong> {formatDate(rdv.date)}</p>
-                    {rdv.message && <p><strong>Message:</strong> {rdv.message}</p>}
-                    <p style={styles.createdAt}>
-                      Demandé le {formatDate(rdv.createdAt)}
-                    </p>
-                  </div>
-
-                  {rdv.status === 'pending' && (
-                    <div style={styles.actions}>
-                      <button
-                        onClick={() => updateRdvStatus(rdv._id, 'confirmed')}
-                        disabled={updatingRdv === rdv._id}
-                        style={{ ...styles.actionButton, ...styles.confirmButton }}
-                      >
-                        {updatingRdv === rdv._id ? '...' : '✅ Confirmer'}
-                      </button>
-                      <button
-                        onClick={() => updateRdvStatus(rdv._id, 'cancelled')}
-                        disabled={updatingRdv === rdv._id}
-                        style={{ ...styles.actionButton, ...styles.cancelButton }}
-                      >
-                        {updatingRdv === rdv._id ? '...' : '❌ Annuler'}
-                      </button>
-                    </div>
-                  )}
+        {/* Contenu Onglet */}
+        <div>
+          {activeTab === 'rdv' && (
+            <div style={styles.rdvList}>
+              <h2 style={styles.sectionTitle}>Rendez-vous ({rdvs.length})</h2>
+              <div style={styles.stats}>
+                <div style={styles.statCard}>
+                  <h3>{rdvs.filter(rdv => rdv.status === 'pending').length}</h3>
+                  <p>En attente</p>
                 </div>
-              ))}
+                <div style={styles.statCard}>
+                  <h3>{rdvs.filter(rdv => rdv.status === 'confirmed').length}</h3>
+                  <p>Confirmés</p>
+                </div>
+                <div style={styles.statCard}>
+                  <h3>{rdvs.filter(rdv => rdv.status === 'cancelled').length}</h3>
+                  <p>Annulés</p>
+                </div>
+              </div>
+              {rdvs.length === 0 ? (
+                <div style={styles.emptyState}>
+                  <p>Aucun rendez-vous pour le moment</p>
+                </div>
+              ) : (
+                <div style={styles.rdvGrid}>
+                  {rdvs.map((rdv) => (
+                    <div key={rdv._id} style={styles.rdvCard}>
+                      <div style={styles.rdvHeader}>
+                        <div>
+                          <h3 style={styles.rdvName}>{rdv.name}</h3>
+                          <p style={styles.createdAt}>
+                            Demandé le {formatDate(rdv.createdAt)}
+                          </p>
+                        </div>
+                        <div style={styles.statusActions}>
+                          <span
+                            style={{
+                              ...styles.statusBadge,
+                              backgroundColor: getStatusColor(rdv.status)
+                            }}
+                          >
+                            {getStatusTextRdv(rdv.status)}
+                          </span>
+                          {rdv.status === 'pending' && (
+                            <div style={styles.actions}>
+                              <button
+                                onClick={() => updateRdvStatus(rdv._id, 'confirmed')}
+                                disabled={updatingRdv === rdv._id}
+                                style={{ ...styles.actionButton, ...styles.confirmButton }}
+                              >
+                                {updatingRdv === rdv._id ? '...' : '✅ Confirmer'}
+                              </button>
+                              <button
+                                onClick={() => updateRdvStatus(rdv._id, 'cancelled')}
+                                disabled={updatingRdv === rdv._id}
+                                style={{ ...styles.actionButton, ...styles.cancelButton }}
+                              >
+                                {updatingRdv === rdv._id ? '...' : '❌ Annuler'}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div style={styles.rdvInfo}>
+                        <p><strong>Email:</strong> {rdv.email}</p>
+                        {rdv.phone && <p><strong>Téléphone:</strong> {rdv.phone}</p>}
+                        <p><strong>Date:</strong> {formatDate(rdv.date)}</p>
+                        {rdv.message && <p><strong>Message:</strong> {rdv.message}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'temoignage' && (
+            <div style={styles.rdvList}>
+              <h2 style={styles.sectionTitle}>Témoignages ({temoignages.length})</h2>
+              <div style={styles.stats}>
+                <div style={styles.statCard}>
+                  <h3>{temoignages.filter(t => t.status === 'pending').length}</h3>
+                  <p>En attente</p>
+                </div>
+                <div style={styles.statCard}>
+                  <h3>{temoignages.filter(t => t.status === 'validated').length}</h3>
+                  <p>Validés</p>
+                </div>
+                <div style={styles.statCard}>
+                  <h3>{temoignages.filter(t => t.status === 'rejected').length}</h3>
+                  <p>Rejetés</p>
+                </div>
+              </div>
+              {temoignages.length === 0 ? (
+                <div style={styles.emptyState}>
+                  <p>Aucun témoignage pour le moment</p>
+                </div>
+              ) : (
+                <div style={styles.rdvGrid}>
+                  {temoignages.map((t) => (
+                    <div key={t._id} style={styles.rdvCard}>
+                      <div style={styles.rdvHeader}>
+                        <div>
+                          <h3 style={styles.rdvName}>{t.name}</h3>
+                          <p style={styles.createdAt}>
+                            Posté le {formatDate(t.createdAt)}
+                          </p>
+                        </div>
+                        <div style={styles.statusActions}>
+                          <span
+                            style={{
+                              ...styles.statusBadge,
+                              backgroundColor: getStatusColor(t.status)
+                            }}
+                          >
+                            {getStatusTextTemoignage(t.status)}
+                          </span>
+                          {t.status === 'pending' && (
+                            <div style={styles.actions}>
+                              <button
+                                onClick={() => updateTemoignageStatus(t._id, 'validated')}
+                                disabled={updatingTemoignage === t._id}
+                                style={{ ...styles.actionButton, ...styles.confirmButton }}
+                              >
+                                {updatingTemoignage === t._id ? '...' : '✅ Valider'}
+                              </button>
+                              <button
+                                onClick={() => updateTemoignageStatus(t._id, 'rejected')}
+                                disabled={updatingTemoignage === t._id}
+                                style={{ ...styles.actionButton, ...styles.cancelButton }}
+                              >
+                                {updatingTemoignage === t._id ? '...' : '❌ Rejeter'}
+                              </button>
+                            </div>
+                          )}
+                          <button
+                            style={styles.deleteButton}
+                            onClick={() => confirmDeleteTemoignage(t._id)}
+                          >
+                            Supprimer
+                          </button>
+                        </div>
+                      </div>
+                      <div style={styles.rdvInfo}>
+                        <p><strong>Message:</strong> {t.message}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'contact' && (
+            <div style={styles.rdvList}>
+              <h2 style={styles.sectionTitle}>Messages de contact ({contactMessages.length})</h2>
+              <div style={styles.stats}>
+                <div style={styles.statCard}>
+                  <h3>{contactMessages.length}</h3>
+                  <p>Total</p>
+                </div>
+                <div style={styles.statCard}>
+                  <h3>{contactMessages.filter(m => m.answered).length}</h3>
+                  <p>Répondus</p>
+                </div>
+                <div style={styles.statCard}>
+                  <h3>{contactMessages.filter(m => !m.answered).length}</h3>
+                  <p>Non répondus</p>
+                </div>
+              </div>
+              {contactMessages.length === 0 ? (
+                <div style={styles.emptyState}>
+                  <p>Aucun message de contact pour le moment</p>
+                </div>
+              ) : (
+                <div style={styles.rdvGrid}>
+                  {contactMessages.map((msg) => (
+                    <div key={msg._id} style={styles.rdvCard}>
+                      <div style={styles.rdvHeader}>
+                        <div>
+                          <h3 style={styles.rdvName}>{msg.name}</h3>
+                          <p style={styles.createdAt}>
+                            Reçu le {formatDate(msg.createdAt)}
+                          </p>
+                        </div>
+                        <div style={styles.statusActions}>
+                          <span
+                            style={{
+                              ...styles.statusBadge,
+                              backgroundColor: msg.answered ? '#27ae60' : '#f39c12'
+                            }}
+                          >
+                            {msg.answered ? 'Répondu' : 'À traiter'}
+                          </span>
+                          <button
+                            style={{
+                              ...styles.replyButton,
+                              backgroundColor: msg.answered ? '#27ae60' : '#f39c12',
+                              color: '#fff',
+                            }}
+                            disabled={msg.answered}
+                            onClick={() => handleReply(msg)}
+                          >
+                            {msg.answered ? 'Répondu' : 'Répondre'}
+                          </button>
+                          <button
+                            style={styles.deleteButton}
+                            onClick={() => confirmDelete(msg._id)}
+                          >
+                            Supprimer
+                          </button>
+                        </div>
+                      </div>
+                      <div style={styles.rdvInfo}>
+                        <p><strong>Email:</strong> {msg.email}</p>
+                        <p><strong>Message:</strong> {msg.message}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {/* Liste Témoignages */}
-        <div style={{ ...styles.rdvList, marginTop: '40px' }}>
-          <h2 style={styles.sectionTitle}>Témoignages ({temoignages.length})</h2>
-
-          {temoignages.length === 0 ? (
-            <div style={styles.emptyState}>
-              <p>Aucun témoignage pour le moment</p>
-            </div>
-          ) : (
-            <div style={styles.rdvGrid}>
-              {temoignages.map((t) => (
-                <div key={t._id} style={styles.rdvCard}>
-                  <div style={styles.rdvHeader}>
-                    <h3 style={styles.rdvName}>{t.author || t.name}</h3>
-                    <span
-                      style={{
-                        ...styles.statusBadge,
-                        backgroundColor: getStatusColor(t.status)
-                      }}
-                    >
-                      {getStatusTextTemoignage(t.status)}
-                    </span>
-                    <button
-                      style={styles.deleteButton}
-                      onClick={() => confirmDeleteTemoignage(t._id)}
-                    >
-                      Supprimer
-                    </button>
-                  </div>
-
-                  <div style={styles.rdvInfo}>
-                    <p><strong>Message:</strong> {t.message}</p>
-                    <p style={styles.createdAt}>
-                      Posté le {formatDate(t.createdAt)}
-                    </p>
-                  </div>
-
-                  {t.status === 'pending' && (
-                    <div style={styles.actions}>
-                      <button
-                        onClick={() => updateTemoignageStatus(t._id, 'validated')}
-                        disabled={updatingTemoignage === t._id}
-                        style={{ ...styles.actionButton, ...styles.confirmButton }}
-                      >
-                        {updatingTemoignage === t._id ? '...' : '✅ Valider'}
-                      </button>
-                      <button
-                        onClick={() => updateTemoignageStatus(t._id, 'rejected')}
-                        disabled={updatingTemoignage === t._id}
-                        style={{ ...styles.actionButton, ...styles.cancelButton }}
-                      >
-                        {updatingTemoignage === t._id ? '...' : '❌ Rejeter'}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Liste Messages de contact */}
-        <div style={{ ...styles.rdvList, marginTop: '40px' }}>
-          <h2 style={styles.sectionTitle}>Messages de contact ({contactMessages.length})</h2>
-          {contactMessages.length === 0 ? (
-            <div style={styles.emptyState}>
-              <p>Aucun message de contact pour le moment</p>
-            </div>
-          ) : (
-            <div style={styles.rdvGrid}>
-              {contactMessages.map((msg) => (
-                <div key={msg._id} style={styles.rdvCard}>
-                  <div style={styles.rdvHeader}>
-                    <h3 style={styles.rdvName}>{msg.name}</h3>
-                    <div>
-                      <button
-                        style={{
-                          ...styles.replyButton,
-                          backgroundColor: msg.answered ? '#27ae60' : '#f39c12',
-                          color: '#fff',
-                        }}
-                        disabled={msg.answered}
-                        onClick={() => handleReply(msg)}
-                      >
-                        {msg.answered ? 'Répondu' : 'Répondre'}
-                      </button>
-                      <button
-                        style={styles.deleteButton}
-                        onClick={() => confirmDelete(msg._id)}
-                      >
-                        Supprimer
-                      </button>
-                    </div>
-                  </div>
-                  <div style={styles.rdvInfo}>
-                    <p><strong>Email:</strong> {msg.email}</p>
-                    <p><strong>Message:</strong> {msg.message}</p>
-                    <p style={styles.createdAt}>
-                      Reçu le {formatDate(msg.createdAt)}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Modale de confirmation */}
+        {/* Modale suppression contact */}
         {showDeleteModal && (
           <div style={styles.modalOverlay}>
             <div style={styles.modalContent}>
@@ -393,7 +449,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Modale de confirmation suppression témoignage */}
+        {/* Modale suppression témoignage */}
         {showDeleteTemoignageModal && (
           <div style={styles.modalOverlay}>
             <div style={styles.modalContent}>
@@ -448,6 +504,28 @@ const styles = {
     cursor: 'pointer',
     fontSize: '1rem',
   },
+  tabs: {
+    display: 'flex',
+    gap: '10px',
+    marginBottom: '30px',
+  },
+  tabButton: {
+    padding: '12px 32px',
+    backgroundColor: '#f3f3f3',
+    color: '#2c3e50',
+    border: '1px solid #ccc',
+    borderRadius: '8px 8px 0 0',
+    cursor: 'pointer',
+    fontSize: '1.1rem',
+    fontWeight: 'bold',
+    transition: 'background 0.2s',
+  },
+  activeTabButton: {
+    backgroundColor: '#fff',
+    color: '#2980b9',
+    borderBottom: '2px solid #2980b9',
+    boxShadow: '0 -2px 10px rgba(44,62,80,0.07)',
+  },
   stats: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -499,6 +577,12 @@ const styles = {
     color: '#fff',
     fontSize: '0.9rem',
     fontWeight: '600',
+    marginRight: '10px',
+  },
+  statusActions: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
   },
   rdvInfo: {
     marginBottom: '20px',
@@ -539,34 +623,6 @@ const styles = {
     boxShadow: '0 2px 6px rgba(44,62,80,0.07)',
     transition: 'background 0.3s',
   },
-  loadingContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-  },
-  spinner: {
-    width: '40px',
-    height: '40px',
-    border: '4px solid #f3f3f3',
-    borderTop: '4px solid #3498db',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
-  },
-  emptyState: {
-    textAlign: 'center',
-    padding: '40px',
-    color: '#7f8c8d',
-  },
-  errorMessage: {
-    padding: '15px',
-    backgroundColor: '#f8d7da',
-    color: '#721c24',
-    border: '1px solid #f5c6cb',
-    borderRadius: '8px',
-    marginBottom: '20px',
-  },
   replyButton: {
     padding: '8px 18px',
     border: 'none',
@@ -606,20 +662,17 @@ const styles = {
     boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
     textAlign: 'center',
   },
+  emptyState: {
+    textAlign: 'center',
+    padding: '40px',
+    color: '#7f8c8d',
+  },
+  errorMessage: {
+    padding: '15px',
+    backgroundColor: '#f8d7da',
+    color: '#721c24',
+    border: '1px solid #f5c6cb',
+    borderRadius: '8px',
+    marginBottom: '20px',
+  },
 };
-
-// Ajoute la fonction handleReply (exemple simple) :
-async function handleReply(msg) {
-  // Ouvre le mail
-  window.location.href = `mailto:${msg.email}?subject=Réponse à votre message`;
-
-  // Met à jour le statut en BDD
-  try {
-    await api.patch(`/admin/contact-messages/${msg._id}/answered`);
-    setContactMessages(prev =>
-      prev.map(m => m._id === msg._id ? { ...m, answered: true } : m)
-    );
-  } catch (err) {
-    setError('Erreur lors du changement de statut du message');
-  }
-}

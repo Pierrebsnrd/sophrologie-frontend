@@ -84,6 +84,10 @@
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 170px;
 }
 
 .temoignageCard::before {
@@ -127,11 +131,29 @@
   font-family: Georgia, serif;
 }
 
+.temoignageFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 1.5rem;
+}
+
+.temoignageDate {
+  font-size: 0.95rem;
+  color: #7f8c8d;
+  font-style: italic;
+  margin-bottom: 0;
+  margin-top: 0;
+  text-align: left;
+}
+
 .temoignageAuthor {
   font-weight: 600;
   font-size: 1rem;
   color: #2d5a3d;
   text-align: right;
+  margin-bottom: 0;
+  margin-top: 0;
   position: relative;
 }
 
@@ -144,6 +166,15 @@
   height: 2px;
   background: linear-gradient(90deg, #48bb78, #38a169);
 }
+
+.loadMoreContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  grid-column: 1 / -1; /* S'étend sur toutes les colonnes */
+}
+
 
 /* SECTION POST */
 .post {
