@@ -282,6 +282,17 @@ export default function AdminDashboard() {
                 <div key={msg._id} style={styles.rdvCard}>
                   <div style={styles.rdvHeader}>
                     <h3 style={styles.rdvName}>{msg.name}</h3>
+                    <button
+                      style={{
+                        ...styles.replyButton,
+                        backgroundColor: msg.answered ? '#27ae60' : '#f39c12', // vert si répondu, orange sinon
+                        color: '#fff',
+                      }}
+                      disabled={msg.answered}
+                      onClick={() => handleReply(msg)}
+                    >
+                      {msg.answered ? 'Répondu' : 'Répondre'}
+                    </button>
                   </div>
                   <div style={styles.rdvInfo}>
                     <p><strong>Email:</strong> {msg.email}</p>
@@ -440,4 +451,30 @@ const styles = {
     borderRadius: '8px',
     marginBottom: '20px',
   },
+  replyButton: {
+    padding: '8px 18px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    marginLeft: '10px',
+    transition: 'background 0.3s',
+  },
 };
+
+// Ajoute la fonction handleReply (exemple simple) :
+async function handleReply(msg) {
+  // Ouvre le mail
+  window.location.href = `mailto:${msg.email}?subject=Réponse à votre message`;
+
+  // Met à jour le statut en BDD
+  try {
+    await api.patch(`/admin/contact-messages/${msg._id}/answered`);
+    setContactMessages(prev =>
+      prev.map(m => m._id === msg._id ? { ...m, answered: true } : m)
+    );
+  } catch (err) {
+    setError('Erreur lors du changement de statut du message');
+  }
+}
