@@ -345,7 +345,7 @@
     height: 45vh;
     min-height: 250px;
   }
-  
+
   .presentationSection,
   .historySection,
   .ctaSection {
@@ -359,5 +359,10 @@
 
   .paragraph {
     font-size: 1rem;
+  }
+
+  .presentationSection {
+    flex-direction: column;
+    align-items: center;
   }
 }
