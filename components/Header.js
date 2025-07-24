@@ -15,15 +15,37 @@ const navLinks = [
   { href: '/charte', label: 'Charte éthique' },
 ];
 
-
 export default function Header() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className={styles.headerContainer}>
-      {/* Social + Logo + Hamburger */}
       <div className={styles.topBar}>
+        {/* Logo à gauche desktop, au centre mobile */}
+        <div className={styles.logoContainer}>
+          <Link href="/">
+            <Image src="/logo/logo-mod.jpeg" alt="Logo" width={60} height={60} />
+          </Link>
+        </div>
+
+        {/* Menu navigation centré (desktop uniquement) */}
+        <nav className={styles.navbar}>
+          <ul className={styles.navList}>
+            {navLinks.map(({ href, label }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={`${styles.navLink} ${router.pathname === href ? styles.active : ''}`}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Icônes sociales à droite desktop, à gauche mobile */}
         <div className={styles.socialIcons}>
           <a href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <FaFacebookF />
@@ -33,36 +55,38 @@ export default function Header() {
           </a>
         </div>
 
-        <div className={styles.logoContainer}>
-          <Link href="/">
-            <Image src="/logo/logo-mod.jpeg" alt="Logo" width={60} height={60} />
-          </Link>
-        </div>
-
-        <button className={styles.hamburger} onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
+        {/* Hamburger menu (visible uniquement mobile) */}
+        <button
+          className={styles.hamburger}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Menu"
+          aria-expanded={menuOpen}
+        >
           <FaBars />
         </button>
       </div>
 
-      {/* NAVIGATION */}
-      <nav className={`${styles.navbar} ${menuOpen ? styles.open : ''}`}>
-        <ul className={styles.navList}>
-          {navLinks.map(({ href, label }) => (
-            <li key={href}>
-              <Link
-                href={href}
-                onClick={() => {
-                  setMenuOpen(false);
-                  if (href === "/qui-suis-je") sessionStorage.setItem("playMusic", "true");
-                }}
-                className={`${styles.navLink} ${router.pathname === href ? styles.active : ''}`}
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Menu mobile (dropdown) */}
+      {menuOpen && (
+        <nav className={styles.mobileNav}>
+          <ul className={styles.mobileNavList}>
+            {navLinks.map(({ href, label }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    if (href === "/qui-suis-je") sessionStorage.setItem("playMusic", "true");
+                  }}
+                  className={`${styles.navLink} ${router.pathname === href ? styles.active : ''}`}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </header>
   );
 }
