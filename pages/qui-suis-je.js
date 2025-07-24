@@ -3,13 +3,23 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Image from "next/image";
 import styles from "../styles/QuiSuisJe.module.css";
+import { useState } from "react";
 
 export default function QuiSuisJe() {
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  // Cette fonction sera appelée au premier clic n'importe où dans la page
+  const onFirstInteraction = () => {
+    if (!hasInteracted) {
+      setHasInteracted(true);
+    }
+  };
+
   return (
     <>
       <Header />
       <div className={styles.pageContainer}>
-        
+
         {/* HERO SECTION */}
         <section className={styles.hero}>
           <Image
@@ -26,7 +36,7 @@ export default function QuiSuisJe() {
 
         {/* CONTENU PRINCIPAL */}
         <div className={styles.content}>
-          
+
           {/* SECTION PRÉSENTATION */}
           <section className={styles.presentationSection}>
             <div className={styles.imageContainer}>
@@ -38,7 +48,7 @@ export default function QuiSuisJe() {
                 className={styles.image}
               />
             </div>
-            
+
             <div className={styles.textContainer}>
               <h2 className={styles.title}>Stéphanie Habert</h2>
               <p className={styles.paragraph}>
@@ -76,6 +86,9 @@ export default function QuiSuisJe() {
             </Link>
           </section>
         </div>
+      </div>
+      <div onClick={onFirstInteraction} style={{ minHeight: '100vh' }}>
+        <BackgroundMusic play={hasInteracted} />
       </div>
       <Footer />
     </>
