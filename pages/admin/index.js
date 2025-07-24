@@ -344,7 +344,17 @@ export default function AdminDashboard() {
               <h3>Confirmer la suppression</h3>
               <p>Voulez-vous vraiment supprimer ce message ?</p>
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                <button style={styles.cancelButton} onClick={() => setShowDeleteModal(false)}>
+                <button
+                  style={{
+                    ...styles.cancelButton,
+                    backgroundColor: '#f3f3f3',
+                    color: '#2c3e50',
+                    border: '1px solid #ccc',
+                    fontWeight: 'bold',
+                    boxShadow: '0 2px 6px rgba(44,62,80,0.07)',
+                  }}
+                  onClick={() => setShowDeleteModal(false)}
+                >
                   Annuler
                 </button>
                 <button style={styles.deleteButton} onClick={handleDeleteConfirmed}>
@@ -468,8 +478,17 @@ const styles = {
     color: '#fff',
   },
   cancelButton: {
-    backgroundColor: '#e74c3c',
-    color: '#fff',
+    backgroundColor: '#f3f3f3',
+    color: '#2c3e50',
+    border: '1px solid #ccc',
+    padding: '8px 18px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '0.95rem',
+    fontWeight: 'bold',
+    marginLeft: '10px',
+    boxShadow: '0 2px 6px rgba(44,62,80,0.07)',
+    transition: 'background 0.3s',
   },
   loadingContainer: {
     display: 'flex',
