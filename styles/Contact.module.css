@@ -1,3 +1,24 @@
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 /* HERO */
 .hero {
   position: relative;
@@ -41,18 +62,6 @@
   font-family: 'Georgia', serif;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* CONTENU PRINCIPAL */
 .pageContainer {
   display: flex;
@@ -71,7 +80,7 @@
 }
 
 /* SECTIONS */
-.contactSection {
+.contactSection, .contactFormMapSection {
   background: rgba(255, 255, 255, 0.95);
   padding: 3rem;
   border-radius: 30px;
@@ -80,13 +89,23 @@
   backdrop-filter: blur(20px);
   position: relative;
   overflow: hidden;
-  opacity: 0;
-  animation: fadeInUp 1s ease-out 0.3s forwards;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
+  opacity: 0;
+  animation: fadeInUp 1s ease-out forwards;
 }
 
-.contactSection::before {
+.contactSection {
+  max-width: 800px;
+  animation-delay: 0.3s;
+}
+
+.contactFormMapSection {
+  background: linear-gradient(145deg, #f0fdfa 0%, #ecfdf5 100%);
+  animation-delay: 0.5s;
+}
+
+.contactSection::before, .contactFormMapSection::before {
   content: '';
   position: absolute;
   top: 0;
@@ -96,8 +115,13 @@
   background: linear-gradient(90deg, #48bb78, #38a169, #2f855a);
 }
 
-.contactSection h1 {
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
+.contactFormMapSection::before {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #48bb78 50%, transparent 100%);
+}
+
+.contactSection h1, .formContainer h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
   margin-bottom: 1.5rem;
   font-weight: 400;
   color: #2d5a3d;
@@ -108,16 +132,27 @@
   width: 100%;
 }
 
-.contactSection h1::after {
+.contactSection h1 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.contactSection h1::after, .formContainer h2::after {
   content: '';
   position: absolute;
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
   height: 3px;
   background: linear-gradient(90deg, #48bb78, #38a169);
   border-radius: 2px;
+}
+
+.contactSection h1::after {
+  width: 80px;
+}
+
+.formContainer h2::after {
+  width: 60px;
 }
 
 .contactSection h2 {
@@ -127,8 +162,7 @@
   font-weight: 500;
 }
 
-.contactSection p,
-.contactSection li {
+.contactSection p, .contactSection li {
   font-size: 1.1rem;
   line-height: 1.8;
   margin: 0.5rem 0;
@@ -173,32 +207,7 @@
   background: rgba(72, 187, 120, 0.2);
 }
 
-/* SECTION FORMULAIRE + CARTE */
-.contactFormMapSection {
-  background: linear-gradient(145deg, #f0fdfa 0%, #ecfdf5 100%);
-  padding: 3rem;
-  border-radius: 30px;
-  box-shadow: 0 20px 40px rgba(72, 187, 120, 0.1);
-  border: 1px solid rgba(72, 187, 120, 0.1);
-  backdrop-filter: blur(20px);
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  animation: fadeInUp 1s ease-out 0.5s forwards;
-  width: 100%;
-  max-width: 1200px;
-}
-
-.contactFormMapSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #48bb78 50%, transparent 100%);
-}
-
+/* FORMULAIRE */
 .flexContainer {
   display: flex;
   gap: 3rem;
@@ -213,27 +222,6 @@
   flex-direction: column;
 }
 
-.formContainer h2 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  margin-bottom: 1.5rem;
-  font-weight: 400;
-  color: #2d5a3d;
-  letter-spacing: 1px;
-  position: relative;
-  display: inline-block;
-}
-
-.formContainer h2::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #48bb78, #38a169);
-  border-radius: 2px;
-}
-
 .contactForm {
   display: flex;
   flex-direction: column;
@@ -246,8 +234,7 @@
   font-size: 1rem;
 }
 
-.contactForm input,
-.contactForm textarea {
+.contactForm input, .contactForm textarea {
   padding: 1rem;
   border: 2px solid rgba(72, 187, 120, 0.2);
   border-radius: 15px;
@@ -257,17 +244,15 @@
   backdrop-filter: blur(10px);
 }
 
-.contactForm input:focus,
-.contactForm textarea:focus {
+.contactForm input:focus, .contactForm textarea:focus {
   border-color: #48bb78;
   box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
   outline: none;
   background: white;
 }
 
-/* Styles pour les messages de confirmation et d'erreur */
-.confirmationMessage,
-.errorMessage {
+/* MESSAGES */
+.confirmationMessage, .errorMessage {
   color: #2ecc71;
   margin: 10px 0;
   font-weight: 500;
@@ -279,7 +264,6 @@
   color: #e74c3c;
 }
 
-/* Nouveau style pour le message d'erreur d'email */
 .labelErrorContainer {
   display: flex;
   justify-content: space-between;
@@ -294,6 +278,7 @@
   text-align: left;
 }
 
+/* BOUTON */
 .contactForm button {
   background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
   color: white;
@@ -331,6 +316,7 @@
   background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
 }
 
+/* CARTE */
 .mapContainer {
   flex: 1;
   min-width: 320px;
@@ -364,18 +350,6 @@
 }
 
 /* ANIMATIONS */
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
 .contactSection {
   animation: fadeInUp 1s ease-out 0.3s forwards, float 6s ease-in-out infinite 2s;
 }
@@ -392,8 +366,7 @@
     gap: 3rem;
   }
 
-  .contactSection,
-  .contactFormMapSection {
+  .contactSection, .contactFormMapSection {
     padding: 2rem;
   }
 
@@ -405,10 +378,6 @@
   .mapContainer iframe {
     height: 250px;
   }
-
-  .socialIcons {
-    justify-content: center;
-  }
 }
 
 @media (max-width: 480px) {
@@ -417,13 +386,11 @@
     min-height: 250px;
   }
 
-  .contactSection,
-  .contactFormMapSection {
+  .contactSection, .contactFormMapSection {
     padding: 1.5rem;
   }
 
-  .contactForm input,
-  .contactForm textarea {
+  .contactForm input, .contactForm textarea {
     padding: 0.8rem;
   }
 }

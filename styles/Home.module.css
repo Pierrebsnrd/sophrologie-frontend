@@ -1,3 +1,24 @@
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 /* HERO */
 .hero {
   position: relative;
@@ -41,35 +62,20 @@
   font-family: 'Georgia', serif;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* SECTIONS */
-.section,
-.sectionAlt {
+.section, .sectionAlt {
   padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 2rem);
   text-align: center;
   position: relative;
+  color: #2d3748;
 }
 
 .section {
   background: linear-gradient(145deg, #ffffff 0%, #f9fffe 100%);
-  color: #2d3748;
 }
 
 .sectionAlt {
   background: linear-gradient(145deg, #f0fdfa 0%, #ecfdf5 100%);
-  color: #2d3748;
-  position: relative;
 }
 
 .sectionAlt::before {
@@ -89,7 +95,7 @@
   animation: fadeInUp 1s ease-out forwards;
 }
 
-.sectionInner h2 {
+.sectionInner h2, .sectionTitle {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   margin-bottom: 1.5rem;
   font-weight: 400;
@@ -99,16 +105,27 @@
   display: inline-block;
 }
 
-.sectionInner h2::after {
+.sectionInner h2::after, .sectionTitle::after {
   content: '';
   position: absolute;
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
   height: 3px;
   background: linear-gradient(90deg, #48bb78, #38a169);
   border-radius: 2px;
+}
+
+.sectionInner h2::after {
+  width: 60px;
+}
+
+.sectionTitle::after {
+  width: 80px;
+}
+
+.sectionTitle {
+  margin-bottom: 3rem;
 }
 
 .sectionInner p {
@@ -119,28 +136,6 @@
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-}
-
-.sectionTitle {
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  margin-bottom: 3rem;
-  font-weight: 400;
-  color: #2d5a3d;
-  letter-spacing: 1px;
-  position: relative;
-  display: inline-block;
-}
-
-.sectionTitle::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, #48bb78, #38a169);
-  border-radius: 2px;
 }
 
 /* GRID */
@@ -154,6 +149,7 @@
   margin-right: auto;
 }
 
+/* CARD */
 .card {
   background: rgba(255, 255, 255, 0.95);
   padding: 2rem 1.5rem;
@@ -248,19 +244,7 @@
   transform: translateY(0);
 }
 
-/* ANIMATIONS */
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
+/* ANIMATIONS SPECIFIQUES */
 .section:nth-child(even) .card:nth-child(2) {
   animation: float 6s ease-in-out infinite;
   animation-delay: 1s;
@@ -279,12 +263,10 @@
   }
 
   .heroTitle {
-    font-size: clamp(2.2rem, 5vw, 4rem);
     padding: 0 1rem;
   }
 
-  .section,
-  .sectionAlt {
+  .section, .sectionAlt {
     padding: 2rem 1rem;
   }
 
@@ -300,7 +282,7 @@
     height: 45vh;
     min-height: 250px;
   }
-  
+
   .card {
     padding: 1.5rem 1rem;
   }

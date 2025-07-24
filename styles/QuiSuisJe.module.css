@@ -1,3 +1,16 @@
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* PAGE CONTAINER */
 .pageContainer {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fffe 0%, #e8f5f3 50%, #d4edda 100%);
@@ -71,6 +84,8 @@
   gap: 2rem;
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  animation: fadeInUp 1s ease-out 0.3s forwards;
 }
 
 .presentationSection::before {
@@ -92,7 +107,6 @@
 
 .image {
   border-radius: 50%;
-  /* Cercle parfait */
   box-shadow: 0 15px 35px rgba(72, 187, 120, 0.2);
   transition: all 0.4s ease;
   border: 4px solid rgba(255, 255, 255, 0.8);
@@ -100,9 +114,7 @@
   width: 300px;
   height: 300px;
   object-fit: cover;
-  /* Maintient les proportions et centre l'image */
   object-position: center top;
-  /* Centre horizontalement et remonte légèrement l'image */
 }
 
 .image:hover {
@@ -169,6 +181,8 @@
   border: 1px solid rgba(72, 187, 120, 0.1);
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  animation: fadeInUp 1s ease-out 0.6s forwards;
 }
 
 .historySection::before {
@@ -178,9 +192,8 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(72, 187, 120, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(56, 161, 105, 0.05) 0%, transparent 50%);
+  background: radial-gradient(circle at 20% 20%, rgba(72, 187, 120, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(56, 161, 105, 0.05) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -215,6 +228,8 @@
   box-shadow: 0 15px 35px rgba(72, 187, 120, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(72, 187, 120, 0.1);
+  opacity: 0;
+  animation: fadeInUp 1s ease-out 0.9s forwards;
 }
 
 .ctaParagraph {
@@ -271,34 +286,6 @@
   transform: translateY(-1px);
 }
 
-/* ANIMATIONS */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.presentationSection {
-  opacity: 0;
-  animation: fadeInUp 1s ease-out 0.3s forwards;
-}
-
-.historySection {
-  opacity: 0;
-  animation: fadeInUp 1s ease-out 0.6s forwards;
-}
-
-.ctaSection {
-  opacity: 0;
-  animation: fadeInUp 1s ease-out 0.9s forwards;
-}
-
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .hero {
@@ -330,6 +317,7 @@
     width: 100%;
     max-width: 350px;
   }
+
   .content {
     gap: 5rem;
   }

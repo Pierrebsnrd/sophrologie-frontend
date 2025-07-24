@@ -1,3 +1,25 @@
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+/* PAGE CONTAINER */
 .pageContainer {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fffe 0%, #e8f5f3 50%, #d4edda 100%);
@@ -32,7 +54,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* backdrop-filter: blur(1px); */
 }
 
 .heroTitle {
@@ -83,16 +104,19 @@
 }
 
 /* TITRES */
+.title, .subTitle {
+  font-family: 'Georgia', serif;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
 .title {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 400;
   color: #2d5a3d;
   margin-bottom: 2rem;
-  text-align: center;
-  letter-spacing: 1px;
-  position: relative;
-  display: inline-block;
-  font-family: 'Georgia', serif;
   width: 100%;
 }
 
@@ -114,10 +138,6 @@
   margin-bottom: 1.5rem;
   font-weight: 500;
   color: #2d5a3d;
-  letter-spacing: 0.5px;
-  position: relative;
-  display: inline-block;
-  font-family: 'Georgia', serif;
 }
 
 .subTitle::after {
@@ -132,13 +152,11 @@
 }
 
 /* TEXTES */
-.intro,
-.info {
+.intro, .info, .note {
   font-size: 1.1rem;
   line-height: 1.8;
   color: #4a5568;
   margin-bottom: 1.5rem;
-  text-align: justify;
 }
 
 .intro {
@@ -150,8 +168,6 @@
 }
 
 .note {
-  font-size: 1rem;
-  margin-bottom: 2rem;
   font-style: italic;
   color: #2d5a3d;
   text-align: center;
@@ -198,6 +214,8 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 
 .tarifList li::before {
@@ -240,7 +258,7 @@
   opacity: 0.8;
 }
 
-/* SECTIONS SPÉCIALES - Intégrées dans tarifSection */
+/* SECTIONS SPÉCIALES */
 .tarifSection .solidaireInfo,
 .tarifSection .remboursementInfo {
   background: linear-gradient(145deg, #f0fdfa 0%, #ecfdf5 100%);
@@ -250,6 +268,16 @@
   margin-top: 2rem;
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.tarifSection .solidaireInfo {
+  animation-delay: 0.6s;
+}
+
+.tarifSection .remboursementInfo {
+  animation-delay: 0.8s;
 }
 
 .tarifSection .solidaireInfo::before,
@@ -260,7 +288,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background: 
+  background:
     radial-gradient(circle at 20% 20%, rgba(72, 187, 120, 0.03) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(56, 161, 105, 0.03) 0%, transparent 50%);
   pointer-events: none;
@@ -331,42 +359,6 @@
   transform: translateY(-1px);
 }
 
-/* ANIMATIONS */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Animation pour les éléments de la liste */
-.tarifList li {
-  opacity: 0;
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.tarifList li:nth-child(1) { animation-delay: 0.1s; }
-.tarifList li:nth-child(2) { animation-delay: 0.2s; }
-.tarifList li:nth-child(3) { animation-delay: 0.3s; }
-.tarifList li:nth-child(4) { animation-delay: 0.4s; }
-.tarifList li:nth-child(5) { animation-delay: 0.5s; }
-.tarifList li:nth-child(6) { animation-delay: 0.6s; }
-.tarifList li:nth-child(7) { animation-delay: 0.7s; }
-
-.solidaireInfo {
-  opacity: 0;
-  animation: fadeInUp 1s ease-out 0.6s forwards;
-}
-
-.remboursementInfo {
-  opacity: 0;
-  animation: fadeInUp 1s ease-out 0.8s forwards;
-}
-
 /* EFFET DE PARALLAXE SUBTIL */
 .tarifSection::after {
   content: '';
@@ -379,14 +371,14 @@
   animation: float 8s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-10px) rotate(2deg);
-  }
-}
+/* ANIMATIONS POUR LES ÉLÉMENTS DE LA LISTE */
+.tarifList li:nth-child(1) { animation-delay: 0.1s; }
+.tarifList li:nth-child(2) { animation-delay: 0.2s; }
+.tarifList li:nth-child(3) { animation-delay: 0.3s; }
+.tarifList li:nth-child(4) { animation-delay: 0.4s; }
+.tarifList li:nth-child(5) { animation-delay: 0.5s; }
+.tarifList li:nth-child(6) { animation-delay: 0.6s; }
+.tarifList li:nth-child(7) { animation-delay: 0.7s; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
@@ -394,31 +386,28 @@
     height: 50vh;
     min-height: 350px;
   }
-  
+
   .content {
     padding: 2rem 1rem;
-    gap: 3rem;
-  }
-    .content {
     gap: 5rem;
   }
-  
+
   .tarifSection,
   .tarifSection .solidaireInfo,
   .tarifSection .remboursementInfo,
   .ctaSection {
     padding: 2rem 1.5rem;
   }
-  
+
   .tarifList li {
     padding: 1.2rem;
   }
-  
+
   .intro,
   .info {
     text-align: left;
   }
-  
+
   .ctaButton {
     width: 100%;
     max-width: 350px;
@@ -430,27 +419,27 @@
     height: 45vh;
     min-height: 250px;
   }
-  
+
   .tarifSection,
   .tarifSection .solidaireInfo,
   .tarifSection .remboursementInfo,
   .ctaSection {
     padding: 1.5rem 1rem;
   }
-  
+
   .tarifList li {
     padding: 1rem;
   }
-  
+
   .intro,
   .info {
     font-size: 1rem;
   }
-  
+
   .tarifList strong {
     font-size: 1rem;
   }
-  
+
   .note {
     padding: 0.8rem;
     font-size: 0.9rem;
