@@ -29,6 +29,18 @@ function App({ Component, pageProps }) {
         <meta property="og:url" content="https://www.sophrologuevillepreux.fr" />
         <meta property="og:image" content="https://www.sophrologuevillepreux.fr/icons/favicon.png" />
         <meta property="og:image:alt" content="Logo de Stéphanie Habert Sophrologie" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Stéphanie Habert – Sophrologue à Villepreux",
+              "url": "https://www.sophrologuevillepreux.fr",
+              "logo": "https://www.sophrologuevillepreux.fr/icons/logo-mod.jpeg"
+            }),
+          }}
+        />
       </Head>
       <Component {...pageProps} />
       <style jsx global>{`
