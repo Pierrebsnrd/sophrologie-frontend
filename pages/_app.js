@@ -7,12 +7,28 @@ function App({ Component, pageProps }) {
     <>
       <Head>
         <title>Stéphanie Habert – Sophrologie à Villepreux</title>
-        <meta name="description" content="Consultation de sophrologie personnalisée à Villepreux avec Stéphanie Habert. Prenez rendez-vous facilement pour améliorer votre bien-être." />
+        <meta
+          name="description"
+          content="Consultation de sophrologie personnalisée à Villepreux avec Stéphanie Habert. Prenez rendez-vous facilement pour améliorer votre bien-être."
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Favicon */}
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon.png" />
         <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
         <link rel="shortcut icon" href="/icons/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Stéphanie Habert – Sophrologie à Villepreux" />
+        <meta
+          property="og:description"
+          content="Consultation de sophrologie personnalisée à Villepreux avec Stéphanie Habert. Prenez rendez-vous facilement pour améliorer votre bien-être."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.sophrologuevillepreux.fr" />
+        <meta property="og:image" content="https://www.sophrologuevillepreux.fr/icons/favicon.png" />
+        <meta property="og:image:alt" content="Logo de Stéphanie Habert Sophrologie" />
       </Head>
       <Component {...pageProps} />
       <style jsx global>{`

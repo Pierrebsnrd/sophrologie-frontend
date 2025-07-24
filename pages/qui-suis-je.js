@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Image from "next/image";
@@ -30,6 +31,18 @@ export default function QuiSuisJe() {
 
   return (
     <>
+    <Head>
+        <title>Qui suis-je ? - Stéphanie Habert Sophrologue à Villepreux</title>
+        <meta name="description" content="Découvrez le parcours et l'approche bienveillante de Stéphanie Habert, sophrologue certifiée, pour vous accompagner vers l'équilibre et le mieux-être." />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Qui suis-je ? - Stéphanie Habert Sophrologue" />
+        <meta property="og:description" content="Découvrez le parcours unique et l'accompagnement personnalisé de Stéphanie Habert à Villepreux." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.sophrologuevillepreux.fr/quisuisje" />
+        <meta property="og:image" content="https://www.sophrologuevillepreux.fr/bannieres/musique.jpg" />
+        <meta property="og:image:alt" content="Note de musique symbolisant l'harmonie et l'équilibre" />
+      </Head>
       <Header />
       <BackgroundMusic autoPlay={shouldAutoPlay} />
 

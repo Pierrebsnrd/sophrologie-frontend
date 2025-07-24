@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Image from "next/image";
@@ -48,6 +49,24 @@ export default function Temoignages() {
 
     return (
         <>
+            <Head>
+                <title>Témoignages - Sophrologie avec Stéphanie Habert à Villepreux</title>
+                <meta
+                    name="description"
+                    content="Découvrez les témoignages des personnes accompagnées par Stéphanie Habert, sophrologue certifiée. Partagez aussi votre expérience."
+                />
+
+                {/* Open Graph */}
+                <meta property="og:title" content="Témoignages - Sophrologie avec Stéphanie Habert" />
+                <meta
+                    property="og:description"
+                    content="Lisez les avis et retours d'expérience des clients de Stéphanie Habert. Un espace de partage bienveillant."
+                />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://www.sophrologuevillepreux.fr/temoignages" />
+                <meta property="og:image" content="https://www.sophrologuevillepreux.fr/bannieres/temoignage.jpg" />
+                <meta property="og:image:alt" content="Image illustrant des témoignages clients" />
+            </Head>
             <Header />
 
             {/* HERO SECTION */}
@@ -69,7 +88,7 @@ export default function Temoignages() {
                 {/* SECTION TEMOIGNAGES */}
                 <section className={styles.temoignage}>
                     {/* Témoignages statiques */}
-                     <div className={styles.temoignageCard}>
+                    <div className={styles.temoignageCard}>
                         <p className={styles.temoignageText}>
                             “Grâce à Stéphanie, j'ai appris à mieux gérer mon stress et à retrouver un sommeil réparateur.”
                         </p>

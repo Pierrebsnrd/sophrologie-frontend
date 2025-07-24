@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Head from "next/head";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import styles from "../styles/Contact.module.css";
@@ -80,6 +81,20 @@ export default function Contact() {
 
     return (
         <>
+            <Head>
+                <title>Contact – Stéphanie Habert, Sophrologue à Villepreux</title>
+                <meta
+                    name="description"
+                    content="Contactez Stéphanie Habert, sophrologue à Villepreux. Prenez rendez-vous ou posez vos questions via notre formulaire simple et rapide."
+                />
+
+                {/* Open Graph */}
+                <meta property="og:title" content="Contact – Stéphanie Habert, Sophrologue à Villepreux" />
+                <meta property="og:description" content="Contactez Stéphanie Habert, sophrologue à Villepreux. Prenez rendez-vous ou posez vos questions via notre formulaire simple et rapide." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://www.sophrologue-villepreux.fr/contact" />
+                <meta property="og:image" content="https://www.sophrologue-villepreux.fr/bannieres/contact.jpg" />
+            </Head>
             <Header />
             <div className={styles.pageContainer}>
                 <section className={styles.hero}>
