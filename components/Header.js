@@ -34,6 +34,11 @@ export default function Header() {
             <li key={href}>
               <Link
                 href={href}
+                onClick={() => {
+                  if (href === "/qui-suis-je") {
+                    sessionStorage.setItem("playMusic", "true");
+                  }
+                }}
                 className={`${styles.navLink} ${router.pathname === href ? styles.active : ''}`}
               >
                 {label}
