@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import Image from "next/image";
 import styles from "../styles/QuiSuisJe.module.css";
 import { useState } from "react";
+import BackgroundMusic from '../components/BackgroundMusic';
 
 export default function QuiSuisJe() {
   const [hasInteracted, setHasInteracted] = useState(false);
