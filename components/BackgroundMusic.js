@@ -19,18 +19,19 @@ export default function BackgroundMusic({ play }) {
   }, [play, isPlaying]);
 
   const togglePlay = () => {
-    if (!audioRef.current) return;
+    const audio = audioRef.current;
+    if (!audio) return;
 
     if (isPlaying) {
-      audioRef.current.pause();
+      audio.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play()
+      audio.play()
         .then(() => setIsPlaying(true))
-        .catch(err => console.warn("Erreur lecture audio :", err));
+        .catch((err) => console.warn("Erreur lecture audio :", err));
     }
   };
-
+  
   // Pour stopper le son lors du démontage du composant (quand on change de page)
   useEffect(() => {
     return () => {
