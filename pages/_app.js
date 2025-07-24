@@ -6,7 +6,6 @@ function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Stéphanie Habert – Sophrologie à Villepreux</title>
         <meta
           name="description"
           content="Consultation de sophrologie personnalisée à Villepreux avec Stéphanie Habert. Prenez rendez-vous facilement pour améliorer votre bien-être."

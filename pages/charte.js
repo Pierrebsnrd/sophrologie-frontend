@@ -1,4 +1,4 @@
-import Head from "next/head";
+import SEO from "../components/SEO";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styles from "../styles/Charte.module.css";
@@ -7,24 +7,15 @@ import Image from "next/image";
 export default function Charte() {
     return (
         <>
-            <Head>
-                <title>Charte éthique – Sophrologie Villepreux | Stéphanie Habert</title>
-                <meta
-                    name="description"
-                    content="Découvrez la charte éthique de Stéphanie Habert, sophrologue à Villepreux. Un engagement de respect, confidentialité et bienveillance pour un accompagnement de qualité."
-                />
-
-                {/* Open Graph */}
-                <meta property="og:title" content="Charte éthique – Sophrologie Villepreux | Stéphanie Habert" />
-                <meta
-                    property="og:description"
-                    content="Découvrez la charte éthique de Stéphanie Habert, sophrologue à Villepreux. Un engagement de respect, confidentialité et bienveillance pour un accompagnement de qualité."
-                />
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://www.sophrologuevillepreux.fr/charte" />
-                <meta property="og:image" content="https://www.sophrologuevillepreux.fr/bannieres/charte.jpg" />
-                <meta property="og:image:alt" content="Charte éthique de Stéphanie Habert" />
-            </Head>
+            <SEO
+                title="Charte éthique – Sophrologie Villepreux | Stéphanie Habert"
+                description="Découvrez la charte éthique de Stéphanie Habert, sophrologue à Villepreux. Un engagement de respect, confidentialité et bienveillance pour un accompagnement de qualité."
+                canonical="https://www.sophrologuevillepreux.fr/charte"
+                ogImage="https://www.sophrologuevillepreux.fr/bannieres/charte.jpg"
+                ogImageAlt="Charte éthique de Stéphanie Habert"
+                pageType="ethics"
+                keywords="charte éthique sophrologie, déontologie, confidentialité, respect, bienveillance"
+            />
             <Header />
             <div className={styles.pageContainer}>
                 {/* HERO SECTION */}

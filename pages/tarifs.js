@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import SEO from '../components/SEO';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Image from 'next/image';
@@ -8,24 +8,15 @@ import Link from 'next/link';
 export default function Tarifs() {
     return (
         <>
-            <Head>
-                <title>Tarifs - Sophrologie avec Stéphanie Habert à Villepreux</title>
-                <meta
-                    name="description"
-                    content="Découvrez les tarifs des séances de sophrologie individuelles, de groupe, et entreprises proposées par Stéphanie Habert, sophrologue certifiée."
-                />
-
-                {/* Open Graph */}
-                <meta property="og:title" content="Tarifs - Sophrologie avec Stéphanie Habert" />
-                <meta
-                    property="og:description"
-                    content="Explorez une approche personnalisée de la sophrologie avec Stéphanie Habert. Tarifs accessibles au cabinet ou en visioconférence."
-                />
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://www.sophrologuevillepreux.fr/tarifs" />
-                <meta property="og:image" content="https://www.sophrologuevillepreux.fr/bannieres/tarifs.jpg" />
-                <meta property="og:image:alt" content="Paysage illustrant la sérénité et l'équilibre" />
-            </Head>
+            <SEO
+                title="Tarifs - Sophrologie avec Stéphanie Habert à Villepreux"
+                description="Découvrez les tarifs des séances de sophrologie individuelles, de groupe, et entreprises proposées par Stéphanie Habert, sophrologue certifiée."
+                canonical="https://www.sophrologuevillepreux.fr/tarifs"
+                ogImage="https://www.sophrologuevillepreux.fr/bannieres/tarifs.jpg"
+                ogImageAlt="Paysage illustrant la sérénité et l'équilibre"
+                pageType="pricing"
+                keywords="tarifs sophrologie Villepreux, prix séance, consultation, Stéphanie Habert"
+            />
             <Header />
             <div className={styles.pageContainer}>
                 {/* HERO SECTION */}

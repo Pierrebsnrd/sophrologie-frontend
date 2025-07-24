@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Head from "next/head";
+import SEO from "../components/SEO";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Image from "next/image";
@@ -18,11 +18,11 @@ export default function QuiSuisJe() {
     if (!hasInitialized.current) {
       // Vérifier si on arrive depuis le menu
       const shouldPlay = sessionStorage.getItem("playMusic") === "true";
-      
+
       if (shouldPlay) {
         sessionStorage.removeItem("playMusic");
       }
-      
+
       // Toujours déclencher l'autoplay sur cette page
       setShouldAutoPlay(true);
       hasInitialized.current = true;
@@ -31,18 +31,15 @@ export default function QuiSuisJe() {
 
   return (
     <>
-    <Head>
-        <title>Qui suis-je ? - Stéphanie Habert Sophrologue à Villepreux</title>
-        <meta name="description" content="Découvrez le parcours et l'approche bienveillante de Stéphanie Habert, sophrologue certifiée, pour vous accompagner vers l'équilibre et le mieux-être." />
-
-        {/* Open Graph */}
-        <meta property="og:title" content="Qui suis-je ? - Stéphanie Habert Sophrologue" />
-        <meta property="og:description" content="Découvrez le parcours unique et l'accompagnement personnalisé de Stéphanie Habert à Villepreux." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.sophrologuevillepreux.fr/quisuisje" />
-        <meta property="og:image" content="https://www.sophrologuevillepreux.fr/bannieres/musique.jpg" />
-        <meta property="og:image:alt" content="Note de musique symbolisant l'harmonie et l'équilibre" />
-      </Head>
+      <SEO
+        title="Qui suis-je ? - Stéphanie Habert Sophrologue à Villepreux"
+        description="Découvrez le parcours et l'approche bienveillante de Stéphanie Habert, sophrologue certifiée, pour vous accompagner vers l'équilibre et le mieux-être."
+        canonical="https://www.sophrologuevillepreux.fr/qui-suis-je"
+        ogImage="https://www.sophrologuevillepreux.fr/bannieres/musique.jpg"
+        ogImageAlt="Note de musique symbolisant l'harmonie et l'équilibre"
+        pageType="about"
+        keywords="Stéphanie Habert, parcours sophrologue, chanteuse opéra, reconversion, Villepreux"
+      />
       <Header />
       <BackgroundMusic autoPlay={shouldAutoPlay} />
 

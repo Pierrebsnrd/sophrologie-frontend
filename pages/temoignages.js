@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Head from "next/head";
+import { useState, useEffect } from "react";
+import SEO from "../components/SEO";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Image from "next/image";
@@ -49,24 +49,15 @@ export default function Temoignages() {
 
     return (
         <>
-            <Head>
-                <title>Témoignages - Sophrologie avec Stéphanie Habert à Villepreux</title>
-                <meta
-                    name="description"
-                    content="Découvrez les témoignages des personnes accompagnées par Stéphanie Habert, sophrologue certifiée. Partagez aussi votre expérience."
-                />
-
-                {/* Open Graph */}
-                <meta property="og:title" content="Témoignages - Sophrologie avec Stéphanie Habert" />
-                <meta
-                    property="og:description"
-                    content="Lisez les avis et retours d'expérience des clients de Stéphanie Habert. Un espace de partage bienveillant."
-                />
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://www.sophrologuevillepreux.fr/temoignages" />
-                <meta property="og:image" content="https://www.sophrologuevillepreux.fr/bannieres/temoignage.jpg" />
-                <meta property="og:image:alt" content="Image illustrant des témoignages clients" />
-            </Head>
+            <SEO
+                title="Témoignages - Sophrologie avec Stéphanie Habert à Villepreux"
+                description="Découvrez les témoignages des personnes accompagnées par Stéphanie Habert, sophrologue certifiée. Partagez aussi votre expérience."
+                canonical="https://www.sophrologuevillepreux.fr/temoignages"
+                ogImage="https://www.sophrologuevillepreux.fr/bannieres/temoignage.jpg"
+                ogImageAlt="Image illustrant des témoignages clients"
+                pageType="testimonials"
+                keywords="témoignages sophrologie, avis clients, expérience, Stéphanie Habert Villepreux"
+            />
             <Header />
 
             {/* HERO SECTION */}
