@@ -1,7 +1,18 @@
 import Head from 'next/head';
 import '../styles/globals.css';
+import BackgroundMusic from '../components/BackgroundMusic';
+import { useState } from 'react';
 
 function App({ Component, pageProps }) {
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  // Cette fonction sera appelée au premier clic n'importe où dans la page
+  const onFirstInteraction = () => {
+    if (!hasInteracted) {
+      setHasInteracted(true);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -13,7 +24,10 @@ function App({ Component, pageProps }) {
         <link rel="shortcut icon" href="/icons/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
       </Head>
-      <Component {...pageProps} />
+      <div onClick={onFirstInteraction} style={{ minHeight: '100vh' }}>
+        <Component {...pageProps} />
+        <BackgroundMusic play={hasInteracted} />
+      </div>
       <style jsx global>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }

@@ -1,0 +1,55 @@
+.container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #38a169;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #2f855a;
+}
+
+.icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Texte affiché uniquement sur desktop */
+.text {
+  display: inline;
+}
+
+/* Sur mobile/tablette on réduit le bouton à un rond avec juste l'icône */
+@media (max-width: 768px) {
+  .button {
+    padding: 8px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    justify-content: center;
+    font-size: 24px;
+  }
+
+  .text {
+    display: none;
+  }
+}
