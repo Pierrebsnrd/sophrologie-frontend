@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import api from '../../utils/api';
 
 export default function AdminDashboard() {
   const [rdvs, setRdvs] = useState([]);
+  const [temoignages, setTemoignages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [updating, setUpdating] = useState(null);
+  const [updatingRdv, setUpdatingRdv] = useState(null);
+  const [updatingTemoignage, setUpdatingTemoignage] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -15,31 +18,49 @@ export default function AdminDashboard() {
       router.replace('/admin/login');
       return;
     }
-    fetchRdvs();
+    fetchData();
   }, [router]);
 
-  const fetchRdvs = async () => {
+  const fetchData = async () => {
     try {
-      const response = await api.get('/admin/rdv');
-      setRdvs(response.data);
+      const [rdvRes, temoignageRes] = await Promise.all([
+        api.get('/admin/rdv'),
+        api.get('/admin/temoignages'),
+      ]);
+      setRdvs(rdvRes.data);
+      setTemoignages(temoignageRes.data);
     } catch (err) {
-      setError('Erreur lors du chargement des rendez-vous');
+      setError('Erreur lors du chargement des données');
     } finally {
       setLoading(false);
     }
   };
 
   const updateRdvStatus = async (rdvId, newStatus) => {
-    setUpdating(rdvId);
+    setUpdatingRdv(rdvId);
     try {
       await api.patch(`/admin/rdv/${rdvId}/status`, { status: newStatus });
       setRdvs(prev => prev.map(rdv =>
         rdv._id === rdvId ? { ...rdv, status: newStatus } : rdv
       ));
-    } catch (err) {
-      setError('Erreur lors de la mise à jour');
+    } catch {
+      setError('Erreur lors de la mise à jour du rendez-vous');
     } finally {
-      setUpdating(null);
+      setUpdatingRdv(null);
+    }
+  };
+
+  const updateTemoignageStatus = async (temoignageId, newStatus) => {
+    setUpdatingTemoignage(temoignageId);
+    try {
+      await api.patch(`/admin/temoignages/${temoignageId}/status`, { status: newStatus });
+      setTemoignages(prev => prev.map(t =>
+        t._id === temoignageId ? { ...t, status: newStatus } : t
+      ));
+    } catch {
+      setError('Erreur lors de la mise à jour du témoignage');
+    } finally {
+      setUpdatingTemoignage(null);
     }
   };
 
@@ -53,15 +74,26 @@ export default function AdminDashboard() {
       case 'pending': return '#f39c12';
       case 'confirmed': return '#27ae60';
       case 'cancelled': return '#e74c3c';
+      case 'validated': return '#27ae60';
+      case 'rejected': return '#e74c3c';
       default: return '#95a5a6';
     }
   };
 
-  const getStatusText = (status) => {
+  const getStatusTextRdv = (status) => {
     switch (status) {
       case 'pending': return 'En attente';
       case 'confirmed': return 'Confirmé';
       case 'cancelled': return 'Annulé';
+      default: return status;
+    }
+  };
+
+  const getStatusTextTemoignage = (status) => {
+    switch (status) {
+      case 'pending': return 'En attente';
+      case 'validated': return 'Validé';
+      case 'rejected': return 'Rejeté';
       default: return status;
     }
   };
@@ -105,21 +137,23 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {/* Stats RDV */}
         <div style={styles.stats}>
           <div style={styles.statCard}>
             <h3>{rdvs.filter(rdv => rdv.status === 'pending').length}</h3>
-            <p>En attente</p>
+            <p>RDV En attente</p>
           </div>
           <div style={styles.statCard}>
             <h3>{rdvs.filter(rdv => rdv.status === 'confirmed').length}</h3>
-            <p>Confirmés</p>
+            <p>RDV Confirmés</p>
           </div>
           <div style={styles.statCard}>
             <h3>{rdvs.filter(rdv => rdv.status === 'cancelled').length}</h3>
-            <p>Annulés</p>
+            <p>RDV Annulés</p>
           </div>
         </div>
 
+        {/* Liste RDV */}
         <div style={styles.rdvList}>
           <h2 style={styles.sectionTitle}>Rendez-vous ({rdvs.length})</h2>
 
@@ -139,7 +173,7 @@ export default function AdminDashboard() {
                         backgroundColor: getStatusColor(rdv.status)
                       }}
                     >
-                      {getStatusText(rdv.status)}
+                      {getStatusTextRdv(rdv.status)}
                     </span>
                   </div>
 
@@ -157,17 +191,72 @@ export default function AdminDashboard() {
                     <div style={styles.actions}>
                       <button
                         onClick={() => updateRdvStatus(rdv._id, 'confirmed')}
-                        disabled={updating === rdv._id}
+                        disabled={updatingRdv === rdv._id}
                         style={{ ...styles.actionButton, ...styles.confirmButton }}
                       >
-                        {updating === rdv._id ? '...' : '✅ Confirmer'}
+                        {updatingRdv === rdv._id ? '...' : '✅ Confirmer'}
                       </button>
                       <button
                         onClick={() => updateRdvStatus(rdv._id, 'cancelled')}
-                        disabled={updating === rdv._id}
+                        disabled={updatingRdv === rdv._id}
                         style={{ ...styles.actionButton, ...styles.cancelButton }}
                       >
-                        {updating === rdv._id ? '...' : '❌ Annuler'}
+                        {updatingRdv === rdv._id ? '...' : '❌ Annuler'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Liste Témoignages */}
+        <div style={{ ...styles.rdvList, marginTop: '40px' }}>
+          <h2 style={styles.sectionTitle}>Témoignages ({temoignages.length})</h2>
+
+          {temoignages.length === 0 ? (
+            <div style={styles.emptyState}>
+              <p>Aucun témoignage pour le moment</p>
+            </div>
+          ) : (
+            <div style={styles.rdvGrid}>
+              {temoignages.map((t) => (
+                <div key={t._id} style={styles.rdvCard}>
+                  <div style={styles.rdvHeader}>
+                    <h3 style={styles.rdvName}>{t.author}</h3>
+                    <span
+                      style={{
+                        ...styles.statusBadge,
+                        backgroundColor: getStatusColor(t.status)
+                      }}
+                    >
+                      {getStatusTextTemoignage(t.status)}
+                    </span>
+                  </div>
+
+                  <div style={styles.rdvInfo}>
+                    <p><strong>Message:</strong> {t.message}</p>
+                    <p style={styles.createdAt}>
+                      Posté le {formatDate(t.createdAt)}
+                    </p>
+                  </div>
+
+                  {t.status === 'pending' && (
+                    <div style={styles.actions}>
+                      <button
+                        onClick={() => updateTemoignageStatus(t._id, 'validated')}
+                        disabled={updatingTemoignage === t._id}
+                        style={{ ...styles.actionButton, ...styles.confirmButton }}
+                      >
+                        {updatingTemoignage === t._id ? '...' : '✅ Valider'}
+                      </button>
+                      <button
+                        onClick={() => updateTemoignageStatus(t._id, 'rejected')}
+                        disabled={updatingTemoignage === t._id}
+                        style={{ ...styles.actionButton, ...styles.cancelButton }}
+                      >
+                        {updatingTemoignage === t._id ? '...' : '❌ Rejeter'}
                       </button>
                     </div>
                   )}
