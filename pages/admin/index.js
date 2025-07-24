@@ -13,6 +13,8 @@ export default function AdminDashboard() {
   const [updatingTemoignage, setUpdatingTemoignage] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [showDeleteTemoignageModal, setShowDeleteTemoignageModal] = useState(false);
+  const [deleteTemoignageId, setDeleteTemoignageId] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -142,6 +144,26 @@ export default function AdminDashboard() {
     }
   };
 
+  // Ouvre la modale de suppression témoignage
+  const confirmDeleteTemoignage = (id) => {
+    setDeleteTemoignageId(id);
+    setShowDeleteTemoignageModal(true);
+  };
+
+  // Supprime le témoignage après confirmation
+  const handleDeleteTemoignageConfirmed = async () => {
+    try {
+      await api.delete(`/admin/temoignages/${deleteTemoignageId}`);
+      await fetchData();
+      setShowDeleteTemoignageModal(false);
+      setDeleteTemoignageId(null);
+    } catch (err) {
+      setError('Erreur lors de la suppression du témoignage');
+      setShowDeleteTemoignageModal(false);
+      setDeleteTemoignageId(null);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -249,7 +271,7 @@ export default function AdminDashboard() {
               {temoignages.map((t) => (
                 <div key={t._id} style={styles.rdvCard}>
                   <div style={styles.rdvHeader}>
-                    <h3 style={styles.rdvName}>{t.author}</h3>
+                    <h3 style={styles.rdvName}>{t.author || t.name}</h3>
                     <span
                       style={{
                         ...styles.statusBadge,
@@ -258,6 +280,12 @@ export default function AdminDashboard() {
                     >
                       {getStatusTextTemoignage(t.status)}
                     </span>
+                    <button
+                      style={styles.deleteButton}
+                      onClick={() => confirmDeleteTemoignage(t._id)}
+                    >
+                      Supprimer
+                    </button>
                   </div>
 
                   <div style={styles.rdvInfo}>
@@ -358,6 +386,27 @@ export default function AdminDashboard() {
                   Annuler
                 </button>
                 <button style={styles.deleteButton} onClick={handleDeleteConfirmed}>
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modale de confirmation suppression témoignage */}
+        {showDeleteTemoignageModal && (
+          <div style={styles.modalOverlay}>
+            <div style={styles.modalContent}>
+              <h3>Confirmer la suppression</h3>
+              <p>Voulez-vous vraiment supprimer ce témoignage ?</p>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                <button
+                  style={styles.cancelButton}
+                  onClick={() => setShowDeleteTemoignageModal(false)}
+                >
+                  Annuler
+                </button>
+                <button style={styles.deleteButton} onClick={handleDeleteTemoignageConfirmed}>
                   Supprimer
                 </button>
               </div>
