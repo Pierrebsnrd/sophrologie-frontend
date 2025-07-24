@@ -7,44 +7,41 @@ export default function BackgroundMusic({ play }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Synchroniser l'état local avec l'état réel de l'audio
+  // Lecture automatique si `play` vient du parent (ex: clic sur menu)
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
-
-    audio.addEventListener('play', handlePlay);
-    audio.addEventListener('pause', handlePause);
-
-    return () => {
-      audio.removeEventListener('play', handlePlay);
-      audio.removeEventListener('pause', handlePause);
-    };
-  }, []);
-
-  // Démarrage automatique si `play === true`
-  useEffect(() => {
-    if (play && audioRef.current && audioRef.current.paused) {
-      audioRef.current
-        .play()
-        .catch((err) => console.warn("Erreur lecture auto :", err));
+    if (play && audioRef.current && !isPlaying) {
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(err => {
+          console.warn("Erreur lecture audio :", err);
+        });
     }
-  }, [play]);
+  }, [play, isPlaying]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (audio.paused) {
-      audio
-        .play()
-        .catch((err) => console.warn("Erreur lecture manuelle :", err));
-    } else {
+    if (isPlaying) {
       audio.pause();
+      setIsPlaying(false);
+    } else {
+      audio.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.warn("Erreur lecture audio :", err));
     }
   };
+  
+  // Pour stopper le son lors du démontage du composant (quand on change de page)
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        // setIsPlaying(false); <-- retiré ici pour éviter problème navigation
+      }
+    };
+  }, []);
 
   return (
     <div className={styles.container}>
