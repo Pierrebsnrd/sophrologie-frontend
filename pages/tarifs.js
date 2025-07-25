@@ -50,24 +50,20 @@ export default function Tarifs() {
                             <h3 className={styles.subTitle}>Séances de sophrologie</h3>
                             <ul className={styles.tarifList}>
                                 <li>
-                                    <strong>Première séance individuelle adulte :</strong> 60 € (1h30)<br />
+                                    <strong>Première séance individuelle adulte :</strong> 80 € (1h30)<br />
                                     <em>Bilan, définition des objectifs, première pratique</em>
                                 </li>
                                 <li>
-                                    <strong>Séance suivi individuelle adulte :</strong> 50 € (1h00)
+                                    <strong>Séance suivi individuelle adulte :</strong> 70 € (1h00)
                                 </li>
                                 <li>
-                                    <strong>Première séance individuelle mineur :</strong> 50 € (1h30)
+                                    <strong>Première séance individuelle mineur :</strong> 70 € (1h30)
                                 </li>
                                 <li>
-                                    <strong>Séance suivi individuelle mineur :</strong> 40 € (1h00)
+                                    <strong>Séance suivi individuelle mineur :</strong> 60 € (1h00)
                                 </li>
                                 <li>
-                                    <strong>Séance de suivi étudiant :</strong> 45 € (1h00)<br />
-                                    <em>(sur présentation de la carte d'étudiant)</em>
-                                </li>
-                                <li>
-                                    <strong>Séance de groupe :</strong> 15 € par personne (1h00)<br />
+                                    <strong>Séance de groupe :</strong> 20 € par personne (1h00)<br />
                                     <em>Minimum 4 participants</em>
                                 </li>
                                 <li>

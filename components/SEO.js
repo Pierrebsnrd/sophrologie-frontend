@@ -52,7 +52,7 @@ const SEO = ({
                 "url": "https://www.sophrologuevillepreux.fr",
                 "telephone": "+33611421765",
                 "email": "stephaniehabert.sophrologue@gmail.com",
-                "priceRange": "40€-60€",
+                "priceRange": "60€-80€",
                 "paymentAccepted": "Cash, Check, Bank transfer",
                 "currenciesAccepted": "EUR",
                 "openingHours": [
@@ -98,7 +98,7 @@ const SEO = ({
                                 "name": "Séance individuelle adulte - première consultation",
                                 "description": "Bilan, définition des objectifs, première pratique"
                             },
-                            "price": "60",
+                            "price": "80",
                             "priceCurrency": "EUR"
                         },
                         {
@@ -108,7 +108,7 @@ const SEO = ({
                                 "name": "Séance de suivi individuelle adulte",
                                 "description": "Séance de sophrologie individuelle de suivi"
                             },
-                            "price": "50",
+                            "price": "70",
                             "priceCurrency": "EUR"
                         },
                         {
@@ -118,7 +118,7 @@ const SEO = ({
                                 "name": "Séance individuelle mineur",
                                 "description": "Accompagnement sophrologique pour les mineurs"
                             },
-                            "price": "40-50",
+                            "price": "60-70",
                             "priceCurrency": "EUR"
                         },
                         {
@@ -128,7 +128,7 @@ const SEO = ({
                                 "name": "Séance de groupe",
                                 "description": "Séance de sophrologie en groupe (minimum 4 participants)"
                             },
-                            "price": "15",
+                            "price": "20",
                             "priceCurrency": "EUR"
                         }
                     ]
