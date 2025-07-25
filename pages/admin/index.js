@@ -4,13 +4,12 @@ import { useRouter } from 'next/router';
 import api from '../../utils/api';
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('rdv');
-  const [rdvs, setRdvs] = useState([]);
+  // States simplifiés - plus de RDV
+  const [activeTab, setActiveTab] = useState('temoignage');
   const [temoignages, setTemoignages] = useState([]);
   const [contactMessages, setContactMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [updatingRdv, setUpdatingRdv] = useState(null);
   const [updatingTemoignage, setUpdatingTemoignage] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -27,15 +26,14 @@ export default function AdminDashboard() {
     fetchData();
   }, [router]);
 
+  // Fonction fetchData simplifiée - sans RDV
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [rdvRes, temoignageRes, contactRes] = await Promise.all([
-        api.get('/admin/rdv'),
+      const [temoignageRes, contactRes] = await Promise.all([
         api.get('/admin/temoignages'),
         api.get('/admin/contact-messages'),
       ]);
-      setRdvs(rdvRes.data);
       setTemoignages(temoignageRes.data);
       setContactMessages(contactRes.data);
     } catch (err) {
@@ -45,20 +43,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // RDV
-  const updateRdvStatus = async (id, status) => {
-    setUpdatingRdv(id);
-    try {
-      await api.patch(`/admin/rdv/${id}/status`, { status });
-      await fetchData();
-    } catch (err) {
-      setError('Erreur lors de la mise à jour du statut');
-    } finally {
-      setUpdatingRdv(null);
-    }
-  };
-
-  // Témoignage
+  // Fonctions Témoignage (conservées)
   const updateTemoignageStatus = async (id, status) => {
     setUpdatingTemoignage(id);
     try {
@@ -71,7 +56,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // Contact
+  // Fonctions Contact (conservées)
   async function handleReply(msg) {
     window.location.href = `mailto:${msg.email}?subject=Réponse à votre message`;
     try {
@@ -82,11 +67,11 @@ export default function AdminDashboard() {
     }
   }
 
-  // Suppression Contact
   const confirmDelete = (id) => {
     setDeleteId(id);
     setShowDeleteModal(true);
   };
+
   const handleDeleteConfirmed = async () => {
     try {
       await api.delete(`/admin/contact-messages/${deleteId}`);
@@ -100,11 +85,11 @@ export default function AdminDashboard() {
     }
   };
 
-  // Suppression Témoignage
   const confirmDeleteTemoignage = (id) => {
     setDeleteTemoignageId(id);
     setShowDeleteTemoignageModal(true);
   };
+
   const handleDeleteTemoignageConfirmed = async () => {
     try {
       await api.delete(`/admin/temoignages/${deleteTemoignageId}`);
@@ -118,25 +103,18 @@ export default function AdminDashboard() {
     }
   };
 
-  // Logout
   const logout = () => {
     localStorage.removeItem('adminToken');
     router.replace('/admin/login');
   };
 
-  // Helpers
+  // Helpers (conservés)
   const formatDate = (date) => new Date(date).toLocaleString('fr-FR');
   const getStatusColor = (status) => {
     if (status === 'pending') return '#f39c12';
-    if (status === 'confirmed' || status === 'validated') return '#27ae60';
-    if (status === 'cancelled' || status === 'rejected') return '#e74c3c';
+    if (status === 'validated') return '#27ae60';
+    if (status === 'rejected') return '#e74c3c';
     return '#7f8c8d';
-  };
-  const getStatusTextRdv = (status) => {
-    if (status === 'pending') return 'En attente';
-    if (status === 'confirmed') return 'Confirmé';
-    if (status === 'cancelled') return 'Annulé';
-    return status;
   };
   const getStatusTextTemoignage = (status) => {
     if (status === 'pending') return 'En attente';
@@ -149,11 +127,14 @@ export default function AdminDashboard() {
     <>
       <Head>
         <meta name="robots" content="noindex, nofollow" />
-        <title>Page administrateur</title>
+        <title>Dashboard Admin - Stéphanie Habert Sophrologue</title>
       </Head>
       <div style={styles.container}>
         <div style={styles.header}>
-          <h1 style={styles.title}>Dashboard Admin</h1>
+          <div>
+            <h1 style={styles.title}>Dashboard Admin</h1>
+            <p style={styles.subtitle}>Gestion des témoignages et messages</p>
+          </div>
           <button onClick={logout} style={styles.logoutButton}>
             Déconnexion
           </button>
@@ -165,17 +146,24 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Onglets */}
-        <div style={styles.tabs}>
-          <button
-            style={{
-              ...styles.tabButton,
-              ...(activeTab === 'rdv' ? styles.activeTabButton : {}),
-            }}
-            onClick={() => setActiveTab('rdv')}
+        {/* Message informatif sur Calendly */}
+        <div style={styles.infoBox}>
+          <h3 style={styles.infoTitle}>📅 Gestion des rendez-vous</h3>
+          <p style={styles.infoText}>
+            Consultez votre tableau de bord Calendly pour voir vos réservations.
+          </p>
+          <a 
+            href="https://calendly.com/app/scheduled_events" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={styles.calendlyLink}
           >
-            Rendez-vous
-          </button>
+            Ouvrir Calendly →
+          </a>
+        </div>
+
+        {/* Onglets simplifiés */}
+        <div style={styles.tabs}>
           <button
             style={{
               ...styles.tabButton,
@@ -192,114 +180,41 @@ export default function AdminDashboard() {
             }}
             onClick={() => setActiveTab('contact')}
           >
-            Contact
+            Messages de contact
           </button>
         </div>
 
-        {/* Contenu Onglet */}
+        {/* Contenu des onglets */}
         <div>
-          {activeTab === 'rdv' && (
-            <div style={styles.rdvList}>
-              <h2 style={styles.sectionTitle}>Rendez-vous ({rdvs.length})</h2>
-              <div style={styles.stats}>
-                <div style={styles.statCard}>
-                  <h3>{rdvs.filter(rdv => rdv.status === 'pending').length}</h3>
-                  <p>En attente</p>
-                </div>
-                <div style={styles.statCard}>
-                  <h3>{rdvs.filter(rdv => rdv.status === 'confirmed').length}</h3>
-                  <p>Confirmés</p>
-                </div>
-                <div style={styles.statCard}>
-                  <h3>{rdvs.filter(rdv => rdv.status === 'cancelled').length}</h3>
-                  <p>Annulés</p>
-                </div>
-              </div>
-              {rdvs.length === 0 ? (
-                <div style={styles.emptyState}>
-                  <p>Aucun rendez-vous pour le moment</p>
-                </div>
-              ) : (
-                <div style={styles.rdvGrid}>
-                  {rdvs.map((rdv) => (
-                    <div key={rdv._id} style={styles.rdvCard}>
-                      <div style={styles.rdvHeader}>
-                        <div>
-                          <h3 style={styles.rdvName}>{rdv.name}</h3>
-                          <p style={styles.createdAt}>
-                            Demandé le {formatDate(rdv.createdAt)}
-                          </p>
-                        </div>
-                        <div style={styles.statusActions}>
-                          <span
-                            style={{
-                              ...styles.statusBadge,
-                              backgroundColor: getStatusColor(rdv.status)
-                            }}
-                          >
-                            {getStatusTextRdv(rdv.status)}
-                          </span>
-                          {rdv.status === 'pending' && (
-                            <div style={styles.actions}>
-                              <button
-                                onClick={() => updateRdvStatus(rdv._id, 'confirmed')}
-                                disabled={updatingRdv === rdv._id}
-                                style={{ ...styles.actionButton, ...styles.confirmButton }}
-                              >
-                                {updatingRdv === rdv._id ? '...' : '✅ Confirmer'}
-                              </button>
-                              <button
-                                onClick={() => updateRdvStatus(rdv._id, 'cancelled')}
-                                disabled={updatingRdv === rdv._id}
-                                style={{ ...styles.actionButton, ...styles.cancelButton }}
-                              >
-                                {updatingRdv === rdv._id ? '...' : '❌ Annuler'}
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div style={styles.rdvInfo}>
-                        <p><strong>Email:</strong> {rdv.email}</p>
-                        {rdv.phone && <p><strong>Téléphone:</strong> {rdv.phone}</p>}
-                        <p><strong>Date:</strong> {formatDate(rdv.date)}</p>
-                        {rdv.message && <p><strong>Message:</strong> {rdv.message}</p>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
           {activeTab === 'temoignage' && (
-            <div style={styles.rdvList}>
+            <div style={styles.sectionContainer}>
               <h2 style={styles.sectionTitle}>Témoignages ({temoignages.length})</h2>
               <div style={styles.stats}>
                 <div style={styles.statCard}>
-                  <h3>{temoignages.filter(t => t.status === 'pending').length}</h3>
-                  <p>En attente</p>
+                  <h3 style={styles.statNumber}>{temoignages.filter(t => t.status === 'pending').length}</h3>
+                  <p style={styles.statLabel}>En attente</p>
                 </div>
                 <div style={styles.statCard}>
-                  <h3>{temoignages.filter(t => t.status === 'validated').length}</h3>
-                  <p>Validés</p>
+                  <h3 style={styles.statNumber}>{temoignages.filter(t => t.status === 'validated').length}</h3>
+                  <p style={styles.statLabel}>Validés</p>
                 </div>
                 <div style={styles.statCard}>
-                  <h3>{temoignages.filter(t => t.status === 'rejected').length}</h3>
-                  <p>Rejetés</p>
+                  <h3 style={styles.statNumber}>{temoignages.filter(t => t.status === 'rejected').length}</h3>
+                  <p style={styles.statLabel}>Rejetés</p>
                 </div>
               </div>
+              
               {temoignages.length === 0 ? (
                 <div style={styles.emptyState}>
                   <p>Aucun témoignage pour le moment</p>
                 </div>
               ) : (
-                <div style={styles.rdvGrid}>
+                <div style={styles.itemGrid}>
                   {temoignages.map((t) => (
-                    <div key={t._id} style={styles.rdvCard}>
-                      <div style={styles.rdvHeader}>
+                    <div key={t._id} style={styles.itemCard}>
+                      <div style={styles.itemHeader}>
                         <div>
-                          <h3 style={styles.rdvName}>{t.name}</h3>
+                          <h3 style={styles.itemName}>{t.name}</h3>
                           <p style={styles.createdAt}>
                             Posté le {formatDate(t.createdAt)}
                           </p>
@@ -339,7 +254,7 @@ export default function AdminDashboard() {
                           </button>
                         </div>
                       </div>
-                      <div style={styles.rdvInfo}>
+                      <div style={styles.itemInfo}>
                         <p><strong>Message:</strong> {t.message}</p>
                       </div>
                     </div>
@@ -350,33 +265,34 @@ export default function AdminDashboard() {
           )}
 
           {activeTab === 'contact' && (
-            <div style={styles.rdvList}>
+            <div style={styles.sectionContainer}>
               <h2 style={styles.sectionTitle}>Messages de contact ({contactMessages.length})</h2>
               <div style={styles.stats}>
                 <div style={styles.statCard}>
-                  <h3>{contactMessages.length}</h3>
-                  <p>Total</p>
+                  <h3 style={styles.statNumber}>{contactMessages.length}</h3>
+                  <p style={styles.statLabel}>Total</p>
                 </div>
                 <div style={styles.statCard}>
-                  <h3>{contactMessages.filter(m => m.answered).length}</h3>
-                  <p>Répondus</p>
+                  <h3 style={styles.statNumber}>{contactMessages.filter(m => m.answered).length}</h3>
+                  <p style={styles.statLabel}>Répondus</p>
                 </div>
                 <div style={styles.statCard}>
-                  <h3>{contactMessages.filter(m => !m.answered).length}</h3>
-                  <p>Non répondus</p>
+                  <h3 style={styles.statNumber}>{contactMessages.filter(m => !m.answered).length}</h3>
+                  <p style={styles.statLabel}>À traiter</p>
                 </div>
               </div>
+              
               {contactMessages.length === 0 ? (
                 <div style={styles.emptyState}>
                   <p>Aucun message de contact pour le moment</p>
                 </div>
               ) : (
-                <div style={styles.rdvGrid}>
+                <div style={styles.itemGrid}>
                   {contactMessages.map((msg) => (
-                    <div key={msg._id} style={styles.rdvCard}>
-                      <div style={styles.rdvHeader}>
+                    <div key={msg._id} style={styles.itemCard}>
+                      <div style={styles.itemHeader}>
                         <div>
-                          <h3 style={styles.rdvName}>{msg.name}</h3>
+                          <h3 style={styles.itemName}>{msg.name}</h3>
                           <p style={styles.createdAt}>
                             Reçu le {formatDate(msg.createdAt)}
                           </p>
@@ -394,7 +310,7 @@ export default function AdminDashboard() {
                             style={{
                               ...styles.replyButton,
                               backgroundColor: msg.answered ? '#27ae60' : '#f39c12',
-                              color: '#fff',
+                              opacity: msg.answered ? 0.7 : 1,
                             }}
                             disabled={msg.answered}
                             onClick={() => handleReply(msg)}
@@ -409,7 +325,7 @@ export default function AdminDashboard() {
                           </button>
                         </div>
                       </div>
-                      <div style={styles.rdvInfo}>
+                      <div style={styles.itemInfo}>
                         <p><strong>Email:</strong> {msg.email}</p>
                         <p><strong>Message:</strong> {msg.message}</p>
                       </div>
@@ -421,22 +337,15 @@ export default function AdminDashboard() {
           )}
         </div>
 
-        {/* Modale suppression contact */}
+        {/* Modales (conservées) */}
         {showDeleteModal && (
           <div style={styles.modalOverlay}>
             <div style={styles.modalContent}>
               <h3>Confirmer la suppression</h3>
               <p>Voulez-vous vraiment supprimer ce message ?</p>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <div style={styles.modalActions}>
                 <button
-                  style={{
-                    ...styles.cancelButton,
-                    backgroundColor: '#f3f3f3',
-                    color: '#2c3e50',
-                    border: '1px solid #ccc',
-                    fontWeight: 'bold',
-                    boxShadow: '0 2px 6px rgba(44,62,80,0.07)',
-                  }}
+                  style={styles.modalCancelButton}
                   onClick={() => setShowDeleteModal(false)}
                 >
                   Annuler
@@ -449,15 +358,14 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Modale suppression témoignage */}
         {showDeleteTemoignageModal && (
           <div style={styles.modalOverlay}>
             <div style={styles.modalContent}>
               <h3>Confirmer la suppression</h3>
               <p>Voulez-vous vraiment supprimer ce témoignage ?</p>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <div style={styles.modalActions}>
                 <button
-                  style={styles.cancelButton}
+                  style={styles.modalCancelButton}
                   onClick={() => setShowDeleteTemoignageModal(false)}
                 >
                   Annuler
@@ -474,57 +382,103 @@ export default function AdminDashboard() {
   );
 }
 
+// Styles optimisés et modernisés
 const styles = {
   container: {
     minHeight: '100vh',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#f8fafc',
     padding: '20px',
+    fontFamily: 'system-ui, -apple-system, sans-serif',
   },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '30px',
-    padding: '20px',
+    padding: '25px 30px',
     backgroundColor: '#fff',
-    borderRadius: '10px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+    borderRadius: '15px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+    border: '1px solid rgba(72, 187, 120, 0.1)',
   },
   title: {
-    fontSize: '2rem',
-    color: '#2c3e50',
+    fontSize: '2.2rem',
+    color: '#2d5a3d',
     margin: 0,
+    fontWeight: '600',
+  },
+  subtitle: {
+    fontSize: '1rem',
+    color: '#64748b',
+    margin: '5px 0 0 0',
   },
   logoutButton: {
-    padding: '10px 20px',
+    padding: '12px 24px',
     backgroundColor: '#e74c3c',
     color: '#fff',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '8px',
     cursor: 'pointer',
+    fontSize: '1rem',
+    fontWeight: '500',
+    transition: 'all 0.2s ease',
+  },
+  infoBox: {
+    backgroundColor: '#e6fffa',
+    border: '1px solid #48bb78',
+    borderRadius: '12px',
+    padding: '20px 25px',
+    marginBottom: '30px',
+  },
+  infoTitle: {
+    color: '#2d5a3d',
+    fontSize: '1.2rem',
+    margin: '0 0 10px 0',
+    fontWeight: '600',
+  },
+  infoText: {
+    color: '#4a5568',
+    margin: '0 0 15px 0',
+    lineHeight: '1.5',
+  },
+  calendlyLink: {
+    color: '#48bb78',
+    textDecoration: 'none',
+    fontWeight: '500',
     fontSize: '1rem',
   },
   tabs: {
     display: 'flex',
-    gap: '10px',
+    gap: '5px',
     marginBottom: '30px',
   },
   tabButton: {
-    padding: '12px 32px',
-    backgroundColor: '#f3f3f3',
-    color: '#2c3e50',
-    border: '1px solid #ccc',
-    borderRadius: '8px 8px 0 0',
+    padding: '15px 30px',
+    backgroundColor: '#f1f5f9',
+    color: '#64748b',
+    border: 'none',
+    borderRadius: '10px 10px 0 0',
     cursor: 'pointer',
     fontSize: '1.1rem',
-    fontWeight: 'bold',
-    transition: 'background 0.2s',
+    fontWeight: '600',
+    transition: 'all 0.2s ease',
   },
   activeTabButton: {
     backgroundColor: '#fff',
-    color: '#2980b9',
-    borderBottom: '2px solid #2980b9',
-    boxShadow: '0 -2px 10px rgba(44,62,80,0.07)',
+    color: '#2d5a3d',
+    boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
+  },
+  sectionContainer: {
+    backgroundColor: '#fff',
+    borderRadius: '15px',
+    padding: '25px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+  },
+  sectionTitle: {
+    fontSize: '1.6rem',
+    color: '#2d5a3d',
+    marginBottom: '25px',
+    fontWeight: '600',
   },
   stats: {
     display: 'grid',
@@ -533,122 +487,121 @@ const styles = {
     marginBottom: '30px',
   },
   statCard: {
-    backgroundColor: '#fff',
-    padding: '30px',
-    borderRadius: '10px',
+    backgroundColor: '#fafbfc',
+    padding: '25px',
+    borderRadius: '12px',
     textAlign: 'center',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+    border: '1px solid #e2e8f0',
   },
-  sectionTitle: {
-    fontSize: '1.5rem',
-    color: '#2c3e50',
-    marginBottom: '20px',
+  statNumber: {
+    fontSize: '2rem',
+    color: '#2d5a3d',
+    margin: '0 0 5px 0',
+    fontWeight: '700',
   },
-  rdvList: {
-    backgroundColor: '#fff',
-    borderRadius: '10px',
-    padding: '20px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+  statLabel: {
+    color: '#64748b',
+    margin: 0,
+    fontSize: '0.95rem',
   },
-  rdvGrid: {
+  itemGrid: {
     display: 'grid',
     gap: '20px',
   },
-  rdvCard: {
-    border: '1px solid #e1e8ed',
-    borderRadius: '10px',
+  itemCard: {
+    border: '1px solid #e2e8f0',
+    borderRadius: '12px',
     padding: '20px',
-    backgroundColor: '#fefefe',
+    backgroundColor: '#fafbfc',
+    transition: 'all 0.2s ease',
   },
-  rdvHeader: {
+  itemHeader: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: '15px',
+    gap: '15px',
   },
-  rdvName: {
-    fontSize: '1.3rem',
-    color: '#2c3e50',
+  itemName: {
+    fontSize: '1.2rem',
+    color: '#2d5a3d',
     margin: 0,
-  },
-  statusBadge: {
-    padding: '5px 12px',
-    borderRadius: '20px',
-    color: '#fff',
-    fontSize: '0.9rem',
     fontWeight: '600',
-    marginRight: '10px',
+  },
+  createdAt: {
+    fontSize: '0.9rem',
+    color: '#64748b',
+    margin: '5px 0 0 0',
+    fontStyle: 'italic',
   },
   statusActions: {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
+    flexWrap: 'wrap',
   },
-  rdvInfo: {
-    marginBottom: '20px',
-    lineHeight: '1.6',
-  },
-  createdAt: {
-    fontSize: '0.9rem',
-    color: '#7f8c8d',
-    fontStyle: 'italic',
+  statusBadge: {
+    padding: '6px 12px',
+    borderRadius: '20px',
+    color: '#fff',
+    fontSize: '0.85rem',
+    fontWeight: '600',
+    whiteSpace: 'nowrap',
   },
   actions: {
     display: 'flex',
-    gap: '10px',
+    gap: '8px',
   },
   actionButton: {
-    padding: '10px 20px',
+    padding: '8px 16px',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '6px',
     cursor: 'pointer',
     fontSize: '0.9rem',
-    fontWeight: '600',
-    transition: 'opacity 0.3s ease',
+    fontWeight: '500',
+    transition: 'all 0.2s ease',
+    whiteSpace: 'nowrap',
   },
   confirmButton: {
-    backgroundColor: '#27ae60',
+    backgroundColor: '#48bb78',
     color: '#fff',
   },
   cancelButton: {
-    backgroundColor: '#f3f3f3',
-    color: '#2c3e50',
-    border: '1px solid #ccc',
-    padding: '8px 18px',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '0.95rem',
-    fontWeight: 'bold',
-    marginLeft: '10px',
-    boxShadow: '0 2px 6px rgba(44,62,80,0.07)',
-    transition: 'background 0.3s',
+    backgroundColor: '#f1f5f9',
+    color: '#64748b',
+    border: '1px solid #e2e8f0',
   },
   replyButton: {
-    padding: '8px 18px',
+    padding: '8px 16px',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '6px',
     cursor: 'pointer',
-    fontSize: '0.95rem',
-    fontWeight: '600',
-    marginLeft: '10px',
-    transition: 'background 0.3s',
+    fontSize: '0.9rem',
+    fontWeight: '500',
+    color: '#fff',
+    transition: 'all 0.2s ease',
+    whiteSpace: 'nowrap',
   },
   deleteButton: {
-    padding: '8px 18px',
+    padding: '8px 16px',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '6px',
     cursor: 'pointer',
-    fontSize: '0.95rem',
-    fontWeight: '600',
-    marginLeft: '10px',
+    fontSize: '0.9rem',
+    fontWeight: '500',
     backgroundColor: '#e74c3c',
     color: '#fff',
-    transition: 'background 0.3s',
+    transition: 'all 0.2s ease',
+    whiteSpace: 'nowrap',
+  },
+  itemInfo: {
+    lineHeight: '1.6',
+    color: '#4a5568',
   },
   modalOverlay: {
     position: 'fixed',
     top: 0, left: 0, right: 0, bottom: 0,
-    background: 'rgba(0,0,0,0.3)',
+    background: 'rgba(0,0,0,0.4)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -656,23 +609,42 @@ const styles = {
   },
   modalContent: {
     background: '#fff',
-    borderRadius: '10px',
+    borderRadius: '15px',
     padding: '30px',
     minWidth: '300px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+    maxWidth: '90vw',
+    boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
     textAlign: 'center',
+  },
+  modalActions: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: '10px',
+    marginTop: '20px',
+  },
+  modalCancelButton: {
+    padding: '10px 20px',
+    backgroundColor: '#f1f5f9',
+    color: '#64748b',
+    border: '1px solid #e2e8f0',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '0.95rem',
+    fontWeight: '500',
   },
   emptyState: {
     textAlign: 'center',
-    padding: '40px',
-    color: '#7f8c8d',
+    padding: '60px 20px',
+    color: '#64748b',
+    fontSize: '1.1rem',
   },
   errorMessage: {
-    padding: '15px',
-    backgroundColor: '#f8d7da',
-    color: '#721c24',
-    border: '1px solid #f5c6cb',
+    padding: '15px 20px',
+    backgroundColor: '#fee2e2',
+    color: '#dc2626',
+    border: '1px solid #fca5a5',
     borderRadius: '8px',
     marginBottom: '20px',
+    fontSize: '1rem',
   },
 };
