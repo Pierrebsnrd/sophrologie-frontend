@@ -138,6 +138,38 @@
   margin-right: auto;
 }
 
+/* Mise en avant des phrases clés */
+.benefitHighlight {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #2d5a3d;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Texte détaillé dans la section "Mon approche" */
+.approachText p {
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto 1.25rem auto;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #2d3748;
+}
+
+/* Signature personnalisée */
+.signature {
+  margin-top: 2rem;
+  font-style: italic;
+  font-weight: 500;
+  color: #38a169;
+  text-align: center;
+  line-height: 1.5;
+}
+
 /* GRID */
 .grid {
   display: grid;
@@ -245,10 +277,10 @@
 }
 
 /* ANIMATIONS SPECIFIQUES */
-.section:nth-child(even) .card:nth-child(2) {
+/* .section:nth-child(even) .card:nth-child(2) {
   animation: float 6s ease-in-out infinite;
   animation-delay: 1s;
-}
+} */
 
 /* RESPONSIVE */
 @media (max-width: 768px) {

@@ -20,7 +20,7 @@ export default function Home() {
             priority
           />
           <div className={styles.heroOverlay}>
-            <h1 className={styles.heroTitle} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)' }}>Stéphanie Habert Sophrologue</h1>
+            <h1 className={styles.heroTitle}>Stéphanie Habert Sophrologue</h1>
           </div>
         </section>
 
@@ -29,7 +29,7 @@ export default function Home() {
           <div className={styles.sectionInner}>
             <h2>Un moment pour soi, à Villepreux</h2>
             <p>
-              Bienvenue chez Stéphanie Habert Sophrologue à Villepreux. Offrez-vous un espace de bienveillance, d'écoute inconditionnelle et de confidentialité pour un retour à soi et une prise de conscience.
+              Bienvenue chez Stéphanie Habert Sophrologue dans les Yvelines. Offrez-vous un moment pour vous reconnecter à l’essentiel : VOUS. Dans un cadre chaleureux et bienveillant, je vous accompagne avec douceur et authenticité vers plus de sérénité, de clarté intérieure et d'équilibre.
             </p>
           </div>
         </section>
@@ -37,28 +37,51 @@ export default function Home() {
         {/* SOPHROLOGIE */}
         <section className={styles.sectionAlt}>
           <div className={styles.sectionInner}>
-            <h2>Qu'est-ce que la sophrologie ?</h2>
-            <p>La sophrologie est une méthode psychocorporelle qui vise à renforcer l'équilibre entre les émotions, les pensées et le corps.</p>
-            <p>Elle se pratique en séances individuelles ou collectives, et favorise la détente, la conscience de soi et la gestion du stress.</p>
-            <p>Elle vous aide à retrouver l’harmonie entre corps et esprit et à retrouver confiance.</p>
+            <h2>Ma définition de la Sophrologie :</h2>
+            <p>La sophrologie est fondée dans les années 1960 par le Docteur Alfonso Caycedo, médecin psychiatre. Cette discipline est une approche centrée sur la personne qui vise à harmoniser le corps et l'esprit, en mobilisant ses propres ressources pour développer un mieux-être au quotidien.</p>
+            <p>Par des exercices de respiration, de relaxation dynamique et de visualisation libre et neutre, elle aide chacun à mieux se connaître, à renforcer ses ressources intérieures et à accueillir les défis de la vie avec sérénité.</p>
+            <p>Cette discipline vise à apporter à ses consultants une amélioration de la qualité de vie. Sa pratique nécessite un entrainement quotidien du corps et de l'esprit.</p>
+            <p>Elle favorise le bien être global de la personne. Accessible à tous, la sophrologie est une voie vers l'épanouissement personnel et la pleine présence à soi-même.</p>
           </div>
         </section>
 
         {/* BIENFAITS */}
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Les bienfaits de la sophrologie</h2>
+          <p className={styles.benefitHighlight}>La sophrologie s’adapte à chacun et peut accompagner dans de nombreuses situations.</p>
+          <p className={styles.benefitHighlight}>La sophrologie : la clé pour libérer votre potentiel !<br />Écoutez votre corps et libérez votre esprit !</p>
+          <p className={styles.benefitHighlight}>Retrouvez votre équilibre intérieur</p>
+          <p className={styles.benefitHighlight}>Une méthode pour une vie plus sereine et plus épanouie.</p>
+
           <div className={styles.grid}>
-            <div className={styles.card}><h3>Gestion du stress</h3><p>Apprenez à vous détendre</p></div>
-            <div className={styles.card}><h3>Sommeil réparateur</h3><p>Améliorez votre sommeil</p></div>
-            <div className={styles.card}><h3>Confiance en soi</h3><p>Renforcez votre estime</p></div>
+            <div className={styles.card}><h3>Gestion du stress et des émotions</h3><p>(Surmenage, charge mentale, Anxiété, angoisses, irritabilité, Burn-out, prévention de l'épuisement…)</p></div>
+            <div className={styles.card}><h3>Confiance en soi</h3><p>(Manque d'estime de soi, Peur du jugement ou du regard des autres, Besoin de s'affirmer dans sa vie personnelle et/ou professionnelle…)</p></div>
+            <div className={styles.card}><h3>Sommeil et récupération</h3><p>(Difficultés d’endormissement, Réveils nocturnes ou sommeil agité, Fatigue persistante, besoin de récupération)</p></div>
+            <div className={styles.card}><h3>Préparation mentale</h3><p>(Examens, concours, compétitions ou événements importants, prise de parole en public, Projets artistiques, Concentration, gestion du trac…)</p></div>
+            <div className={styles.card}>
+              <h3>Gestion de la douleur</h3>
+              <p>(Douleurs chroniques, Accompagnement de traitements médicaux : cancer, fibromyalgie, etc.)</p>
+              <p><em>La sophrologie ne remplace pas un traitement médical mais peut le compléter efficacement, en favorisant une meilleure qualité de vie au quotidien.</em></p>
+            </div>
+            <div className={styles.card}><h3>Accompagnement des étapes de vie</h3><p>(Deuil, séparation, maladie, transition de vie personnelle ou professionnelle)</p></div>
+            <div className={styles.card}><h3>Accompagnement de la maternité</h3><p>(Grossesse, post-partum, confiance en soi, gestion des peurs et de la douleur…)</p></div>
+            <div className={styles.card}><h3>Accompagnement des enfants à partir de 5 ans</h3><p>(Gestion des émotions, colère, peurs, agitation, confiance, timidité, sommeil, adaptation au changement…)</p></div>
           </div>
         </section>
 
         {/* MON APPROCHE */}
         <section className={styles.sectionAlt}>
           <div className={styles.sectionInner}>
-            <h2>Mon approche</h2>
-            <p>Au cabinet ou en visio, je vous propose des séances sur-mesure basées sur l’écoute, la bienveillance et la confidentialité.</p>
+            <h2>Mon approche ou Comment se déroule mon accompagnement ?</h2>
+            <div className={styles.approachText}>
+              <p>Chaque séance débute par un échange basé sur une écoute inconditionnelle, afin de comprendre vos besoins et ce que vous traversez.</p>
+              <p>Je construis ensuite un protocole personnalisé, adapté à vos objectifs et à votre rythme. Généralement 6 à 10 séances sont nécessaires en fonction de votre objectif.</p>
+              <p>Les séances s’organisent en 3 temps : un accueil bienveillant avec un échange, la pratique de la sophrologie avec des exercices de respirations, de relaxation dynamique et de visualisation neutre, puis un moment d’échange pour partager cette expérience intérieure vécue durant la séance.</p>
+              <p>Pour obtenir le résultat attendu, la sophrologie demande un investissement personnel et régulier.</p>
+              <p>À la fin de chaque séance, je vous donne des petits exercices à faire chez vous.</p>
+              <p>N’hésitez pas à me contacter si vous désirez plus d’informations.</p>
+              <p className={styles.signature}>Belle journée à vous,<br />Stéphanie Habert<br />Sophrologue Villepreux</p>
+            </div>
           </div>
         </section>
 
