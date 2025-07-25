@@ -70,8 +70,8 @@ const SEO = ({
                     "latitude": "48.8283",
                     "longitude": "1.9877"
                 },
-                "image": "https://www.sophrologuevillepreux.fr/icons/logo-mod.jpeg",
-                "logo": "https://www.sophrologuevillepreux.fr/icons/logo-mod.jpeg",
+                "image": "https://www.sophrologuevillepreux.fr/icons/logo.jpeg",
+                "logo": "https://www.sophrologuevillepreux.fr/icons/logo.jpeg",
                 "founder": {
                     "@id": "https://www.sophrologuevillepreux.fr/#person"
                 },

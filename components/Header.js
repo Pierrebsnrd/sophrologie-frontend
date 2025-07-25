@@ -25,7 +25,7 @@ export default function Header() {
         {/* Logo à gauche desktop, au centre mobile */}
         <div className={styles.logoContainer}>
           <Link href="/">
-            <Image src="/logo/logo-mod.jpeg" alt="Logo" width={60} height={60} />
+            <Image src="/logo/logo.jpeg" alt="Logo" width={60} height={60} />
           </Link>
         </div>
 
