@@ -29,7 +29,7 @@ export default function Charte() {
                             className={styles.heroImage}
                         />
                         <div className={styles.heroOverlay}>
-                            <h1 className={styles.heroTitle}>Charte éthique</h1>
+                            <h1 className={styles.heroTitle} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)' }}>Charte éthique</h1>
                         </div>
                     </section>
 
