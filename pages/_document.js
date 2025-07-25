@@ -5,7 +5,6 @@ export default function Document() {
     <Html lang="fr">
       <Head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Favicon commun */}
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon.png" />
         <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
