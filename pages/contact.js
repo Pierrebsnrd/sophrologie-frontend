@@ -102,7 +102,7 @@ export default function Contact() {
                             style={{ objectFit: 'cover', objectPosition: 'center 63%' }}
                         />
                         <div className={styles.heroOverlay}>
-                            <h1 className={styles.heroTitle}>Contact</h1>
+                            <h1 className={styles.heroTitle} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)' }}>Contact</h1>
                         </div>
                     </section>
                     <div className={styles.contentWrapper}>

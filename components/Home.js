@@ -20,7 +20,7 @@ export default function Home() {
             priority
           />
           <div className={styles.heroOverlay}>
-            <h1 className={styles.heroTitle}>Stéphanie Habert Sophrologue</h1>
+            <h1 className={styles.heroTitle} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)' }}>Stéphanie Habert Sophrologue</h1>
           </div>
         </section>
 
