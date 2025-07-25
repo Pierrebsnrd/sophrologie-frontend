@@ -6,10 +6,6 @@ function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <meta
-          name="description"
-          content="Consultation de sophrologie personnalisée à Villepreux avec Stéphanie Habert. Prenez rendez-vous facilement pour améliorer votre bien-être."
-        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {/* Favicon */}
@@ -17,29 +13,8 @@ function App({ Component, pageProps }) {
         <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
         <link rel="shortcut icon" href="/icons/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
-
-        {/* Open Graph */}
-        <meta property="og:title" content="Stéphanie Habert – Sophrologie à Villepreux" />
-        <meta
-          property="og:description"
-          content="Consultation de sophrologie personnalisée à Villepreux avec Stéphanie Habert. Prenez rendez-vous facilement pour améliorer votre bien-être."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.sophrologuevillepreux.fr" />
-        <meta property="og:image" content="https://www.sophrologuevillepreux.fr/icons/favicon.png" />
-        <meta property="og:image:alt" content="Logo de Stéphanie Habert Sophrologie" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "Stéphanie Habert – Sophrologue à Villepreux",
-              "url": "https://www.sophrologuevillepreux.fr",
-              "logo": "https://www.sophrologuevillepreux.fr/icons/logo-mod.jpeg"
-            }),
-          }}
-        />
+        {/* Meta description générique en secours */}
+        <meta name="description" content="Sophrologie à Villepreux avec Stéphanie Habert. Séances personnalisées pour votre bien-être." />
       </Head>
       <Component {...pageProps} />
       <style jsx global>{`
