@@ -97,7 +97,6 @@
 .intro {
   font-size: 1.2rem;
   line-height: 1.8;
-  color: #4a5568;
   margin-bottom: 2rem;
   text-align: center;
   font-weight: 500;
@@ -250,10 +249,6 @@
  
   .content {
     padding: 2rem 1rem;
-    gap: 3rem;
-  }
-
-  .content {
     gap: 5rem;
   }
 
