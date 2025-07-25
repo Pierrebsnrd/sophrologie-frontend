@@ -220,7 +220,7 @@
 }
 
 /* ANIMATIONS */
-@keyframes float {
+/* @keyframes float {
   0%, 100% {
     transform: translateY(0px);
   }
@@ -238,7 +238,7 @@
   animation: float 8s ease-in-out infinite;
   animation-delay: 4s;
   animation-direction: reverse;
-}
+} */
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
