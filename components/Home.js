@@ -15,7 +15,7 @@ export default function Home() {
             src="/bannieres/accueil.jpg"
             alt="Paysage"
             layout="fill"
-            /* objectFit="cover" */
+            objectFit="cover"
             className={styles.heroImage}
             priority
           />
