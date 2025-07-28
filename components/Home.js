@@ -37,7 +37,7 @@ export default function Home() {
         {/* SOPHROLOGIE */}
         <section className={styles.sectionAlt}>
           <div className={styles.sectionInner}>
-            <h2>Ma définition de la Sophrologie :</h2>
+            <h2>La Sophrologie :</h2>
             <p>La sophrologie est fondée dans les années 1960 par le Docteur Alfonso Caycedo, médecin psychiatre. Cette discipline est une approche centrée sur la personne qui vise à harmoniser le corps et l'esprit, en mobilisant ses propres ressources pour développer un mieux-être au quotidien.</p>
             <p>Par des exercices de respiration, de relaxation dynamique et de visualisation libre et neutre, elle aide chacun à mieux se connaître, à renforcer ses ressources intérieures et à accueillir les défis de la vie avec sérénité.</p>
             <p>Cette discipline vise à apporter à ses consultants une amélioration de la qualité de vie. Sa pratique nécessite un entrainement quotidien du corps et de l'esprit.</p>
@@ -49,10 +49,6 @@ export default function Home() {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Les bienfaits de la sophrologie</h2>
           <p className={styles.benefitHighlight}>La sophrologie s’adapte à chacun et peut accompagner dans de nombreuses situations.</p>
-          <p className={styles.benefitHighlight}>La sophrologie : la clé pour libérer votre potentiel !<br />Écoutez votre corps et libérez votre esprit !</p>
-          <p className={styles.benefitHighlight}>Retrouvez votre équilibre intérieur</p>
-          <p className={styles.benefitHighlight}>Une méthode pour une vie plus sereine et plus épanouie.</p>
-
           <div className={styles.grid}>
             <div className={styles.card}><h3>Gestion du stress et des émotions</h3><p>(Surmenage, charge mentale, Anxiété, angoisses, irritabilité, Burn-out, prévention de l'épuisement…)</p></div>
             <div className={styles.card}><h3>Confiance en soi</h3><p>(Manque d'estime de soi, Peur du jugement ou du regard des autres, Besoin de s'affirmer dans sa vie personnelle et/ou professionnelle…)</p></div>
