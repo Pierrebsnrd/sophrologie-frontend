@@ -19,18 +19,36 @@ api.interceptors.request.use((config) => {
     }
   }
   return config;
+}, (error) => {
+  return Promise.reject(error);
 });
 
 // Intercepteur pour gérer les erreurs d'authentification
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response;
+  },
   (error) => {
-    if (error.response?.status === 401 && typeof window !== 'undefined') {
-      localStorage.removeItem('adminToken');
-      window.location.href = '/admin/login';
+    // Gérer l'expiration du token
+    if (error.response?.status === 401) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('adminToken');
+        // Rediriger vers login si on est dans l'admin
+        if (window.location.pathname.startsWith('/admin') &&
+          !window.location.pathname.includes('/login')) {
+          window.location.href = '/admin/login';
+        }
+      }
     }
+
+    // Gérer les erreurs de rate limiting
+    if (error.response?.status === 429) {
+      console.warn('Rate limit atteint:', error.response.data.message);
+    }
+
     return Promise.reject(error);
   }
 );
+
 
 export default api;

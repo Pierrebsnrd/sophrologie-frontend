@@ -23,28 +23,35 @@ export default function AdminLogin() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    try {
-      const response = await api.post('/admin/login', credentials);
-      if (response.data.success) {
-        localStorage.setItem('adminToken', response.data.token);
+  try {
+    const response = await api.post('/admin/login', credentials);
+    
+    if (response.data.success) {
+      const token = response.data.data.tokens?.accessToken;
+      if (token) {
+        localStorage.setItem('adminToken', token);
         router.replace('/admin');
       } else {
-        setError(response.data.message || 'Erreur de connexion');
+        setError('Token non reçu');
       }
-    } catch (err) {
-      console.error('Erreur de connexion:', err);
-      setError(
-        err.response?.data?.message ||
-        'Erreur de connexion. Veuillez vérifier vos identifiants.'
-      );
-    } finally {
-      setLoading(false);
+    } else {
+      setError(response.data.message || 'Erreur de connexion');
     }
-  };
+  } catch (err) {
+    console.error('Erreur de connexion:', err);
+    setError(
+      err.response?.data?.message ||
+      'Erreur de connexion. Veuillez vérifier vos identifiants.'
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <>

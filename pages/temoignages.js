@@ -21,9 +21,11 @@ export default function Temoignages() {
     const fetchTemoignages = async () => {
         try {
             const res = await api.get("/temoignage");
-            setTemoignages(res.data);
+
+            const data = res.data.success ? res.data.data : res.data;
+            setTemoignages(data.temoignages || data);
         } catch (err) {
-            console.error("Erreur chargement témoignages");
+            console.error("Erreur chargement témoignages", err);
         }
     };
 
@@ -32,14 +34,27 @@ export default function Temoignages() {
             setError("Veuillez remplir tous les champs.");
             return;
         }
+
         try {
-            await api.post("/temoignage", { name, message });
-            setConfirmation("Merci pour votre témoignage ! Il sera publié après validation.");
-            setName("");
-            setMessage("");
-            setError("");
+            const response = await api.post("/temoignage", { name, message });
+
+            if (response.data.success) {
+                setConfirmation(
+                    response.data.message ||
+                    "Merci pour votre témoignage ! Il sera publié après validation."
+                );
+                setName("");
+                setMessage("");
+                setError("");
+            } else {
+                setError(response.data.message || "Erreur lors de l'envoi du témoignage.");
+            }
         } catch (err) {
-            setError("Erreur lors de l'envoi du témoignage.");
+            console.error("Erreur soumission témoignage:", err);
+            setError(
+                err.response?.data?.message ||
+                "Erreur lors de l'envoi du témoignage."
+            );
         }
     };
 

@@ -60,20 +60,23 @@ export default function Contact() {
 
         try {
             const res = await api.post('/contact', { name, email, message });
-            if (res.status === 200) {
-                setConfirmationMessage('Votre message a bien été envoyé.');
-                // Reset du formulaire
+
+            if (res.data.success) {
+                setConfirmationMessage(res.data.message || 'Votre message a bien été envoyé.');
                 setFormData({
                     name: '',
                     email: '',
                     message: ''
                 });
             } else {
-                setErrorMessage("Une erreur est survenue lors de l'envoi.");
+                setErrorMessage(res.data.message || "Une erreur est survenue lors de l'envoi.");
             }
         } catch (err) {
             console.error(err);
-            setErrorMessage("Une erreur est survenue lors de l'envoi du message.");
+            setErrorMessage(
+                err.response?.data?.message ||
+                "Une erreur est survenue lors de l'envoi du message."
+            );
         } finally {
             setSending(false);
         }
@@ -192,7 +195,6 @@ export default function Contact() {
                                 </section>
 
                                 <div className={styles.mapContainer}>
-                                    {/* Carte existante reste identique */}
                                     <iframe
                                         title="Cabinet Stéphanie Habert"
                                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.4126037209037!2d1.9877313156759884!3d48.828308979286794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e68b780bffb055%3A0x2c2a75f8e34365cd!2sVillepreux%2078450!5e0!3m2!1sfr!2sfr!4v1697890000000!5m2!1sfr!2sfr"
