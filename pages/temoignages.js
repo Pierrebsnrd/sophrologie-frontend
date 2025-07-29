@@ -13,7 +13,6 @@ export default function Temoignages() {
     const [confirmation, setConfirmation] = useState("");
     const [error, setError] = useState("");
     const [showAll, setShowAll] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
@@ -21,10 +20,7 @@ export default function Temoignages() {
     }, []);
 
     const fetchTemoignages = async () => {
-        try {
-            console.log('🔍 Chargement des témoignages...');
-            setLoading(true);
-            
+        try {   
             const res = await api.get("/temoignage");
             console.log('📡 Réponse API:', res.data);
 
@@ -43,8 +39,6 @@ export default function Temoignages() {
             console.error("❌ Erreur chargement témoignages:", err);
             setError("Erreur lors du chargement des témoignages");
             setTemoignages([]);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -162,12 +156,6 @@ export default function Temoignages() {
                 <div className={styles.content}>
                     {/* SECTION TEMOIGNAGES */}
                     <section className={styles.temoignage}>
-                        {loading && (
-                            <div style={{ textAlign: 'center', padding: '2rem' }}>
-                                <p>Chargement des témoignages...</p>
-                            </div>
-                        )}
-
                         {/* Témoignages statiques */}
                         <div className={styles.temoignageCard}>
                             <p className={styles.temoignageText}>
@@ -198,7 +186,7 @@ export default function Temoignages() {
                         </div>
 
                         {/* Témoignages depuis la BDD */}
-                        {!loading && visibleTemoignages.map((t, index) => (
+                        {visibleTemoignages.map((t, index) => (
                             <div key={t._id || index} className={styles.temoignageCard}>
                                 <p className={styles.temoignageText}>"{t.message}"</p>
                                 <div className={styles.temoignageFooter}>
@@ -210,7 +198,7 @@ export default function Temoignages() {
                             </div>
                         ))}
 
-                        {!loading && sortedTemoignages.length > 4 && (
+                        {sortedTemoignages.length > 4 && (
                             <div className={styles.loadMoreContainer}>
                                 <button 
                                     className={styles.submitButton} 
@@ -220,8 +208,6 @@ export default function Temoignages() {
                                 </button>
                             </div>
                         )}
-
-
                     </section>
 
                     {/* FORMULAIRE DE SOUMISSION */}
