@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Head from 'next/head'; // 👈 Ajout ici
+import Head from 'next/head';
 import api from '../../utils/api';
 import styles from '../../styles/login.module.css';
 
@@ -23,35 +23,35 @@ export default function AdminLogin() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  try {
-    const response = await api.post('/admin/login', credentials);
-    
-    if (response.data.success) {
-      const token = response.data.data.tokens?.accessToken;
-      if (token) {
-        localStorage.setItem('adminToken', token);
-        router.replace('/admin');
+    try {
+      const response = await api.post('/admin/login', credentials);
+      
+      // ✅ Structure de réponse corrigée
+      if (response.data.success) {
+        const token = response.data.token; // ✅ Directement dans response.data.token
+        if (token) {
+          localStorage.setItem('adminToken', token);
+          router.replace('/admin');
+        } else {
+          setError('Token non reçu');
+        }
       } else {
-        setError('Token non reçu');
+        setError(response.data.error || 'Erreur de connexion');
       }
-    } else {
-      setError(response.data.message || 'Erreur de connexion');
+    } catch (err) {
+      console.error('Erreur de connexion:', err);
+      setError(
+        err.response?.data?.error || // ✅ Utiliser 'error' au lieu de 'message'
+        'Erreur de connexion. Veuillez vérifier vos identifiants.'
+      );
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error('Erreur de connexion:', err);
-    setError(
-      err.response?.data?.message ||
-      'Erreur de connexion. Veuillez vérifier vos identifiants.'
-    );
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <>
