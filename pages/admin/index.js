@@ -46,57 +46,74 @@ export default function AdminDashboard() {
     fetchAdminProfile();
   }, [router]);
 
-  // Fonction fetchData unifiée avec pagination
-  const fetchData = async (temoignagePage = 1, messagePage = 1) => {
-    setLoading(true);
-    setError('');
+  // Fonction fetchData corrigée avec meilleure gestion d'erreurs
+const fetchData = async (temoignagePage = 1, messagePage = 1) => {
+  setLoading(true);
+  setError('');
 
-    try {
-      const [temoignageRes, contactRes] = await Promise.all([
-        api.get(`/admin/temoignages?page=${temoignagePage}&limit=10`),
-        api.get(`/admin/contact-messages?page=${messagePage}&limit=10`),
-      ]);
+  try {
+    const [temoignageRes, contactRes] = await Promise.all([
+      api.get(`/admin/temoignages?page=${temoignagePage}&limit=10`),
+      api.get(`/admin/contact-messages?page=${messagePage}&limit=10`),
+    ]);
 
-      // Gestion des témoignages
-      if (temoignageRes.data.success) {
-        setTemoignages(temoignageRes.data.data.temoignages || []);
-        setTotalPagesTemoignages(temoignageRes.data.data.pagination?.totalPages || 1);
-        setCurrentPageTemoignages(temoignageRes.data.data.pagination?.currentPage || 1);
-      } else {
-        // Fallback si pas de pagination
-        setTemoignages(temoignageRes.data.data || []);
-      }
+    console.log('Temoignage response:', temoignageRes.data);
+    console.log('Contact response:', contactRes.data);
 
-      // Gestion des messages de contact
-      if (contactRes.data.success) {
-        setContactMessages(contactRes.data.data.messages || []);
-        setTotalPagesMessages(contactRes.data.data.pagination?.totalPages || 1);
-        setCurrentPageMessages(contactRes.data.data.pagination?.currentPage || 1);
-      } else {
-        // Fallback si pas de pagination
-        setContactMessages(contactRes.data.data || []);
-      }
-
-    } catch (err) {
-      console.error('Fetch error:', err);
-      setError('Erreur lors du chargement des données');
-    } finally {
-      setLoading(false);
+    // Gestion des témoignages
+    if (temoignageRes.data.success) {
+      setTemoignages(temoignageRes.data.data.temoignages || []);
+      setTotalPagesTemoignages(temoignageRes.data.data.pagination?.totalPages || 1);
+      setCurrentPageTemoignages(temoignageRes.data.data.pagination?.currentPage || 1);
+    } else {
+      // Fallback si pas de structure success
+      setTemoignages(Array.isArray(temoignageRes.data) ? temoignageRes.data : []);
     }
-  };
 
-  // Récupération du profil admin
-  const fetchAdminProfile = async () => {
-    try {
-      const response = await api.get('/admin/profile');
-      if (response.data.success) {
-        setAdminProfile(response.data.data);
-      }
-    } catch (err) {
-      console.error('Error fetching admin profile:', err);
+    // Gestion des messages de contact
+    if (contactRes.data.success) {
+      setContactMessages(contactRes.data.data.messages || []);
+      setTotalPagesMessages(contactRes.data.data.pagination?.totalPages || 1);
+      setCurrentPageMessages(contactRes.data.data.pagination?.currentPage || 1);
+    } else {
+      // Fallback si pas de structure success
+      setContactMessages(Array.isArray(contactRes.data) ? contactRes.data : []);
     }
-  };
 
+  } catch (err) {
+    console.error('Fetch error:', err);
+    if (err.response?.status === 401) {
+      // Token expiré, rediriger vers login
+      localStorage.removeItem('adminToken');
+      router.replace('/admin/login');
+    } else {
+      setError('Erreur lors du chargement des données: ' + (err.response?.data?.error || err.message));
+    }
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Récupération du profil admin corrigée
+const fetchAdminProfile = async () => {
+  try {
+    console.log('Calling URL:', '/admin/profile');
+    const response = await api.get('/admin/profile');
+    console.log('Profile response:', response.data);
+    
+    if (response.data.success) {
+      setAdminProfile(response.data.data);
+    } else {
+      console.warn('Profile response without success flag:', response.data);
+    }
+  } catch (err) {
+    console.error('Error fetching admin profile:', err);
+    if (err.response?.status === 401) {
+      localStorage.removeItem('adminToken');
+      router.replace('/admin/login');
+    }
+  }
+};
   // Fonctions de navigation pour la pagination
   const handleTemoignagePage = (page) => {
     fetchData(page, currentPageMessages);
