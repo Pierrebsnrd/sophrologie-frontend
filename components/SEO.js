@@ -4,7 +4,7 @@ const SEO = ({
     title = "Stéphanie Habert – Sophrologie à Villepreux",
     description = "Découvrez les séances de sophrologie personnalisées avec Stéphanie Habert à Villepreux. Améliorez votre bien-être grâce à un accompagnement professionnel et bienveillant.",
     canonical = "https://www.sophrologuevillepreux.fr/",
-    ogImage = "https://www.sophrologuevillepreux.fr/bannieres/acceuil.jpg",
+    ogImage = "https://www.sophrologuevillepreux.fr/bannieres/accueil.jpg",
     ogImageAlt = "Stéphanie Habert - Sophrologue à Villepreux",
     pageType = "website",
     specificJsonLd = null,
@@ -70,8 +70,8 @@ const SEO = ({
                     "latitude": "48.8283",
                     "longitude": "1.9877"
                 },
-                "image": "https://www.sophrologuevillepreux.fr/icons/logo.jpeg",
-                "logo": "https://www.sophrologuevillepreux.fr/icons/logo.jpeg",
+                "image": "https://www.sophrologuevillepreux.fr/logo/logo.jpeg",
+                "logo": "https://www.sophrologuevillepreux.fr/logo/logo.jpeg",
                 "founder": {
                     "@id": "https://www.sophrologuevillepreux.fr/#person"
                 },
