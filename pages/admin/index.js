@@ -15,6 +15,9 @@ export default function AdminDashboard() {
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteTemoignageModal, setShowDeleteTemoignageModal] = useState(false);
   const [deleteTemoignageId, setDeleteTemoignageId] = useState(null);
+  const pendingTemoignagesCount = temoignages.filter(t => t.status === 'pending').length;
+  const unansweredMessagesCount = contactMessages.filter(m => !m.answered).length;
+
 
   // Pagination states
   const [currentPageTemoignages, setCurrentPageTemoignages] = useState(1);
@@ -47,73 +50,73 @@ export default function AdminDashboard() {
   }, [router]);
 
   // Fonction fetchData corrigée avec meilleure gestion d'erreurs
-const fetchData = async (temoignagePage = 1, messagePage = 1) => {
-  setLoading(true);
-  setError('');
+  const fetchData = async (temoignagePage = 1, messagePage = 1) => {
+    setLoading(true);
+    setError('');
 
-  try {
-    const [temoignageRes, contactRes] = await Promise.all([
-      api.get(`/admin/temoignages?page=${temoignagePage}&limit=10`),
-      api.get(`/admin/contact-messages?page=${messagePage}&limit=10`),
-    ]);
+    try {
+      const [temoignageRes, contactRes] = await Promise.all([
+        api.get(`/admin/temoignages?page=${temoignagePage}&limit=10`),
+        api.get(`/admin/contact-messages?page=${messagePage}&limit=10`),
+      ]);
 
-    console.log('Temoignage response:', temoignageRes.data);
-    console.log('Contact response:', contactRes.data);
+      console.log('Temoignage response:', temoignageRes.data);
+      console.log('Contact response:', contactRes.data);
 
-    // Gestion des témoignages
-    if (temoignageRes.data.success) {
-      setTemoignages(temoignageRes.data.data.temoignages || []);
-      setTotalPagesTemoignages(temoignageRes.data.data.pagination?.totalPages || 1);
-      setCurrentPageTemoignages(temoignageRes.data.data.pagination?.currentPage || 1);
-    } else {
-      // Fallback si pas de structure success
-      setTemoignages(Array.isArray(temoignageRes.data) ? temoignageRes.data : []);
+      // Gestion des témoignages
+      if (temoignageRes.data.success) {
+        setTemoignages(temoignageRes.data.data.temoignages || []);
+        setTotalPagesTemoignages(temoignageRes.data.data.pagination?.totalPages || 1);
+        setCurrentPageTemoignages(temoignageRes.data.data.pagination?.currentPage || 1);
+      } else {
+        // Fallback si pas de structure success
+        setTemoignages(Array.isArray(temoignageRes.data) ? temoignageRes.data : []);
+      }
+
+      // Gestion des messages de contact
+      if (contactRes.data.success) {
+        setContactMessages(contactRes.data.data.messages || []);
+        setTotalPagesMessages(contactRes.data.data.pagination?.totalPages || 1);
+        setCurrentPageMessages(contactRes.data.data.pagination?.currentPage || 1);
+      } else {
+        // Fallback si pas de structure success
+        setContactMessages(Array.isArray(contactRes.data) ? contactRes.data : []);
+      }
+
+    } catch (err) {
+      console.error('Fetch error:', err);
+      if (err.response?.status === 401) {
+        // Token expiré, rediriger vers login
+        localStorage.removeItem('adminToken');
+        router.replace('/admin/login');
+      } else {
+        setError('Erreur lors du chargement des données: ' + (err.response?.data?.error || err.message));
+      }
+    } finally {
+      setLoading(false);
     }
+  };
 
-    // Gestion des messages de contact
-    if (contactRes.data.success) {
-      setContactMessages(contactRes.data.data.messages || []);
-      setTotalPagesMessages(contactRes.data.data.pagination?.totalPages || 1);
-      setCurrentPageMessages(contactRes.data.data.pagination?.currentPage || 1);
-    } else {
-      // Fallback si pas de structure success
-      setContactMessages(Array.isArray(contactRes.data) ? contactRes.data : []);
-    }
+  // Récupération du profil admin corrigée
+  const fetchAdminProfile = async () => {
+    try {
+      console.log('Calling URL:', '/admin/profile');
+      const response = await api.get('/admin/profile');
+      console.log('Profile response:', response.data);
 
-  } catch (err) {
-    console.error('Fetch error:', err);
-    if (err.response?.status === 401) {
-      // Token expiré, rediriger vers login
-      localStorage.removeItem('adminToken');
-      router.replace('/admin/login');
-    } else {
-      setError('Erreur lors du chargement des données: ' + (err.response?.data?.error || err.message));
+      if (response.data.success) {
+        setAdminProfile(response.data.data);
+      } else {
+        console.warn('Profile response without success flag:', response.data);
+      }
+    } catch (err) {
+      console.error('Error fetching admin profile:', err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminToken');
+        router.replace('/admin/login');
+      }
     }
-  } finally {
-    setLoading(false);
-  }
-};
-
-// Récupération du profil admin corrigée
-const fetchAdminProfile = async () => {
-  try {
-    console.log('Calling URL:', '/admin/profile');
-    const response = await api.get('/admin/profile');
-    console.log('Profile response:', response.data);
-    
-    if (response.data.success) {
-      setAdminProfile(response.data.data);
-    } else {
-      console.warn('Profile response without success flag:', response.data);
-    }
-  } catch (err) {
-    console.error('Error fetching admin profile:', err);
-    if (err.response?.status === 401) {
-      localStorage.removeItem('adminToken');
-      router.replace('/admin/login');
-    }
-  }
-};
+  };
   // Fonctions de navigation pour la pagination
   const handleTemoignagePage = (page) => {
     fetchData(page, currentPageMessages);
@@ -377,19 +380,27 @@ const fetchAdminProfile = async () => {
             style={{
               ...styles.tabButton,
               ...(activeTab === 'temoignage' ? styles.activeTabButton : {}),
+              position: 'relative'
             }}
             onClick={() => setActiveTab('temoignage')}
           >
             Témoignages
+            {pendingTemoignagesCount > 0 && (
+              <span style={styles.tabBadge}>{pendingTemoignagesCount}</span>
+            )}
           </button>
           <button
             style={{
               ...styles.tabButton,
               ...(activeTab === 'contact' ? styles.activeTabButton : {}),
+              position: 'relative'
             }}
             onClick={() => setActiveTab('contact')}
           >
             Messages de contact
+            {unansweredMessagesCount > 0 && (
+              <span style={styles.tabBadge}>{unansweredMessagesCount}</span>
+            )}
           </button>
           <button
             style={{
@@ -401,6 +412,7 @@ const fetchAdminProfile = async () => {
             Mon Profil
           </button>
         </div>
+
 
         {/* Contenu des onglets */}
         <div>
@@ -1221,4 +1233,19 @@ const styles = {
     marginBottom: '15px',
     fontSize: '0.95rem',
   },
+  tabBadge: {
+    position: 'absolute',
+    top: '5px',
+    right: '10px',
+    backgroundColor: '#e74c3c',
+    color: '#fff',
+    borderRadius: '50%',
+    padding: '2px 8px',
+    fontSize: '0.8rem',
+    fontWeight: 'bold',
+    lineHeight: '1',
+    display: 'inline-block',
+    minWidth: '18px',
+    textAlign: 'center',
+  }
 };
