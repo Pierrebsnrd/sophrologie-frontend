@@ -340,12 +340,12 @@ export default function AdminDashboard() {
             )}
           </div>
           <div style={styles.headerActions}>
-            <button
+            {/* <button
               onClick={() => setShowPasswordModal(true)}
               style={styles.profileButton}
             >
               Changer le mot de passe
-            </button>
+            </button> */}
             <button onClick={logout} style={styles.logoutButton}>
               Déconnexion
             </button>
@@ -604,11 +604,21 @@ export default function AdminDashboard() {
                     <div style={styles.profileStats}>
                       <div style={styles.profileStatItem}>
                         <strong>Membre depuis:</strong>
-                        <span>{adminProfile.createdAt ? formatDate(adminProfile.createdAt) : 'N/A'}</span>
+                        <span>
+                          {adminProfile.createdAt
+                            ? formatDate(adminProfile.createdAt)
+                            : 'Date non disponible'
+                          }
+                        </span>
                       </div>
                       <div style={styles.profileStatItem}>
                         <strong>Dernière connexion:</strong>
-                        <span>{adminProfile.lastLogin ? formatDate(adminProfile.lastLogin) : 'N/A'}</span>
+                        <span>
+                          {adminProfile.lastLogin
+                            ? formatDate(adminProfile.lastLogin)
+                            : 'Jamais connecté'
+                          }
+                        </span>
                       </div>
                       <div style={styles.profileStatItem}>
                         <strong>Nombre de connexions:</strong>
