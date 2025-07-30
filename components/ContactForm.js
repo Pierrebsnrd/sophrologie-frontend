@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../styles/Contact.module.css';
+import styles from '../styles/components/ContactForm.module.css';
 import api from '../utils/api';
 
 function isValidEmail(email) {

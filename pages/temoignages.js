@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import TestimonialCard from "../components/TestimonialCard";
 import TestimonialForm from "../components/TestimonialForm";
 import Image from "next/image";
-import styles from "../styles/Temoignages.module.css";
+import styles from "../styles/pages/Temoignages.module.css";
 import api from "../utils/api";
 
 export default function Temoignages() {

@@ -3,7 +3,7 @@ import SEO from "../components/SEO";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Image from "next/image";
-import styles from "../styles/QuiSuisJe.module.css";
+import styles from "../styles/pages/QuiSuisJe.module.css";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import BackgroundMusic from "../components/BackgroundMusic";

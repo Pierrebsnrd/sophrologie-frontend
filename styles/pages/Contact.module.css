@@ -1,0 +1,139 @@
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  height: 40vh;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  filter: brightness(0.85) saturate(1.1);
+  transition: transform 8s ease-in-out;
+}
+
+.heroImage:hover {
+  transform: scale(1.05);
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(72, 187, 120, 0.3), rgba(26, 32, 44, 0.6));
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(1px);
+}
+
+.heroTitle {
+  color: white;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  text-align: center;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  animation: fadeInUp 1.5s ease-out 0.5s forwards;
+  font-family: 'Georgia', serif;
+}
+
+/* PAGE LAYOUT */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.contentWrapper {
+  flex: 1;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 2rem);
+  background: linear-gradient(145deg, #ffffff, #f9fffe);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+}
+
+/* SECTIONS LAYOUT */
+.contactFormMapSection {
+  background: linear-gradient(145deg, #f0fdfa, #ecfdf5);
+  padding: 3rem;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(72, 187, 120, 0.1);
+  border: 1px solid rgba(72, 187, 120, 0.1);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1000px;
+  opacity: 0;
+  animation: fadeInUp 1s ease-out 0.5s forwards;
+}
+
+.contactFormMapSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #48bb78, transparent);
+}
+
+/* FLEX CONTAINER FOR FORM + MAP */
+.flexContainer {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero {
+    height: 50vh;
+    min-height: 300px;
+  }
+  
+  .contentWrapper {
+    padding: 2rem 1rem;
+    gap: 3rem;
+  }
+  
+  .contactFormMapSection {
+    padding: 2rem;
+  }
+  
+  .flexContainer {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 45vh;
+    min-height: 250px;
+  }
+  
+  .contactFormMapSection {
+    padding: 1.5rem;
+  }
+}

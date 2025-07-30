@@ -1,7 +1,7 @@
 import SEO from "../components/SEO";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import styles from "../styles/Charte.module.css";
+import styles from "../styles/pages/Charte.module.css";
 import Image from "next/image";
 
 export default function Charte() {

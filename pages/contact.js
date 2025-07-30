@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import ContactInfo from "../components/ContactInfo";
 import ContactForm from "../components/ContactForm";
 import Map from "../components/Map";
-import styles from "../styles/Contact.module.css";
+import styles from "../styles/pages/Contact.module.css";
 import Image from "next/image";
 
 export default function Contact() {

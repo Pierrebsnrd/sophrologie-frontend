@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { InlineWidget } from 'react-calendly';
-import styles from '../styles/Calendly.module.css';
+import styles from '../styles/components/Calendly.module.css';
 import Image from 'next/image';
 
 export default function Calendly() {

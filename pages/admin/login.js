@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import api from '../../utils/api';
-import styles from '../../styles/login.module.css';
+import styles from '../../styles/pages/Login.module.css';
 
 export default function AdminLogin() {
   const [credentials, setCredentials] = useState({ email: '', password: '' });

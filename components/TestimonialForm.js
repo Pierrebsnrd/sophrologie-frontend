@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../styles/Temoignages.module.css';
+import styles from '../styles/components/TestimonialForm.module.css';
 import api from '../utils/api';
 
 export default function TestimonialForm({ onTestimonialSubmitted }) {
