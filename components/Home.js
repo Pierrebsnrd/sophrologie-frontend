@@ -29,8 +29,9 @@ export default function Home() {
           <div className={styles.sectionInner}>
             <h2>Un moment pour soi, à Villepreux</h2>
             <p>
-              Bienvenue chez Stéphanie Habert Sophrologue dans les Yvelines. Offrez-vous un moment pour vous reconnecter à l’essentiel : VOUS. Dans un cadre chaleureux et bienveillant, je vous accompagne avec douceur et authenticité vers plus de sérénité, de clarté intérieure et d'équilibre.
-            </p>
+              Bienvenue chez Stéphanie Habert Sophrologue dans les Yvelines. Offrez-vous un moment pour vous reconnecter à l’essentiel : VOUS.</p>
+            <p>
+              Dans un cadre chaleureux et bienveillant, je vous accompagne avec douceur et authenticité vers plus de sérénité, de clarté intérieure et d'équilibre.</p>
           </div>
         </section>
 

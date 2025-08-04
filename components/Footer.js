@@ -6,7 +6,10 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
-        <p>© {new Date().getFullYear()} Stéphanie Habert Sophrologue Villepreux</p>
+        <p>
+          © {new Date().getFullYear()} Stéphanie Habert - Sophrologue à Villepreux<br />
+          <span className={styles.credit}>Site créé par Pierre Boisnard</span>
+        </p>
         <div className={styles.socialIcons}>
           <a
             href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr"
