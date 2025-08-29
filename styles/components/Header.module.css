@@ -79,7 +79,10 @@
 .navLink::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
   border-radius: 25px;
   opacity: 0;
@@ -159,8 +162,15 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 /* === BOUTON HAMBURGER === */
@@ -204,47 +214,86 @@
   }
 }
 
-/* Mobile */
+/* === RESPONSIVE MOBILE STABLE === */
 @media (max-width: 768px) {
+
+  .headerContainer {
+    padding: 0 1rem !important;
+    transition: none !important;
+  }
+
   .topBar {
-    justify-content: center; /* centre le logo */
-  }
-
-  /* Logo centré correctement sans transform */
-  .logoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
     position: relative;
-    margin: 0 auto;
-    transform: none; /* évite le conflit */
+    padding: 0;
   }
 
-  /* Icônes sociales fixées à gauche */
-  .socialIcons {
+  /* Logo parfaitement centré */
+  .logoContainer {
     position: absolute;
-    left: 1rem;
+    left: 50%;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%);
+  }
+  .logoContainer:hover {
+    transform: translate(-50%, -50%) !important;
   }
 
-  /* Hamburger fixé à droite */
+  /* Icônes sociales fixes à gauche */
+  .socialIcons {
+    position: relative;
+    left: 0;
+    top: 0;
+    transform: none;
+    display: flex;
+    gap: 1rem;
+  }
+  .socialIcons a {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Hamburger fixe à droite */
   .hamburger {
     display: block;
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative;
+    transform: none !important;
+    font-size: 1.8rem;
+    color: #2d5a3d;
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 
-  /* Navigation desktop cachée sur mobile */
   .navbar {
     display: none;
   }
 
-  /* Styles pour le menu mobile */
+  /* Menu mobile */
+  .mobileNav {
+    margin-top: 1rem;
+    border-top: 1px solid rgba(72, 187, 120, 0.1);
+    padding-top: 1rem;
+  }
+
+  .mobileNavList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
   .mobileNavList .navLink {
     font-size: 0.9rem;
     padding: 0.5rem 0.7rem;
     display: block;
     text-align: center;
+    transform: none !important;
   }
 }
 
