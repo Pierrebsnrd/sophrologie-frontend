@@ -165,6 +165,10 @@ export default function AdminDashboard() {
     }
   };
 
+  const goToPageEditor = () => {
+    router.push('/admin/pages'); // <-- lien vers ton interface d'édition
+  };
+
   const logout = () => {
     localStorage.removeItem('adminToken');
     router.replace('/admin/login');
@@ -335,6 +339,20 @@ export default function AdminDashboard() {
             Ouvrir Calendly →
           </a>
         </div>
+        {/* --- NOUVEAU BLOC : Lien vers l'éditeur de pages --- */}
+        <div className={styles.infoBox}>
+          <h3 className={styles.infoTitle}>✏️ Éditer les pages du site</h3>
+          <p className={styles.infoText}>
+            Accédez à l’éditeur de pages pour modifier le contenu des pages dynamiques.
+          </p>
+          <button
+            onClick={goToPageEditor}
+            className={styles.calendlyLink} // tu peux créer un style spécifique type bouton
+          >
+            Ouvrir l’éditeur →
+          </button>
+        </div>
+        
         <div className={styles.tabs}>
           <button
             className={`${styles.tabButton} ${activeTab === 'temoignage' ? styles.activeTabButton : ''}`}

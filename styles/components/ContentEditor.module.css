@@ -1,0 +1,508 @@
+/* CONTAINER PRINCIPAL */
+.contentEditor {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+}
+
+.error {
+  color: #e74c3c;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+}
+
+/* HEADER DE L'ÉDITEUR */
+.editorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 25px;
+}
+
+.editorHeader h1 {
+  color: #2d5a3d;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.savePageButton {
+  background: linear-gradient(135deg, #48bb78, #38a169);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.savePageButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.savePageButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* CONTRÔLES D'AJOUT DE SECTIONS */
+.editorControls {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 25px;
+}
+
+.editorControls h3 {
+  color: #2d5a3d;
+  margin: 0 0 15px 0;
+  font-size: 18px;
+}
+
+.sectionButtons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.addSectionButton {
+  background: #f1f5f9;
+  color: #475569;
+  border: 2px solid #e2e8f0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.addSectionButton:hover {
+  background: #48bb78;
+  color: white;
+  border-color: #48bb78;
+  transform: translateY(-1px);
+}
+
+/* CONTAINER DES SECTIONS */
+.sectionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sectionItem {
+  display: flex;
+  align-items: flex-start;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.sectionItem:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 100%;
+  min-height: 80px;
+  background: #f8fafc;
+  border-right: 2px solid #e2e8f0;
+  cursor: grab;
+  color: #94a3b8;
+  font-size: 20px;
+  border-radius: 12px 0 0 12px;
+  transition: background-color 0.3s ease;
+}
+
+.dragHandle:hover {
+  background: #e2e8f0;
+  color: #64748b;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+/* PRÉVISUALISATION DE SECTION */
+.sectionPreview {
+  flex: 1;
+  padding: 20px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sectionInfo h3 {
+  margin: 0 0 5px 0;
+  color: #2d5a3d;
+  font-size: 18px;
+}
+
+.sectionType {
+  background: #e2e8f0;
+  color: #64748b;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.sectionActions {
+  display: flex;
+  gap: 8px;
+}
+
+.editButton, .duplicateButton, .deleteButton {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.editButton {
+  background: #3b82f6;
+  color: white;
+}
+
+.editButton:hover {
+  background: #2563eb;
+}
+
+.duplicateButton {
+  background: #f59e0b;
+  color: white;
+}
+
+.duplicateButton:hover {
+  background: #d97706;
+}
+
+.deleteButton {
+  background: #ef4444;
+  color: white;
+}
+
+.deleteButton:hover {
+  background: #dc2626;
+}
+
+.sectionPreviewContent {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.sectionPreviewContent h2 {
+  color: #2d5a3d;
+  font-size: 20px;
+  margin: 0 0 10px 0;
+}
+
+.sectionPreviewContent h3 {
+  color: #2d5a3d;
+  font-size: 16px;
+  margin: 0 0 8px 0;
+}
+
+.sectionPreviewContent p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ÉDITEUR DE SECTION */
+.sectionEditor {
+  flex: 1;
+  padding: 20px;
+}
+
+.editorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.editorHeader h3 {
+  color: #2d5a3d;
+  margin: 0;
+  font-size: 18px;
+}
+
+.editorActions {
+  display: flex;
+  gap: 10px;
+}
+
+.cancelButton, .saveButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.cancelButton {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.cancelButton:hover {
+  background: #e2e8f0;
+}
+
+.saveButton {
+  background: #48bb78;
+  color: white;
+}
+
+.saveButton:hover {
+  background: #38a169;
+}
+
+/* FORMULAIRES D'ÉDITION */
+.editorForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input, .textarea, .select {
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.input:focus, .textarea:focus, .select:focus {
+  outline: none;
+  border-color: #48bb78;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* UPLOAD D'IMAGE */
+.imageUpload {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploadButton {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 2px dashed #d1d5db;
+  padding: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-weight: 500;
+}
+
+.uploadButton:hover {
+  background: #e2e8f0;
+  border-color: #48bb78;
+  color: #48bb78;
+}
+
+.imagePreview {
+  max-width: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.imagePreview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ÉDITEURS SPÉCIALISÉS */
+.cardEditor, .pricingEditor {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.cardHeader h4 {
+  color: #2d5a3d;
+  margin: 0;
+  font-size: 16px;
+}
+
+.buttonEditor {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.buttonEditor .input {
+  flex: 1;
+  margin: 0;
+}
+
+.addButton {
+  background: #48bb78;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.addButton:hover {
+  background: #38a169;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .contentEditor {
+    padding: 10px;
+  }
+
+  .editorHeader {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+
+  .sectionButtons {
+    justify-content: center;
+  }
+
+  .addSectionButton {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .sectionItem {
+    flex-direction: column;
+  }
+
+  .dragHandle {
+    width: 100%;
+    height: 40px;
+    min-height: 40px;
+    border-right: none;
+    border-bottom: 2px solid #e2e8f0;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .sectionActions {
+    justify-content: center;
+  }
+
+  .editorHeader {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+
+  .editorActions {
+    justify-content: center;
+  }
+
+  .buttonEditor {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionButtons {
+    flex-direction: column;
+  }
+
+  .addSectionButton {
+    width: 100%;
+  }
+
+  .buttonEditor .input {
+    width: 100%;
+  }
+}
