@@ -6,75 +6,49 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
     const [name, setName] = useState("");
     const [message, setMessage] = useState("");
     const [confirmation, setConfirmation] = useState("");
-    const [error, setError] = useState("");
+    const [errorMessages, setErrorMessages] = useState([]);
     const [submitting, setSubmitting] = useState(false);
 
     const submitTestimonial = async () => {
         // Reset des messages
-        setError("");
+        setErrorMessages([]);
         setConfirmation("");
 
+        const newErrors = [];
+
         // Validation côté client
-        if (!name.trim()) {
-            setError("Veuillez saisir votre nom.");
-            return;
-        }
+        if (!name.trim()) newErrors.push("Veuillez saisir votre nom.");
+        else if (name.trim().length < 2) newErrors.push("Le nom doit contenir au moins 2 caractères.");
 
-        if (!message.trim()) {
-            setError("Veuillez saisir votre message.");
-            return;
-        }
+        if (!message.trim()) newErrors.push("Veuillez saisir votre message.");
+        else if (message.trim().length < 10) newErrors.push("Le message doit contenir au moins 10 caractères.");
 
-        if (name.trim().length < 2) {
-            setError("Le nom doit contenir au moins 2 caractères.");
-            return;
-        }
-
-        if (message.trim().length < 10) {
-            setError("Le message doit contenir au moins 10 caractères.");
+        if (newErrors.length > 0) {
+            setErrorMessages(newErrors);
             return;
         }
 
         try {
             setSubmitting(true);
-            console.log('📤 Envoi du témoignage:', { name: name.trim(), message: message.trim() });
-
             const response = await api.post("/temoignage", { 
                 name: name.trim(), 
                 message: message.trim() 
             });
 
-            console.log('📡 Réponse soumission:', response.data);
-
             if (response.data.success) {
-                setConfirmation(
-                    response.data.message || 
-                    "Merci pour votre témoignage ! Il sera publié après validation."
-                );
-                // Reset du formulaire
+                setConfirmation(response.data.message || "Merci pour votre témoignage ! Il sera publié après validation.");
                 setName("");
                 setMessage("");
-                console.log('✅ Témoignage envoyé avec succès');
-                
-                // Callback optionnel pour rafraîchir la liste
-                if (onTestimonialSubmitted) {
-                    onTestimonialSubmitted();
-                }
+                if (onTestimonialSubmitted) onTestimonialSubmitted();
+            } else if (response.data.error) {
+                setErrorMessages([response.data.error]);
             } else {
-                setError(response.data.error || "Erreur lors de l'envoi du témoignage.");
+                setErrorMessages(["Erreur lors de l'envoi du témoignage."]);
             }
         } catch (err) {
-            console.error("❌ Erreur soumission témoignage:", err);
-            
-            if (err.response?.data?.error) {
-                setError(err.response.data.error);
-            } else if (err.response?.data?.message) {
-                setError(err.response.data.message);
-            } else if (err.message) {
-                setError(`Erreur de connexion: ${err.message}`);
-            } else {
-                setError("Erreur lors de l'envoi du témoignage. Veuillez réessayer.");
-            }
+            if (err.response?.data?.error) setErrorMessages([err.response.data.error]);
+            else if (err.response?.data?.message) setErrorMessages([err.response.data.message]);
+            else setErrorMessages([err.message || "Erreur lors de l'envoi du témoignage. Veuillez réessayer."]);
         } finally {
             setSubmitting(false);
         }
@@ -88,16 +62,13 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
                 Partagez votre témoignage pour aider d'autres personnes à découvrir les bienfaits de cette pratique.
             </p>
 
-            {error && (
-                <div style={{ 
-                    color: "#c53030", 
-                    textAlign: "center", 
-                    backgroundColor: "#fed7d7", 
-                    padding: "10px", 
-                    borderRadius: "5px", 
-                    marginBottom: "15px" 
-                }}>
-                    {error}
+            {errorMessages.length > 0 && (
+                <div className={styles.errorBox}>
+                    <ul>
+                        {errorMessages.map((err, idx) => (
+                            <li key={idx}>{err}</li>
+                        ))}
+                    </ul>
                 </div>
             )}
 

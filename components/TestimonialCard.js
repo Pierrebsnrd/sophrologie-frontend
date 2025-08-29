@@ -14,15 +14,25 @@ export default function TestimonialCard({
     author, 
     date
 }) {
+    const displayDate = (() => {
+        if (!date) return null;
+
+        // Si c'est déjà au format JJ/MM/AAAA, on ne touche pas
+        if (typeof date === 'string' && date.includes('/')) return date;
+
+        // Sinon, on parse la date
+        return formatDate(date);
+    })();
+
     return (
         <div className={styles.temoignageCard}>
             <p className={styles.temoignageText}>
                 "{message}"
             </p>
             <div className={styles.temoignageFooter}>
-                {date && (
+                {displayDate && (
                     <p className={styles.temoignageDate}>
-                        Publié le {typeof date === 'string' ? date : formatDate(date)}
+                        Publié le {displayDate}
                     </p>
                 )}
                 <p className={styles.temoignageAuthor}>– {author}</p>

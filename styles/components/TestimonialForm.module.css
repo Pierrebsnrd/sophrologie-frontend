@@ -1,13 +1,7 @@
 /* ANIMATIONS */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* FORM SECTION */
@@ -121,9 +115,7 @@
   transition: left 0.6s;
 }
 
-.submitButton:hover::before {
-  left: 100%;
-}
+.submitButton:hover::before { left: 100%; }
 
 .submitButton:hover {
   transform: translateY(-2px);
@@ -131,28 +123,48 @@
   background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
 }
 
-.submitButton:active {
-  transform: translateY(0);
-}
+.submitButton:active { transform: translateY(0); }
 
 .submitButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .post {
-    padding: 2rem;
-  }
+/* BOÎTE D'ERREURS GLOBALE */
+.errorBox {
+  margin: 1rem 0;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  color: #e74c3c;
+  font-weight: 500;
+  text-align: left;
+  animation: fadeInUp 0.4s ease forwards;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.1);
 }
 
+.errorBox ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.errorBox li {
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(5px);
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.errorBox li:nth-child(1) { animation-delay: 0s; }
+.errorBox li:nth-child(2) { animation-delay: 0.05s; }
+.errorBox li:nth-child(3) { animation-delay: 0.1s; }
+.errorBox li:nth-child(4) { animation-delay: 0.15s; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) { .post { padding: 2rem; } }
 @media (max-width: 480px) {
-  .post {
-    padding: 1.5rem;
-  }
-  
-  .textarea {
-    padding: 0.8rem;
-  }
+  .post { padding: 1.5rem; }
+  .textarea { padding: 0.8rem; }
 }

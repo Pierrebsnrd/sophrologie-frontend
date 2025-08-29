@@ -108,26 +108,37 @@
   border: 1px solid rgba(46, 204, 113, 0.2);
 }
 
-.errorMessage {
-  color: #e74c3c;
+/* BOÎTE D'ERREURS GLOBALE */
+.errorBox {
+  margin: 1rem 0;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
   background: rgba(231, 76, 60, 0.1);
-  border: 1px solid rgba(231, 76, 60, 0.2);
-}
-
-.labelErrorContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.emailErrorMessage {
+  border: 1px solid rgba(231, 76, 60, 0.3);
   color: #e74c3c;
-  font-size: 0.9rem;
   font-weight: 500;
-  margin: 0;
-  text-align: right;
+  text-align: left;
+  animation: fadeInUp 0.4s ease forwards;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.1);
 }
+
+.errorBox ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.errorBox li {
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(5px);
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.errorBox li:nth-child(1) { animation-delay: 0s; }
+.errorBox li:nth-child(2) { animation-delay: 0.05s; }
+.errorBox li:nth-child(3) { animation-delay: 0.1s; }
+.errorBox li:nth-child(4) { animation-delay: 0.15s; }
 
 /* SUBMIT BUTTON */
 .contactSubmitButton {

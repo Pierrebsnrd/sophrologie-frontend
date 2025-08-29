@@ -1,142 +1,143 @@
-import { useState } from 'react';
-import styles from '../styles/components/ContactForm.module.css';
-import api from '../utils/api';
+import { useState } from "react";
+import styles from "../styles/components/ContactForm.module.css";
+import api from "../utils/api";
 
 function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 export default function ContactForm() {
-    const [sending, setSending] = useState(false);
-    const [confirmationMessage, setConfirmationMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: ''
-    });
+  const [sending, setSending] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [errorMessages, setErrorMessages] = useState([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
 
-    // Fonction pour gérer les changements d'input
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    setErrorMessages([]);
+    setConfirmationMessage("");
+  };
 
-        // Réinitialiser les erreurs quand l'utilisateur tape
-        if (name === 'email' && emailError) {
-            setEmailError('');
-        }
-        if (errorMessage) {
-            setErrorMessage('');
-        }
-    };
+  const handleSubmit = async () => {
+    const { name, email, message } = formData;
+    const newErrors = [];
 
-    const handleSubmit = async () => {
-        const { name, email, message } = formData;
+    // Validation front
+    if (!name.trim()) newErrors.push("Le prénom est requis.");
+    else if (name.trim().length < 2) newErrors.push("Le prénom doit contenir au moins 2 caractères.");
 
-        if (!name.trim() || !email.trim() || !message.trim()) {
-            setErrorMessage('Merci de remplir tous les champs.');
-            return;
-        }
+    if (!email.trim()) newErrors.push("L'email est requis.");
+    else if (!isValidEmail(email)) newErrors.push("Veuillez entrer un email valide.");
 
-        if (!isValidEmail(email)) {
-            setEmailError('Veuillez entrer un email valide.');
-            return;
-        } else {
-            setEmailError('');
-        }
+    if (!message.trim()) newErrors.push("Le message est requis.");
+    else if (message.trim().length < 10) newErrors.push("Le message doit contenir au moins 10 caractères.");
 
-        setSending(true);
-        setConfirmationMessage('');
-        setErrorMessage('');
+    if (newErrors.length > 0) {
+      setErrorMessages(newErrors);
+      return;
+    }
 
-        try {
-            const res = await api.post('/contact', { name, email, message });
+    setSending(true);
+    setErrorMessages([]);
+    setConfirmationMessage("");
 
-            if (res.data.success) {
-                setConfirmationMessage(res.data.message || 'Votre message a bien été envoyé.');
-                setFormData({
-                    name: '',
-                    email: '',
-                    message: ''
-                });
-            } else {
-                setErrorMessage(res.data.message || "Une erreur est survenue lors de l'envoi.");
-            }
-        } catch (err) {
-            console.error(err);
-            setErrorMessage(
-                err.response?.data?.message ||
-                "Une erreur est survenue lors de l'envoi du message."
-            );
-        } finally {
-            setSending(false);
-        }
-    };
+    try {
+      const res = await api.post("/contact", { name, email, message });
 
-    return (
-        <section className={styles.contactFormSection}>
-            <h2>Formulaire de contact</h2>
-            <p className={styles.contactFormText}>
-                Vous avez des questions sur la sophrologie ?
-                N'hésitez pas à me contacter, je vous répondrai dans les plus brefs délais.
-            </p>
+      if (res.data.success) {
+        setConfirmationMessage(res.data.message || "Votre message a bien été envoyé.");
+        setFormData({ name: "", email: "", message: "" });
+      } else if (res.data.errors) {
+        // Backend renvoie erreurs champ par champ
+        setErrorMessages(Object.values(res.data.errors));
+      } else {
+        setErrorMessages([res.data.message || "Une erreur est survenue."]);
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.response?.data?.errors) {
+        setErrorMessages(Object.values(err.response.data.errors));
+      } else {
+        setErrorMessages([err.response?.data?.message || "Une erreur est survenue lors de l'envoi."]);
+      }
+    } finally {
+      setSending(false);
+    }
+  };
 
-            {confirmationMessage && <p className={styles.confirmationMessage}>{confirmationMessage}</p>}
-            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+  return (
+    <section className={styles.contactFormSection}>
+      <h2>Formulaire de contact</h2>
+      <p className={styles.contactFormText}>
+        Vous avez des questions sur la sophrologie ? N'hésitez pas à me contacter, je vous répondrai dans les plus brefs délais.
+      </p>
 
-            <div className={styles.contactFormFields}>
-                <div>
-                    <label htmlFor="name">Nom complet</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="Entrez votre nom complet"
-                    />
-                </div>
+      {confirmationMessage && <p className={styles.confirmationMessage}>{confirmationMessage}</p>}
 
-                <div>
-                    <div className={styles.labelErrorContainer}>
-                        <label htmlFor="email">Email</label>
-                        {emailError && <p className={styles.emailErrorMessage}>{emailError}</p>}
-                    </div>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="Entrez votre email"
-                    />
-                </div>
+      {errorMessages.length > 0 && (
+        <div className={styles.errorBox}>
+          <ul>
+            {errorMessages.map((err, idx) => (
+              <li key={idx}>{err}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-                <div>
-                    <label htmlFor="message">Message</label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        placeholder="Décrivez votre besoin ou posez votre question..."
-                    />
-                </div>
+      <div className={styles.contactFormFields}>
+        <div>
+          <label htmlFor="name">Prénom et Nom</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="Entrez votre prénom et nom"
+          />
+        </div>
 
-                <button
-                    type="button"
-                    className={styles.contactSubmitButton}
-                    onClick={handleSubmit}
-                    disabled={sending}
-                >
-                    {sending ? 'Envoi en cours...' : 'Envoyer'}
-                </button>
-            </div>
-        </section>
-    );
+        <div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="Entrez votre email"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleInputChange}
+            placeholder="Décrivez votre besoin ou posez votre question..."
+          />
+        </div>
+
+        <button
+          type="button"
+          className={styles.contactSubmitButton}
+          onClick={handleSubmit}
+          disabled={sending}
+        >
+          {sending ? "Envoi en cours..." : "Envoyer"}
+        </button>
+      </div>
+    </section>
+  );
 }
