@@ -23,6 +23,7 @@
   justify-content: space-between;
   height: 60px;
   width: 100%;
+  position: relative;
 }
 
 /* === LOGO === */
@@ -206,25 +207,31 @@
 /* Mobile */
 @media (max-width: 768px) {
   .topBar {
-    position: relative;
+    justify-content: center; /* centre le logo */
   }
 
-  /* Logo au centre sur mobile */
+  /* Logo centré correctement sans transform */
   .logoContainer {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    margin: 0 auto;
+    transform: none; /* évite le conflit */
   }
 
-  /* Icônes sociales à gauche sur mobile */
+  /* Icônes sociales fixées à gauche */
   .socialIcons {
-    order: 1;
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
-  /* Hamburger à droite sur mobile */
+  /* Hamburger fixé à droite */
   .hamburger {
     display: block;
-    order: 3;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   /* Navigation desktop cachée sur mobile */

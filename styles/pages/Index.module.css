@@ -545,3 +545,228 @@
   min-width: 18px;
   text-align: center;
 }
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    padding: 15px;
+  }
+
+  .header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .tabButton {
+    flex: 1 1 calc(50% - 12px); /* 2 par ligne */
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .sectionContainer {
+    padding: 20px;
+  }
+
+  .sectionTitle {
+    font-size: 1.4rem;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+  }
+
+  .itemHeader {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .statusActions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .actionButton,
+  .replyButton,
+  .deleteButton {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .pagination {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .profileCard {
+    padding: 25px;
+  }
+
+  .profileHeader {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 15px;
+  }
+
+  .profileAvatar {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8rem;
+  }
+
+  .profileEmail {
+    font-size: 1.3rem;
+  }
+
+  .profileStats {
+    font-size: 1rem;
+  }
+
+  .profileActions {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .modalContent {
+    width: 80%;
+    padding: 25px;
+  }
+
+  .modalContent[style] {
+    min-width: 300px !important; /* un peu moins strict que desktop */
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .logoutButton {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+
+  .tabs {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tabButton {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+  }
+
+  .sectionContainer {
+    padding: 15px;
+  }
+
+  .sectionTitle {
+    font-size: 1.3rem;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .itemHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .statusActions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .actionButton,
+  .replyButton,
+  .deleteButton {
+    flex: 1;
+    text-align: center;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .profileCard {
+    padding: 20px;
+  }
+
+  .profileHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profileAvatar {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .profileEmail {
+    font-size: 1.2rem;
+  }
+
+  .profileStats {
+    font-size: 0.9rem;
+  }
+
+  .profileActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modalContent {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .modalContent[style] {
+    min-width: unset !important; /* pour override ton inline minWidth: 400px */
+  }
+}
