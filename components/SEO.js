@@ -235,7 +235,11 @@ const SEO = ({
                     "itemReviewed": {
                         "@id": "https://www.sophrologuevillepreux.fr/#business"
                     },
-                    "reviewBody": "Témoignages de clients ayant bénéficié des services de sophrologie de Stéphanie Habert."
+                    "reviewBody": "Témoignages de clients ayant bénéficié des services de sophrologie de Stéphanie Habert.",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Anonyme"
+                    }
                 };
 
             case 'ethics':
@@ -251,7 +255,8 @@ const SEO = ({
                         "@type": "Article",
                         "headline": "Charte éthique - Sophrologie",
                         "author": {
-                            "@id": "https://www.sophrologuevillepreux.fr/#person"
+                            "@type": "Person",
+                            "name": "Stéphanie Habert"
                         }
                     }
                 };
