@@ -130,6 +130,82 @@ const SectionEditor = ({ section, onUpdate, onDelete, onDuplicate }) => {
                 <option value="right">Droite</option>
               </select>
             </div>
+            <div className={styles.formGroup}>
+              <label>Couleur de fond</label>
+              <select
+                value={editedSection.settings?.backgroundColor || ''}
+                onChange={(e) => setEditedSection(prev => ({
+                  ...prev,
+                  settings: { ...prev.settings, backgroundColor: e.target.value }
+                }))}
+                className={styles.select}
+              >
+                <option value="">Par défaut</option>
+                <option value="#f0fdfa">Vert clair</option>
+                <option value="#fef7f0">Beige clair</option>
+                <option value="#f0f7ff">Bleu clair</option>
+              </select>
+            </div>
+          </div>
+        );
+
+      case 'image-text':
+        return (
+          <div className={styles.editorForm}>
+            <div className={styles.formGroup}>
+              <label>Titre</label>
+              <input
+                type="text"
+                value={editedSection.title || ''}
+                onChange={(e) => setEditedSection(prev => ({ ...prev, title: e.target.value }))}
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Contenu</label>
+              <textarea
+                value={editedSection.content || ''}
+                onChange={(e) => setEditedSection(prev => ({ ...prev, content: e.target.value }))}
+                className={styles.textarea}
+                rows={6}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Image</label>
+              <div className={styles.imageUpload}>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  accept="image/*"
+                  className={styles.fileInput}
+                />
+                <button 
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className={styles.uploadButton}
+                >
+                  {editedSection.image?.url ? 'Changer l\'image' : 'Ajouter une image'}
+                </button>
+                {editedSection.image?.url && (
+                  <div className={styles.imagePreview}>
+                    <img src={editedSection.image.url} alt="Aperçu" />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className={styles.formGroup}>
+              <label>Texte alternatif de l'image</label>
+              <input
+                type="text"
+                value={editedSection.image?.alt || ''}
+                onChange={(e) => setEditedSection(prev => ({
+                  ...prev,
+                  image: { ...prev.image, alt: e.target.value }
+                }))}
+                className={styles.input}
+              />
+            </div>
           </div>
         );
 
@@ -334,6 +410,18 @@ const SectionEditor = ({ section, onUpdate, onDelete, onDuplicate }) => {
                     }}
                     className={styles.input}
                   />
+                  <select
+                    value={button.style || 'primary'}
+                    onChange={(e) => {
+                      const newButtons = [...editedSection.buttons];
+                      newButtons[index] = { ...button, style: e.target.value };
+                      setEditedSection(prev => ({ ...prev, buttons: newButtons }));
+                    }}
+                    className={styles.select}
+                  >
+                    <option value="primary">Primaire</option>
+                    <option value="secondary">Secondaire</option>
+                  </select>
                   <button
                     type="button"
                     onClick={() => {
@@ -360,8 +448,219 @@ const SectionEditor = ({ section, onUpdate, onDelete, onDuplicate }) => {
           </div>
         );
 
+      case 'list-sections':
+        return (
+          <div className={styles.editorForm}>
+            <div className={styles.formGroup}>
+              <label>Sections de liste</label>
+              {(editedSection.sections || []).map((listSection, index) => (
+                <div key={index} className={styles.cardEditor}>
+                  <div className={styles.cardHeader}>
+                    <h4>Section {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSections = editedSection.sections.filter((_, i) => i !== index);
+                        setEditedSection(prev => ({ ...prev, sections: newSections }));
+                      }}
+                      className={styles.deleteButton}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Titre de la section"
+                    value={listSection.title || ''}
+                    onChange={(e) => {
+                      const newSections = [...editedSection.sections];
+                      newSections[index] = { ...listSection, title: e.target.value };
+                      setEditedSection(prev => ({ ...prev, sections: newSections }));
+                    }}
+                    className={styles.input}
+                  />
+                  <div className={styles.itemsList}>
+                    <label>Éléments de la liste:</label>
+                    {(listSection.items || []).map((item, itemIndex) => (
+                      <div key={itemIndex} className={styles.listItemEditor}>
+                        <input
+                          type="text"
+                          placeholder="Élément de liste"
+                          value={item || ''}
+                          onChange={(e) => {
+                            const newSections = [...editedSection.sections];
+                            const newItems = [...listSection.items];
+                            newItems[itemIndex] = e.target.value;
+                            newSections[index] = { ...listSection, items: newItems };
+                            setEditedSection(prev => ({ ...prev, sections: newSections }));
+                          }}
+                          className={styles.input}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newSections = [...editedSection.sections];
+                            const newItems = listSection.items.filter((_, i) => i !== itemIndex);
+                            newSections[index] = { ...listSection, items: newItems };
+                            setEditedSection(prev => ({ ...prev, sections: newSections }));
+                          }}
+                          className={styles.deleteButton}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSections = [...editedSection.sections];
+                        const newItems = [...(listSection.items || []), ''];
+                        newSections[index] = { ...listSection, items: newItems };
+                        setEditedSection(prev => ({ ...prev, sections: newSections }));
+                      }}
+                      className={styles.addButton}
+                    >
+                      Ajouter un élément
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  const newSections = [...(editedSection.sections || []), { title: '', items: [''] }];
+                  setEditedSection(prev => ({ ...prev, sections: newSections }));
+                }}
+                className={styles.addButton}
+              >
+                Ajouter une section de liste
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'testimonial-list':
+        return (
+          <div className={styles.editorForm}>
+            <div className={styles.formGroup}>
+              <label>Configuration des témoignages</label>
+              <div className={styles.checkboxGroup}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={editedSection.fetchFromApi || false}
+                    onChange={(e) => setEditedSection(prev => ({ 
+                      ...prev, 
+                      fetchFromApi: e.target.checked 
+                    }))}
+                  />
+                  Charger les témoignages depuis l'API
+                </label>
+              </div>
+            </div>
+            <div className={styles.formGroup}>
+              <label>Témoignages statiques</label>
+              {(editedSection.staticTestimonials || []).map((testimonial, index) => (
+                <div key={index} className={styles.cardEditor}>
+                  <div className={styles.cardHeader}>
+                    <h4>Témoignage {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newTestimonials = editedSection.staticTestimonials.filter((_, i) => i !== index);
+                        setEditedSection(prev => ({ ...prev, staticTestimonials: newTestimonials }));
+                      }}
+                      className={styles.deleteButton}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Nom de l'auteur"
+                    value={testimonial.author || ''}
+                    onChange={(e) => {
+                      const newTestimonials = [...editedSection.staticTestimonials];
+                      newTestimonials[index] = { ...testimonial, author: e.target.value };
+                      setEditedSection(prev => ({ ...prev, staticTestimonials: newTestimonials }));
+                    }}
+                    className={styles.input}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Date (JJ/MM/AAAA)"
+                    value={testimonial.date || ''}
+                    onChange={(e) => {
+                      const newTestimonials = [...editedSection.staticTestimonials];
+                      newTestimonials[index] = { ...testimonial, date: e.target.value };
+                      setEditedSection(prev => ({ ...prev, staticTestimonials: newTestimonials }));
+                    }}
+                    className={styles.input}
+                  />
+                  <textarea
+                    placeholder="Message du témoignage"
+                    value={testimonial.message || ''}
+                    onChange={(e) => {
+                      const newTestimonials = [...editedSection.staticTestimonials];
+                      newTestimonials[index] = { ...testimonial, message: e.target.value };
+                      setEditedSection(prev => ({ ...prev, staticTestimonials: newTestimonials }));
+                    }}
+                    className={styles.textarea}
+                    rows={3}
+                  />
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  const newTestimonials = [...(editedSection.staticTestimonials || []), { 
+                    author: '', 
+                    date: '', 
+                    message: '' 
+                  }];
+                  setEditedSection(prev => ({ ...prev, staticTestimonials: newTestimonials }));
+                }}
+                className={styles.addButton}
+              >
+                Ajouter un témoignage statique
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'contact-info':
+      case 'testimonial-form':
+      case 'appointment-widget':
+      case 'contact-form-map':
+        return (
+          <div className={styles.editorForm}>
+            <div className={styles.infoBox}>
+              <h4>🔧 Section de composant</h4>
+              <p>Cette section utilise un composant pré-défini et ne nécessite pas de configuration particulière.</p>
+              <p><strong>Type:</strong> {section.type}</p>
+            </div>
+            <div className={styles.formGroup}>
+              <label>Titre (optionnel)</label>
+              <input
+                type="text"
+                value={editedSection.title || ''}
+                onChange={(e) => setEditedSection(prev => ({ ...prev, title: e.target.value }))}
+                className={styles.input}
+                placeholder="Titre de la section"
+              />
+            </div>
+          </div>
+        );
+
       default:
-        return <div>Type de section non supporté</div>;
+        return (
+          <div className={styles.editorForm}>
+            <div className={styles.errorBox}>
+              <h4>⚠️ Type de section non supporté</h4>
+              <p>Le type <code>{section.type}</code> n'est pas encore implémenté dans l'éditeur.</p>
+            </div>
+          </div>
+        );
     }
   };
 
@@ -390,6 +689,7 @@ const SectionEditor = ({ section, onUpdate, onDelete, onDuplicate }) => {
             <div>
               <h2>{section.title}</h2>
               <p>{section.subtitle}</p>
+              {section.image?.url && <p>🖼️ Image: {section.image.url}</p>}
             </div>
           )}
           {section.type === 'text' && (
@@ -398,10 +698,48 @@ const SectionEditor = ({ section, onUpdate, onDelete, onDuplicate }) => {
               <p>{section.content?.substring(0, 200)}...</p>
             </div>
           )}
+          {section.type === 'image-text' && (
+            <div>
+              <h3>{section.title}</h3>
+              <p>{section.content?.substring(0, 150)}...</p>
+              {section.image?.url && <p>🖼️ Image incluse</p>}
+            </div>
+          )}
           {section.type === 'card-grid' && (
             <div>
               <h3>{section.title}</h3>
               <p>{section.items?.length || 0} cartes</p>
+            </div>
+          )}
+          {section.type === 'pricing-table' && (
+            <div>
+              <h3>{section.title}</h3>
+              <p>{section.items?.length || 0} tarifs</p>
+            </div>
+          )}
+          {section.type === 'cta' && (
+            <div>
+              <h3>{section.title}</h3>
+              <p>{section.buttons?.length || 0} boutons</p>
+            </div>
+          )}
+          {section.type === 'list-sections' && (
+            <div>
+              <h3>Sections de liste</h3>
+              <p>{section.sections?.length || 0} sections</p>
+            </div>
+          )}
+          {section.type === 'testimonial-list' && (
+            <div>
+              <h3>Liste de témoignages</h3>
+              <p>{section.staticTestimonials?.length || 0} témoignages statiques</p>
+              <p>API: {section.fetchFromApi ? 'Activée' : 'Désactivée'}</p>
+            </div>
+          )}
+          {['contact-info', 'testimonial-form', 'appointment-widget', 'contact-form-map'].includes(section.type) && (
+            <div>
+              <h3>Composant: {section.type}</h3>
+              <p>Section automatique - Pas de configuration nécessaire</p>
             </div>
           )}
         </div>
@@ -427,7 +765,7 @@ const SectionEditor = ({ section, onUpdate, onDelete, onDuplicate }) => {
   );
 };
 
-const ContentEditor = ({ pageId }) => {
+const ContentEditor = ({ pageId, onContentSaved }) => {
   const [pageContent, setPageContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -455,6 +793,10 @@ const ContentEditor = ({ pageId }) => {
       setSaving(true);
       await api.put(`/admin/pages/${pageId}`, pageContent);
       alert('Contenu sauvegardé avec succès !');
+      // Appeler la callback si elle existe
+      if (onContentSaved) {
+        onContentSaved();
+      }
     } catch (err) {
       setError('Erreur lors de la sauvegarde');
       console.error(err);
@@ -472,6 +814,25 @@ const ContentEditor = ({ pageId }) => {
       order: pageContent.sections.length,
       settings: { visible: true }
     };
+
+    // Ajouter des propriétés par défaut selon le type
+    if (type === 'card-grid') {
+      newSection.items = [{ title: '', content: '' }];
+    } else if (type === 'pricing-table') {
+      newSection.items = [{ title: '', price: '', content: '' }];
+    } else if (type === 'cta') {
+      newSection.buttons = [{ text: '', url: '', style: 'primary' }];
+    } else if (type === 'list-sections') {
+      newSection.sections = [{ title: '', items: [''] }];
+    } else if (type === 'testimonial-list') {
+      newSection.staticTestimonials = [];
+      newSection.fetchFromApi = true;
+    } else if (type === 'image-text') {
+      newSection.image = { url: '', alt: '' };
+    } else if (type === 'hero') {
+      newSection.image = { url: '', alt: '' };
+      newSection.subtitle = '';
+    }
 
     setPageContent(prev => ({
       ...prev,
@@ -559,6 +920,9 @@ const ContentEditor = ({ pageId }) => {
           <button onClick={() => addSection('text')} className={styles.addSectionButton}>
             📝 Texte
           </button>
+          <button onClick={() => addSection('image-text')} className={styles.addSectionButton}>
+            🖼️ Image + Texte
+          </button>
           <button onClick={() => addSection('card-grid')} className={styles.addSectionButton}>
             🃏 Grille de cartes
           </button>
@@ -567,6 +931,24 @@ const ContentEditor = ({ pageId }) => {
           </button>
           <button onClick={() => addSection('cta')} className={styles.addSectionButton}>
             🎯 Call-to-Action
+          </button>
+          <button onClick={() => addSection('list-sections')} className={styles.addSectionButton}>
+            📋 Sections de liste
+          </button>
+          <button onClick={() => addSection('testimonial-list')} className={styles.addSectionButton}>
+            💬 Liste témoignages
+          </button>
+          <button onClick={() => addSection('contact-info')} className={styles.addSectionButton}>
+            📞 Infos contact
+          </button>
+          <button onClick={() => addSection('testimonial-form')} className={styles.addSectionButton}>
+            📝 Formulaire témoignage
+          </button>
+          <button onClick={() => addSection('appointment-widget')} className={styles.addSectionButton}>
+            📅 Widget RDV
+          </button>
+          <button onClick={() => addSection('contact-form-map')} className={styles.addSectionButton}>
+            🗺️ Contact + Carte
           </button>
         </div>
       </div>

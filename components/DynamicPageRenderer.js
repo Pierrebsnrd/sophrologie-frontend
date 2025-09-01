@@ -193,6 +193,109 @@ const TestimonialFormSection = ({ section }) => (
   </section>
 );
 
+// Nouveau composant pour les sections de liste (charte éthique)
+const ListSectionsComponent = ({ section }) => (
+  <section className={styles.section}>
+    <div className={styles.sectionInner}>
+      {section.sections && section.sections.map((listSection, index) => (
+        <div key={index} className={styles.listSection}>
+          <h3 className={styles.listSectionTitle}>{listSection.title}</h3>
+          {listSection.items && (
+            <ul className={styles.ethicsList}>
+              {listSection.items.map((item, itemIndex) => (
+                <li key={itemIndex} className={styles.ethicsListItem}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+);
+
+// Nouveau composant pour la liste de témoignages
+const TestimonialListSection = ({ section }) => {
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    if (section.fetchFromApi) {
+      fetchTestimonials();
+    } else {
+      setLoading(false);
+    }
+  }, [section.fetchFromApi]);
+
+  const fetchTestimonials = async () => {
+    try {
+      const response = await api.get('/temoignage');
+      if (response.data.success) {
+        setTestimonials(response.data.data.temoignages || []);
+      }
+    } catch (error) {
+      console.error('Erreur chargement témoignages:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Combiner les témoignages statiques et dynamiques
+  const staticTestimonials = section.staticTestimonials || [];
+  const allTestimonials = [...staticTestimonials, ...testimonials];
+  const sortedTestimonials = allTestimonials.sort((a, b) => 
+    new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date)
+  );
+  const visibleTestimonials = showAll ? sortedTestimonials : sortedTestimonials.slice(0, 4);
+
+  return (
+    <section className={styles.section}>
+      <div className={styles.sectionInner}>
+        <div className={styles.testimonialsGrid}>
+          {visibleTestimonials.map((testimonial, index) => (
+            <TestimonialCard
+              key={testimonial._id || `static-${index}`}
+              message={testimonial.message}
+              author={testimonial.name || testimonial.author}
+              date={testimonial.createdAt || testimonial.date}
+            />
+          ))}
+        </div>
+        
+        {sortedTestimonials.length > 4 && (
+          <div className={styles.loadMoreContainer}>
+            <button 
+              className={styles.loadMoreButton} 
+              onClick={() => setShowAll(!showAll)}
+            >
+              {showAll ? 'Masquer les anciens témoignages' : 'Afficher tous les témoignages'}
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// Nouveau composant pour le widget de rendez-vous
+const AppointmentWidgetSection = ({ section }) => (
+  <div>
+    <Calendly />
+  </div>
+);
+
+// Nouveau composant pour formulaire de contact + carte
+const ContactFormMapSection = ({ section }) => (
+  <section className={styles.section}>
+    <div className={styles.sectionInner}>
+      <div className={styles.contactFormMapContainer}>
+        <ContactForm />
+        <Map />
+      </div>
+    </div>
+  </section>
+);
+
 // Composant principal pour rendre une page dynamiquement
 const DynamicPageRenderer = ({ pageId, fallbackContent = null }) => {
   const [pageContent, setPageContent] = useState(null);
@@ -253,6 +356,18 @@ const DynamicPageRenderer = ({ pageId, fallbackContent = null }) => {
       case 'testimonial-form':
         return <TestimonialFormSection key={key} section={section} />;
       
+      case 'list-sections':
+        return <ListSectionsComponent key={key} section={section} />;
+      
+      case 'testimonial-list':
+        return <TestimonialListSection key={key} section={section} />;
+      
+      case 'appointment-widget':
+        return <AppointmentWidgetSection key={key} section={section} />;
+      
+      case 'contact-form-map':
+        return <ContactFormMapSection key={key} section={section} />;
+      
       // Sections spéciales qui nécessitent des composants existants
       case 'contact-form':
         return (
@@ -275,22 +390,16 @@ const DynamicPageRenderer = ({ pageId, fallbackContent = null }) => {
       case 'calendly':
         return <Calendly key={key} />;
       
-      case 'testimonials-display':
-        // Ici vous pourriez intégrer l'affichage des témoignages existants
-        return (
-          <section key={key} className={styles.section}>
-            <div className={styles.sectionInner}>
-              {/* Logique pour afficher les témoignages depuis la base */}
-            </div>
-          </section>
-        );
-      
       default:
         console.warn(`Type de section non supporté: ${section.type}`);
         return (
           <section key={key} className={styles.section}>
             <div className={styles.sectionInner}>
-              <p>Section de type "{section.type}" non supportée</p>
+              <div className={styles.unsupportedSection}>
+                <h3>⚠️ Section non supportée</h3>
+                <p>Type: <code>{section.type}</code></p>
+                <p>Cette section n'est pas encore implémentée dans le renderer.</p>
+              </div>
             </div>
           </section>
         );

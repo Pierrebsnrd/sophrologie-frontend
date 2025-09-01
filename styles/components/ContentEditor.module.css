@@ -506,3 +506,282 @@
     width: 100%;
   }
 }
+
+/* Styles supplémentaires pour ContentEditor.module.css */
+
+/* Boîte d'information */
+.infoBox {
+  background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+  border: 2px solid #48bb78;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.infoBox h4 {
+  color: #2d5a3d;
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.infoBox p {
+  color: #2d5a3d;
+  margin: 5px 0;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.infoBox strong {
+  color: #1a365d;
+}
+
+/* Boîte d'erreur */
+.errorBox {
+  background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.errorBox h4 {
+  color: #dc2626;
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.errorBox p {
+  color: #dc2626;
+  margin: 5px 0;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.errorBox code {
+  background: #fca5a5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+}
+
+/* Groupe de checkbox */
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkboxGroup label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.checkboxGroup label:hover {
+  background-color: #f9fafb;
+}
+
+.checkboxGroup input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #48bb78;
+  cursor: pointer;
+}
+
+/* Liste d'éléments */
+.itemsList {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 15px;
+  background: #f9fafb;
+  margin-top: 10px;
+}
+
+.itemsList label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Éditeur d'élément de liste */
+.listItemEditor {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.listItemEditor .input {
+  flex: 1;
+  margin: 0;
+}
+
+.listItemEditor .deleteButton {
+  padding: 6px 8px;
+  font-size: 12px;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+/* Amélioration des boutons existants */
+.addButton {
+  background: #48bb78;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+  margin-top: 10px;
+}
+
+.addButton:hover {
+  background: #38a169;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+}
+
+.deleteButton {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.deleteButton:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Styles spécialisés pour les différents types d'éditeurs */
+.cardEditor, .pricingEditor {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.cardEditor::before, .pricingEditor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #48bb78, #38a169);
+  border-radius: 4px 0 0 4px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cardHeader h4 {
+  color: #2d5a3d;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Éditeur de boutons */
+.buttonEditor {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr auto auto;
+  align-items: center;
+}
+
+.buttonEditor .input,
+.buttonEditor .select {
+  margin: 0;
+}
+
+.buttonEditor .deleteButton {
+  grid-column: 4;
+}
+
+/* Responsive pour les éditeurs */
+@media (max-width: 768px) {
+  .buttonEditor {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .buttonEditor .deleteButton {
+    grid-column: 1;
+    justify-self: flex-end;
+    margin-top: 5px;
+  }
+  
+  .listItemEditor {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .listItemEditor .deleteButton {
+    align-self: flex-end;
+    margin-top: 5px;
+  }
+  
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .cardHeader .deleteButton {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardEditor, .pricingEditor {
+    padding: 12px;
+  }
+  
+  .infoBox, .errorBox {
+    padding: 15px;
+  }
+  
+  .itemsList {
+    padding: 12px;
+  }
+}
