@@ -765,7 +765,7 @@ const SectionEditor = ({ section, onUpdate, onDelete, onDuplicate }) => {
   );
 };
 
-const ContentEditor = ({ pageId, onContentSaved }) => {
+const ContentEditor = ({ pageId }) => {
   const [pageContent, setPageContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -793,10 +793,6 @@ const ContentEditor = ({ pageId, onContentSaved }) => {
       setSaving(true);
       await api.put(`/admin/pages/${pageId}`, pageContent);
       alert('Contenu sauvegardé avec succès !');
-      // Appeler la callback si elle existe
-      if (onContentSaved) {
-        onContentSaved();
-      }
     } catch (err) {
       setError('Erreur lors de la sauvegarde');
       console.error(err);

@@ -26,8 +26,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* HEADER */
@@ -39,7 +44,7 @@
   padding: 30px 35px;
   background: white;
   border-radius: 16px;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(72, 187, 120, 0.1);
 }
 
@@ -82,7 +87,7 @@
 .backButton:hover {
   background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* MESSAGE D'ERREUR */
@@ -111,7 +116,7 @@
   background: white;
   border-radius: 16px;
   padding: 25px;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(72, 187, 120, 0.1);
   transition: all 0.3s ease;
   position: relative;
@@ -209,7 +214,8 @@
   margin-bottom: 15px;
 }
 
-.editButton, .previewButton {
+.editButton,
+.previewButton {
   flex: 1;
   padding: 12px 16px;
   border: none;
@@ -275,7 +281,7 @@
   background: white;
   border-radius: 16px;
   padding: 35px;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(72, 187, 120, 0.1);
 }
 
@@ -304,7 +310,7 @@
 
 .helpCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
 }
 
@@ -423,4 +429,135 @@
   .helpIcon {
     font-size: 2rem;
   }
+}
+
+.visualEditButton {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.visualEditButton:hover {
+  background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+}
+
+/* Mise à jour du bouton d'édition existant */
+.editButton {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+}
+
+.editButton:hover {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+}
+
+/* Actions de page avec 3 boutons */
+.pageActions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+/* Responsive pour les 3 boutons */
+@media (max-width: 768px) {
+  .pageActions {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* Badge informatif pour l'éditeur visuel */
+.newFeatureBadge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Style pour la description de la page avec info sur les éditeurs */
+.pageDescription {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.editorInfo {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #48bb78;
+  font-style: italic;
+}
+
+.helpTags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.helpTags span {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.helpTip {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 25px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.tipIcon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.helpTip h4 {
+  color: #1e40af;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.helpTip p {
+  color: #1e40af;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.helpTip strong {
+  font-weight: 600;
 }

@@ -15,7 +15,7 @@ export default function AdminPages() {
   const pageNames = {
     home: 'Accueil',
     about: 'Qui suis-je ?',
-    pricing: 'Tarifs', 
+    pricing: 'Tarifs',
     appointment: 'Prendre rendez-vous',
     testimonials: 'Témoignages',
     contact: 'Contact',
@@ -39,7 +39,7 @@ export default function AdminPages() {
       router.replace('/admin/login');
       return;
     }
-    
+
     fetchPages();
   }, [router]);
 
@@ -109,7 +109,7 @@ export default function AdminPages() {
           {Object.keys(pageNames).map(pageId => {
             const pageData = pages.find(p => p.pageId === pageId);
             const lastModified = pageData?.lastModified;
-            
+
             return (
               <div key={pageId} className={styles.pageCard}>
                 <div className={styles.pageHeader}>
@@ -118,10 +118,15 @@ export default function AdminPages() {
                   </div>
                   <div className={styles.pageInfo}>
                     <h3 className={styles.pageName}>{pageNames[pageId]}</h3>
-                    <p className={styles.pageDescription}>{pageDescriptions[pageId]}</p>
+                    <p className={styles.pageDescription}>
+                      {pageDescriptions[pageId]}
+                    </p>
+                    <p className={styles.editorInfo}>
+                      💡 Deux méthodes d'édition disponibles
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className={styles.pageStats}>
                   <div className={styles.statItem}>
                     <span className={styles.statLabel}>Dernière modification</span>
@@ -132,13 +137,19 @@ export default function AdminPages() {
                 </div>
 
                 <div className={styles.pageActions}>
-                  <Link 
+                  <Link
                     href={`/admin/pages/edit/${pageId}`}
                     className={styles.editButton}
                   >
-                    ✏️ Modifier
+                    📝 Éditer (Formulaires)
                   </Link>
-                  <Link 
+                  <Link
+                    href={`/admin/pages/visual/${pageId}`}
+                    className={styles.visualEditButton}
+                  >
+                    ✏️ Éditeur Visuel
+                  </Link>
+                  <Link
                     href={getPageUrl(pageId)}
                     target="_blank"
                     className={styles.previewButton}
@@ -162,19 +173,47 @@ export default function AdminPages() {
           <h2>Comment ça marche ?</h2>
           <div className={styles.helpCards}>
             <div className={styles.helpCard}>
-              <div className={styles.helpIcon}>✏️</div>
-              <h3>1. Modifier</h3>
-              <p>Cliquez sur "Modifier" pour éditer le contenu d'une page. Vous pouvez ajouter, supprimer et réorganiser les sections.</p>
+              <div className={styles.helpIcon}>📝</div>
+              <h3>Éditeur Formulaires</h3>
+              <p>Parfait pour les modifications structurelles : ajouter des sections, réorganiser le contenu, configurer les paramètres avancés.</p>
+              <div className={styles.helpTags}>
+                <span>Ajout de sections</span>
+                <span>Réorganisation</span>
+                <span>Configuration</span>
+              </div>
             </div>
+
+            <div className={styles.helpCard}>
+              <div className={styles.helpIcon}>✏️</div>
+              <h3>Éditeur Visuel</h3>
+              <p>Idéal pour les modifications rapides : cliquez directement sur les textes et images pour les modifier en temps réel.</p>
+              <div className={styles.helpTags}>
+                <span>Modification rapide</span>
+                <span>WYSIWYG</span>
+                <span>Intuitive</span>
+              </div>
+            </div>
+
             <div className={styles.helpCard}>
               <div className={styles.helpIcon}>👁️</div>
-              <h3>2. Prévisualiser</h3>
-              <p>Utilisez "Aperçu" pour voir comment la page apparaîtra sur votre site web avant de publier.</p>
+              <h3>Aperçu</h3>
+              <p>Visualisez exactement comment votre page apparaîtra sur votre site web avant de publier les modifications.</p>
+              <div className={styles.helpTags}>
+                <span>Prévisualisation</span>
+                <span>Vérification</span>
+                <span>Validation</span>
+              </div>
             </div>
-            <div className={styles.helpCard}>
-              <div className={styles.helpIcon}>💾</div>
-              <h3>3. Sauvegarder</h3>
-              <p>Vos modifications sont automatiquement sauvegardées et publiées sur votre site.</p>
+          </div>
+
+          <div className={styles.helpTip}>
+            <div className={styles.tipIcon}>💡</div>
+            <div>
+              <h4>Conseil d'utilisation</h4>
+              <p>
+                <strong>Éditeur Visuel</strong> pour vos modifications quotidiennes (textes, images) •
+                <strong>Éditeur Formulaires</strong> pour la restructuration et les ajouts complexes
+              </p>
             </div>
           </div>
         </div>
