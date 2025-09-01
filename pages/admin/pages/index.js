@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import api from '../../utils/api';
-import styles from '../../styles/pages/AdminPages.module.css';
+import api from '../../../utils/api';
+import styles from '../../../styles/pages/AdminPages.module.css';
 
 export default function AdminPages() {
   const [pages, setPages] = useState([]);

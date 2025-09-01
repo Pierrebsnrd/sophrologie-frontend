@@ -17,6 +17,10 @@ const InlineTextEditor = ({ value, onSave, placeholder, multiline = false, class
   const inputRef = useRef(null);
 
   useEffect(() => {
+    setEditValue(value || '');
+  }, [value]);
+
+  useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus();
       if (!multiline) {
@@ -26,7 +30,9 @@ const InlineTextEditor = ({ value, onSave, placeholder, multiline = false, class
   }, [isEditing, multiline]);
 
   const handleSave = () => {
-    onSave(editValue);
+    if (editValue !== value) {
+      onSave(editValue);
+    }
     setIsEditing(false);
   };
 
@@ -98,6 +104,10 @@ const InlineImageEditor = ({ value, onSave, alt, className = '' }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(value || '');
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    setEditValue(value || '');
+  }, [value]);
 
   const handleSave = () => {
     if (editValue !== value) {
@@ -171,13 +181,17 @@ const InlineImageEditor = ({ value, onSave, alt, className = '' }) => {
 
 // Composant pour éditer une liste d'éléments (cartes, tarifs, etc.)
 const InlineListEditor = ({ items = [], onSave, type = 'card' }) => {
-  const [editingItems, setEditingItems] = useState(items);
+  const [editingItems, setEditingItems] = useState([...items]);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    setEditingItems([...items]);
+  }, [items]);
 
   const addItem = () => {
     const newItem = type === 'pricing' 
-      ? { title: '', price: '', content: '' }
-      : { title: '', content: '' };
+      ? { title: '', price: '', content: '', duration: '' }
+      : { title: '', content: '', image: { url: '', alt: '' } };
     
     setEditingItems([...editingItems, newItem]);
     setIsEditing(true);
@@ -185,7 +199,15 @@ const InlineListEditor = ({ items = [], onSave, type = 'card' }) => {
 
   const updateItem = (index, field, value) => {
     const updated = [...editingItems];
-    updated[index] = { ...updated[index], [field]: value };
+    if (field.includes('.')) {
+      const [parentField, childField] = field.split('.');
+      updated[index] = {
+        ...updated[index],
+        [parentField]: { ...updated[index][parentField], [childField]: value }
+      };
+    } else {
+      updated[index] = { ...updated[index], [field]: value };
+    }
     setEditingItems(updated);
   };
 
@@ -200,7 +222,7 @@ const InlineListEditor = ({ items = [], onSave, type = 'card' }) => {
   };
 
   const handleCancel = () => {
-    setEditingItems(items);
+    setEditingItems([...items]);
     setIsEditing(false);
   };
 
@@ -244,13 +266,22 @@ const InlineListEditor = ({ items = [], onSave, type = 'card' }) => {
               />
               
               {type === 'pricing' && (
-                <input
-                  type="text"
-                  placeholder="Prix (ex: 70€)"
-                  value={item.price || ''}
-                  onChange={(e) => updateItem(index, 'price', e.target.value)}
-                  className={styles.itemInput}
-                />
+                <>
+                  <input
+                    type="text"
+                    placeholder="Prix (ex: 70€)"
+                    value={item.price || ''}
+                    onChange={(e) => updateItem(index, 'price', e.target.value)}
+                    className={styles.itemInput}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Durée (ex: 1h)"
+                    value={item.duration || ''}
+                    onChange={(e) => updateItem(index, 'duration', e.target.value)}
+                    className={styles.itemInput}
+                  />
+                </>
               )}
               
               <textarea
@@ -260,6 +291,16 @@ const InlineListEditor = ({ items = [], onSave, type = 'card' }) => {
                 className={styles.itemTextarea}
                 rows={3}
               />
+
+              {type === 'card' && (
+                <input
+                  type="text"
+                  placeholder="URL de l'image (optionnel)"
+                  value={item.image?.url || ''}
+                  onChange={(e) => updateItem(index, 'image.url', e.target.value)}
+                  className={styles.itemInput}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -293,20 +334,49 @@ const VisualEditor = ({ pageId }) => {
     try {
       setLoading(true);
       const response = await api.get(`/admin/pages/${pageId}`);
-      setPageContent(response.data.data);
+      if (response.data && response.data.data) {
+        setPageContent(response.data.data);
+      } else {
+        // Créer une structure de base
+        setPageContent({
+          title: `Page ${pageId}`,
+          sections: []
+        });
+      }
     } catch (err) {
       console.error('Erreur chargement:', err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminToken');
+        window.location.href = '/admin/login';
+      } else {
+        // Créer une structure de base en cas d'erreur
+        setPageContent({
+          title: `Page ${pageId}`,
+          sections: []
+        });
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const updateSection = async (sectionId, field, value) => {
-    const updatedSections = pageContent.sections.map(section =>
-      section.id === sectionId
-        ? { ...section, [field]: value }
-        : section
-    );
+    if (!pageContent) return;
+
+    const updatedSections = pageContent.sections.map(section => {
+      if (section.id === sectionId) {
+        if (field.includes('.')) {
+          const [parentField, childField] = field.split('.');
+          return {
+            ...section,
+            [parentField]: { ...section[parentField], [childField]: value }
+          };
+        } else {
+          return { ...section, [field]: value };
+        }
+      }
+      return section;
+    });
 
     const updatedPage = {
       ...pageContent,
@@ -323,28 +393,23 @@ const VisualEditor = ({ pageId }) => {
       await api.put(`/admin/pages/${pageId}`, content);
     } catch (err) {
       console.error('Erreur sauvegarde:', err);
+      alert('❌ Erreur lors de la sauvegarde. Vos modifications ont été perdues.');
     } finally {
       setSaving(false);
     }
   };
 
   const renderSection = (section) => {
-    const sectionProps = {
-      className: isEditMode ? styles.editableSection : '',
-      'data-section-id': section.id
-    };
+    const key = section.id || `section-${section.order}`;
 
     switch (section.type) {
       case 'hero':
         return (
-          <section key={section.id} className={`${styles.hero} ${isEditMode ? styles.editable : ''}`}>
+          <section key={key} className={`${styles.hero} ${isEditMode ? styles.editable : ''}`}>
             <InlineImageEditor
               value={section.image?.url}
               alt={section.image?.alt}
-              onSave={(url) => updateSection(section.id, 'image', { 
-                url, 
-                alt: section.image?.alt || section.title 
-              })}
+              onSave={(url) => updateSection(section.id, 'image.url', url)}
               className={styles.heroImage}
             />
             <div className={styles.heroOverlay}>
@@ -369,12 +434,15 @@ const VisualEditor = ({ pageId }) => {
       case 'text':
         return (
           <section 
-            key={section.id} 
+            key={key} 
             className={`${styles.section} ${isEditMode ? styles.editable : ''}`}
-            style={{ backgroundColor: section.settings?.backgroundColor }}
+            style={{ 
+              backgroundColor: section.settings?.backgroundColor,
+              textAlign: section.settings?.alignment || 'left'
+            }}
           >
             <div className={styles.sectionInner}>
-              {section.title && (
+              {section.title !== undefined && (
                 <InlineTextEditor
                   value={section.title}
                   onSave={(value) => updateSection(section.id, 'title', value)}
@@ -393,9 +461,40 @@ const VisualEditor = ({ pageId }) => {
           </section>
         );
 
+      case 'image-text':
+        return (
+          <section key={key} className={`${styles.section} ${isEditMode ? styles.editable : ''}`}>
+            <div className={styles.imageTextContainer}>
+              <div className={styles.imageContainer}>
+                <InlineImageEditor
+                  value={section.image?.url}
+                  alt={section.image?.alt}
+                  onSave={(url) => updateSection(section.id, 'image.url', url)}
+                  className={styles.profileImage}
+                />
+              </div>
+              <div className={styles.textContainer}>
+                <InlineTextEditor
+                  value={section.title}
+                  onSave={(value) => updateSection(section.id, 'title', value)}
+                  placeholder="Titre de section"
+                  className={styles.title}
+                />
+                <InlineTextEditor
+                  value={section.content}
+                  onSave={(value) => updateSection(section.id, 'content', value)}
+                  placeholder="Contenu textuel"
+                  multiline={true}
+                  className={styles.textContent}
+                />
+              </div>
+            </div>
+          </section>
+        );
+
       case 'card-grid':
         return (
-          <section key={section.id} className={`${styles.section} ${isEditMode ? styles.editable : ''}`}>
+          <section key={key} className={`${styles.section} ${isEditMode ? styles.editable : ''}`}>
             <div className={styles.sectionInner}>
               <InlineTextEditor
                 value={section.title}
@@ -412,6 +511,16 @@ const VisualEditor = ({ pageId }) => {
               <div className={styles.grid}>
                 {section.items?.map((item, index) => (
                   <div key={index} className={styles.card}>
+                    {item.image?.url && (
+                      <div className={styles.cardImage}>
+                        <Image
+                          src={item.image.url}
+                          alt={item.image.alt || item.title || ''}
+                          width={300}
+                          height={200}
+                        />
+                      </div>
+                    )}
                     <h3>{item.title}</h3>
                     <p>{item.content}</p>
                   </div>
@@ -430,7 +539,7 @@ const VisualEditor = ({ pageId }) => {
 
       case 'pricing-table':
         return (
-          <section key={section.id} className={`${styles.section} ${isEditMode ? styles.editable : ''}`}>
+          <section key={key} className={`${styles.section} ${isEditMode ? styles.editable : ''}`}>
             <div className={styles.sectionInner}>
               <InlineTextEditor
                 value={section.title}
@@ -442,10 +551,13 @@ const VisualEditor = ({ pageId }) => {
                 {section.items?.map((item, index) => (
                   <div key={index} className={styles.pricingItem}>
                     <div className={styles.pricingHeader}>
-                      <h3>{item.title}</h3>
+                      <h3 className={styles.pricingTitle}>{item.title}</h3>
                       <span className={styles.pricingPrice}>{item.price}</span>
                     </div>
-                    <p>{item.content}</p>
+                    <p className={styles.pricingDescription}>{item.content}</p>
+                    {item.duration && (
+                      <p className={styles.pricingDuration}>Durée: {item.duration}</p>
+                    )}
                   </div>
                 ))}
                 {isEditMode && (
@@ -462,7 +574,7 @@ const VisualEditor = ({ pageId }) => {
 
       case 'cta':
         return (
-          <section key={section.id} className={`${styles.section} ${isEditMode ? styles.editable : ''}`}>
+          <section key={key} className={`${styles.section} ${isEditMode ? styles.editable : ''}`}>
             <div className={styles.sectionInner}>
               {section.title && (
                 <InlineTextEditor
@@ -488,6 +600,74 @@ const VisualEditor = ({ pageId }) => {
                     </button>
                   </Link>
                 ))}
+                {isEditMode && section.buttons && (
+                  <div className={styles.editButtonsHint}>
+                    <small>💡 Utilisez l'éditeur de formulaires pour modifier les boutons</small>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        );
+
+      case 'list-sections':
+        return (
+          <section key={key} className={`${styles.section} ${isEditMode ? styles.editable : ''}`}>
+            <div className={styles.sectionInner}>
+              {section.sections?.map((listSection, index) => (
+                <div key={index} className={styles.listSection}>
+                  <h3 className={styles.listSectionTitle}>{listSection.title}</h3>
+                  {listSection.items && (
+                    <ul className={styles.ethicsList}>
+                      {listSection.items.map((item, itemIndex) => (
+                        <li key={itemIndex} className={styles.ethicsListItem}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+              {isEditMode && (
+                <div className={styles.editHint}>
+                  <small>💡 Utilisez l'éditeur de formulaires pour modifier cette section</small>
+                </div>
+              )}
+            </div>
+          </section>
+        );
+
+      case 'testimonial-list':
+        return (
+          <TestimonialListSection key={key} section={section} />
+        );
+
+      case 'contact-info':
+        return (
+          <section key={key} className={styles.section}>
+            <div className={styles.sectionInner}>
+              <ContactInfo />
+            </div>
+          </section>
+        );
+
+      case 'testimonial-form':
+        return (
+          <section key={key} className={styles.section}>
+            <div className={styles.sectionInner}>
+              <TestimonialForm />
+            </div>
+          </section>
+        );
+
+      case 'appointment-widget':
+        return <Calendly key={key} />;
+
+      case 'contact-form-map':
+        return (
+          <section key={key} className={styles.section}>
+            <div className={styles.sectionInner}>
+              <div className={styles.contactFormMapContainer}>
+                <ContactForm />
+                <Map />
               </div>
             </div>
           </section>
@@ -495,20 +675,99 @@ const VisualEditor = ({ pageId }) => {
 
       default:
         return (
-          <section key={section.id} className={styles.section}>
+          <section key={key} className={styles.section}>
             <div className={styles.sectionInner}>
-              <p>Section {section.type} - Rendu standard</p>
+              <div className={styles.unsupportedSection}>
+                <h3>⚠️ Section non supportée</h3>
+                <p>Type: <code>{section.type}</code></p>
+                <p>Cette section n'est pas encore implémentée dans l'éditeur visuel.</p>
+                {isEditMode && (
+                  <small>💡 Utilisez l'éditeur de formulaires pour configurer cette section</small>
+                )}
+              </div>
             </div>
           </section>
         );
     }
   };
 
+  // Composant pour la liste de témoignages (séparé pour la logique)
+  const TestimonialListSection = ({ section }) => {
+    const [testimonials, setTestimonials] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [showAll, setShowAll] = useState(false);
+
+    useEffect(() => {
+      if (section.fetchFromApi) {
+        fetchTestimonials();
+      } else {
+        setLoading(false);
+      }
+    }, [section.fetchFromApi]);
+
+    const fetchTestimonials = async () => {
+      try {
+        const response = await api.get('/temoignage');
+        if (response.data.success) {
+          setTestimonials(response.data.data.temoignages || []);
+        }
+      } catch (error) {
+        console.error('Erreur chargement témoignages:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const staticTestimonials = section.staticTestimonials || [];
+    const allTestimonials = [...staticTestimonials, ...testimonials];
+    const sortedTestimonials = allTestimonials.sort((a, b) => 
+      new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date)
+    );
+    const visibleTestimonials = showAll ? sortedTestimonials : sortedTestimonials.slice(0, 4);
+
+    return (
+      <section className={styles.section}>
+        <div className={styles.sectionInner}>
+          {section.title && (
+            <h2 className={styles.sectionTitle}>{section.title}</h2>
+          )}
+          <div className={styles.testimonialsGrid}>
+            {visibleTestimonials.map((testimonial, index) => (
+              <TestimonialCard
+                key={testimonial._id || `static-${index}`}
+                message={testimonial.message}
+                author={testimonial.name || testimonial.author}
+                date={testimonial.createdAt || testimonial.date}
+              />
+            ))}
+          </div>
+          
+          {sortedTestimonials.length > 4 && (
+            <div className={styles.loadMoreContainer}>
+              <button 
+                className={styles.loadMoreButton} 
+                onClick={() => setShowAll(!showAll)}
+              >
+                {showAll ? 'Masquer les anciens témoignages' : 'Afficher tous les témoignages'}
+              </button>
+            </div>
+          )}
+
+          {isEditMode && (
+            <div className={styles.editHint}>
+              <small>💡 Utilisez l'éditeur de formulaires pour configurer les témoignages</small>
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  };
+
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loadingSpinner}></div>
-        <p>Chargement...</p>
+        <p>Chargement de l'éditeur visuel...</p>
       </div>
     );
   }
@@ -516,7 +775,11 @@ const VisualEditor = ({ pageId }) => {
   if (!pageContent) {
     return (
       <div className={styles.errorContainer}>
-        <p>Erreur de chargement du contenu</p>
+        <h2>❌ Erreur</h2>
+        <p>Impossible de charger le contenu de la page</p>
+        <button onClick={fetchPageContent} className={styles.retryButton}>
+          🔄 Réessayer
+        </button>
       </div>
     );
   }
@@ -530,35 +793,56 @@ const VisualEditor = ({ pageId }) => {
             className={`${styles.modeButton} ${isEditMode ? styles.active : ''}`}
             onClick={() => setIsEditMode(!isEditMode)}
           >
-            {isEditMode ? '👁️ Aperçu' : '✏️ Éditer'}
+            {isEditMode ? '👁️ Aperçu' : '✏️ Mode édition'}
           </button>
-          <span className={styles.pageTitle}>{pageContent.title}</span>
+          <span className={styles.pageTitle}>
+            📝 {pageContent.title} ({pageContent.sections.length} sections)
+          </span>
         </div>
         <div className={styles.toolbarRight}>
-          {saving && <span className={styles.savingIndicator}>💾 Sauvegarde...</span>}
+          {saving && (
+            <span className={styles.savingIndicator}>💾 Sauvegarde automatique...</span>
+          )}
           <Link href="/admin/pages" className={styles.backButton}>
-            ← Retour
+            ← Retour aux pages
           </Link>
         </div>
       </div>
 
       {/* Contenu éditable */}
       <div className={`${styles.content} ${isEditMode ? styles.editMode : ''}`}>
-        {pageContent.sections
-          .sort((a, b) => (a.order || 0) - (b.order || 0))
-          .map(renderSection)}
+        {pageContent.sections && pageContent.sections.length > 0 ? (
+          pageContent.sections
+            .filter(section => section.settings?.visible !== false)
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .map(renderSection)
+        ) : (
+          <div className={styles.emptyState}>
+            <h2>📄 Page vide</h2>
+            <p>Cette page ne contient aucune section.</p>
+            <p>Utilisez l'éditeur de formulaires pour ajouter du contenu.</p>
+            <Link href={`/admin/pages/edit/${pageId}`} className={styles.addContentButton}>
+              ➕ Ajouter du contenu
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Instructions d'aide */}
-      {isEditMode && (
+      {isEditMode && pageContent.sections && pageContent.sections.length > 0 && (
         <div className={styles.helpPanel}>
-          <h3>💡 Comment utiliser l'éditeur visuel</h3>
+          <h3>💡 Éditeur visuel</h3>
           <ul>
-            <li><strong>Textes :</strong> Cliquez sur n'importe quel texte pour l'éditer</li>
-            <li><strong>Images :</strong> Survolez une image et cliquez pour la remplacer</li>
-            <li><strong>Listes :</strong> Cliquez sur "Éditer les éléments" pour modifier cartes/tarifs</li>
+            <li><strong>Textes :</strong> Cliquez directement sur le texte pour l'éditer</li>
+            <li><strong>Images :</strong> Survolez l'image et cliquez pour la changer</li>
+            <li><strong>Listes complexes :</strong> Utilisez l'éditeur de formulaires</li>
             <li><strong>Sauvegarde :</strong> Automatique à chaque modification</li>
           </ul>
+          <div className={styles.helpLinks}>
+            <Link href={`/admin/pages/edit/${pageId}`} className={styles.helpLink}>
+              🔧 Éditeur de formulaires
+            </Link>
+          </div>
         </div>
       )}
     </div>
