@@ -236,8 +236,16 @@ const EnhancedVisualEditor = ({ pageId }) => {
   const { lastSaved, autoSaveStatus } = useAutoSave(pageId, pageContent);
 
   useEffect(() => {
+  console.log('🔍 Debug EnhancedVisualEditor:', {
+    pageId,
+    token: localStorage.getItem('adminToken') ? 'présent' : 'manquant',
+    apiBaseURL: api.defaults.baseURL
+  });
+  
+  if (pageId) {
     fetchPageContent();
-  }, [pageId]);
+  }
+}, [pageId]);
 
   // Détecter les changements non sauvegardés
   useEffect(() => {
@@ -254,23 +262,49 @@ const EnhancedVisualEditor = ({ pageId }) => {
   }, [hasUnsavedChanges]);
 
   const fetchPageContent = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get(`/admin/pages/${pageId}`);
+  try {
+    setLoading(true);
+    setError('');
+    
+    // Vérifier que pageId existe
+    if (!pageId) {
+      throw new Error('PageId manquant');
+    }
+    
+    console.log('🔍 Récupération de la page:', pageId);
+    
+    const response = await api.get(`/admin/pages/${pageId}`);
+    
+    if (response.data && response.data.success && response.data.data) {
       setPageContent(response.data.data);
       setHasUnsavedChanges(false);
-    } catch (err) {
-      console.error('Erreur chargement:', err);
-      if (err.response?.status === 401) {
-        localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
-      } else {
-        setError('Erreur de chargement: ' + (err.message || 'Erreur inconnue'));
-      }
-    } finally {
-      setLoading(false);
+      console.log('✅ Page chargée:', response.data.data.title);
+    } else {
+      throw new Error('Format de réponse invalide');
     }
-  };
+  } catch (err) {
+    console.error('❌ Erreur chargement:', err);
+    
+    // Gestion spécifique des erreurs
+    if (err.response?.status === 401) {
+      localStorage.removeItem('adminToken');
+      window.location.href = '/admin/login';
+      return;
+    }
+    
+    if (err.response?.status === 404) {
+      setError(`Page "${pageId}" non trouvée`);
+    } else if (err.response?.status === 403) {
+      setError('Accès refusé - Vérifiez vos permissions');
+    } else if (err.code === 'NETWORK_ERROR') {
+      setError('Erreur réseau - Vérifiez votre connexion');
+    } else {
+      setError(`Erreur de chargement: ${err.message || 'Erreur inconnue'}`);
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   const savePageContent = async (content = pageContent, createVersion = false, versionComment = '') => {
     if (!content) return;

@@ -26,15 +26,17 @@ api.interceptors.request.use((config) => {
 
 // Intercepteur pour gérer les erreurs d'authentification
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
-    // Gérer l'expiration du token
+    console.error('❌ Erreur API:', {
+      url: error.config?.url,
+      status: error.response?.status,
+      message: error.response?.data?.message || error.message
+    });
+
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('adminToken');
-        // Rediriger vers login si on est dans l'admin
         if (window.location.pathname.startsWith('/admin') &&
           !window.location.pathname.includes('/login')) {
           window.location.href = '/admin/login';

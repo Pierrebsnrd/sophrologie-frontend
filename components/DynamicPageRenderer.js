@@ -35,7 +35,7 @@ const HeroSection = ({ section }) => (
 
 // Composant pour rendre une section de texte
 const TextSection = ({ section }) => (
-  <section 
+  <section
     className={`${styles.section} ${section.settings?.backgroundColor === '#f0fdfa' ? styles.sectionAlt : ''}`}
     style={{
       textAlign: section.settings?.alignment || 'left',
@@ -133,7 +133,7 @@ const CTASection = ({ section }) => (
         <div className={styles.ctaButtons}>
           {section.buttons.map((button, index) => (
             <Link key={index} href={button.url || '#'}>
-              <button 
+              <button
                 className={`${styles.button} ${button.style === 'secondary' ? styles.buttonSecondary : ''}`}
               >
                 {button.text}
@@ -230,11 +230,17 @@ const TestimonialListSection = ({ section }) => {
   const fetchTestimonials = async () => {
     try {
       const response = await api.get('/temoignage');
-      if (response.data.success) {
-        setTestimonials(response.data.data.temoignages || []);
-      }
+
+      // Validation robuste
+      const testimonials = response?.data?.success
+        ? (response.data?.data?.temoignages || [])
+        : [];
+
+      console.log('📝 Témoignages chargés:', testimonials.length);
+      setTestimonials(testimonials);
     } catch (error) {
-      console.error('Erreur chargement témoignages:', error);
+      console.error('❌ Erreur témoignages:', error);
+      setTestimonials([]); // Fallback sécurisé
     } finally {
       setLoading(false);
     }
@@ -243,7 +249,7 @@ const TestimonialListSection = ({ section }) => {
   // Combiner les témoignages statiques et dynamiques
   const staticTestimonials = section.staticTestimonials || [];
   const allTestimonials = [...staticTestimonials, ...testimonials];
-  const sortedTestimonials = allTestimonials.sort((a, b) => 
+  const sortedTestimonials = allTestimonials.sort((a, b) =>
     new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date)
   );
   const visibleTestimonials = showAll ? sortedTestimonials : sortedTestimonials.slice(0, 4);
@@ -261,11 +267,11 @@ const TestimonialListSection = ({ section }) => {
             />
           ))}
         </div>
-        
+
         {sortedTestimonials.length > 4 && (
           <div className={styles.loadMoreContainer}>
-            <button 
-              className={styles.loadMoreButton} 
+            <button
+              className={styles.loadMoreButton}
               onClick={() => setShowAll(!showAll)}
             >
               {showAll ? 'Masquer les anciens témoignages' : 'Afficher tous les témoignages'}
@@ -334,40 +340,40 @@ const DynamicPageRenderer = ({ pageId, fallbackContent = null }) => {
     switch (section.type) {
       case 'hero':
         return <HeroSection key={key} section={section} />;
-      
+
       case 'text':
         return <TextSection key={key} section={section} />;
-      
+
       case 'card-grid':
         return <CardGridSection key={key} section={section} />;
-      
+
       case 'pricing-table':
         return <PricingTableSection key={key} section={section} />;
-      
+
       case 'cta':
         return <CTASection key={key} section={section} />;
-      
+
       case 'image-text':
         return <ImageTextSection key={key} section={section} />;
-      
+
       case 'contact-info':
         return <ContactInfoSection key={key} section={section} />;
-      
+
       case 'testimonial-form':
         return <TestimonialFormSection key={key} section={section} />;
-      
+
       case 'list-sections':
         return <ListSectionsComponent key={key} section={section} />;
-      
+
       case 'testimonial-list':
         return <TestimonialListSection key={key} section={section} />;
-      
+
       case 'appointment-widget':
         return <AppointmentWidgetSection key={key} section={section} />;
-      
+
       case 'contact-form-map':
         return <ContactFormMapSection key={key} section={section} />;
-      
+
       // Sections spéciales qui nécessitent des composants existants
       case 'contact-form':
         return (
@@ -377,7 +383,7 @@ const DynamicPageRenderer = ({ pageId, fallbackContent = null }) => {
             </div>
           </section>
         );
-      
+
       case 'map':
         return (
           <section key={key} className={styles.section}>
@@ -386,10 +392,10 @@ const DynamicPageRenderer = ({ pageId, fallbackContent = null }) => {
             </div>
           </section>
         );
-      
+
       case 'calendly':
         return <Calendly key={key} />;
-      
+
       default:
         console.warn(`Type de section non supporté: ${section.type}`);
         return (
@@ -436,7 +442,7 @@ const DynamicPageRenderer = ({ pageId, fallbackContent = null }) => {
         </main>
       );
     }
-    
+
     return (
       <div className={styles.errorContainer}>
         <h2>Contenu non disponible</h2>

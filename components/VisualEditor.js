@@ -999,38 +999,67 @@ const VisualEditor = ({ pageId }) => {
   const [configModal, setConfigModal] = useState({ isOpen: false, section: null });
   const [showAddMenu, setShowAddMenu] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
+  console.log('🔍 Debug EnhancedVisualEditor:', {
+    pageId,
+    token: localStorage.getItem('adminToken') ? 'présent' : 'manquant',
+    apiBaseURL: api.defaults.baseURL
+  });
+  
+  if (pageId) {
     fetchPageContent();
-  }, [pageId]);
+  }
+}, [pageId]);
 
-  const fetchPageContent = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get(`/admin/pages/${pageId}`);
-      if (response.data && response.data.data) {
-        setPageContent(response.data.data);
-      } else {
-        setPageContent({
-          title: `Page ${pageId}`,
-          sections: []
-        });
-      }
-    } catch (err) {
-      console.error('Erreur chargement:', err);
-      if (err.response?.status === 401) {
-        localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
-      } else {
-        setError('Erreur de chargement: ' + (err.message || 'Erreur inconnue'));
-        setPageContent({
-          title: `Page ${pageId}`,
-          sections: []
-        });
-      }
-    } finally {
-      setLoading(false);
+const fetchPageContent = async () => {
+  try {
+    setLoading(true);
+    setError('');
+    
+    // 1. Vérifier l'authentification
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      console.log('❌ Token manquant, redirection');
+      router.replace('/admin/login');
+      return;
     }
-  };
+    
+    // 2. Vérifier que pageId existe
+    if (!pageId) {
+      throw new Error('PageId manquant');
+    }
+    
+    console.log('🔍 Chargement de la page:', pageId);
+    
+    const response = await api.get(`/admin/pages/${pageId}`);
+    
+    // 3. Valider la structure de réponse
+    if (response?.data?.success && response.data?.data) {
+      setPageContent(response.data.data);
+      setHasUnsavedChanges(false);
+      console.log('✅ Page chargée:', response.data.data.title);
+    } else {
+      throw new Error('Format de réponse API invalide');
+    }
+    
+  } catch (err) {
+    console.error('❌ Erreur fetchPageContent:', err);
+    
+    if (err.response?.status === 401) {
+      localStorage.removeItem('adminToken');
+      router.replace('/admin/login');
+      return;
+    }
+    
+    if (err.response?.status === 404) {
+      setError(`Page "${pageId}" non trouvée`);
+    } else {
+      setError(`Erreur de chargement: ${err.message || 'Erreur inconnue'}`);
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   const savePageContent = async (content = pageContent) => {
     if (!content) return;
