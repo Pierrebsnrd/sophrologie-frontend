@@ -207,7 +207,7 @@
   font-weight: 600;
 }
 
-/* ACTIONS DE CARTE */
+/* ACTIONS DE CARTE - Version simplifiée */
 .pageActions {
   display: flex;
   gap: 12px;
@@ -232,15 +232,15 @@
 }
 
 .editButton {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
 }
 
 .editButton:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
 }
 
 .previewButton {
@@ -253,6 +253,14 @@
   background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+/* Responsive pour les 2 boutons */
+@media (max-width: 768px) {
+  .pageActions {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 /* FOOTER DE CARTE */

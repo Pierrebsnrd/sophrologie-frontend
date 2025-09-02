@@ -90,7 +90,7 @@ export default function AdminPages() {
         <div className={styles.header}>
           <div>
             <h1 className={styles.title}>Gestion des pages</h1>
-            <p className={styles.subtitle}>Modifiez le contenu de votre site web</p>
+            <p className={styles.subtitle}>Modifiez le contenu de votre site web avec l'éditeur visuel</p>
           </div>
           <div className={styles.headerActions}>
             <Link href="/admin" className={styles.backButton}>
@@ -121,9 +121,6 @@ export default function AdminPages() {
                     <p className={styles.pageDescription}>
                       {pageDescriptions[pageId]}
                     </p>
-                    <p className={styles.editorInfo}>
-                      💡 Deux méthodes d'édition disponibles
-                    </p>
                   </div>
                 </div>
 
@@ -138,14 +135,8 @@ export default function AdminPages() {
 
                 <div className={styles.pageActions}>
                   <Link
-                    href={`/admin/pages/edit/${pageId}`}
-                    className={styles.editButton}
-                  >
-                    📝 Éditer (Formulaires)
-                  </Link>
-                  <Link
                     href={`/admin/pages/visual/${pageId}`}
-                    className={styles.visualEditButton}
+                    className={styles.editButton}
                   >
                     ✏️ Éditeur Visuel
                   </Link>
@@ -170,27 +161,16 @@ export default function AdminPages() {
 
         {/* Section d'aide */}
         <div className={styles.helpSection}>
-          <h2>Comment ça marche ?</h2>
+          <h2>Comment utiliser l'éditeur ?</h2>
           <div className={styles.helpCards}>
-            <div className={styles.helpCard}>
-              <div className={styles.helpIcon}>📝</div>
-              <h3>Éditeur Formulaires</h3>
-              <p>Parfait pour les modifications structurelles : ajouter des sections, réorganiser le contenu, configurer les paramètres avancés.</p>
-              <div className={styles.helpTags}>
-                <span>Ajout de sections</span>
-                <span>Réorganisation</span>
-                <span>Configuration</span>
-              </div>
-            </div>
-
             <div className={styles.helpCard}>
               <div className={styles.helpIcon}>✏️</div>
               <h3>Éditeur Visuel</h3>
-              <p>Idéal pour les modifications rapides : cliquez directement sur les textes et images pour les modifier en temps réel.</p>
+              <p>Interface moderne qui combine édition directe et configuration avancée. Parfait pour toutes les modifications.</p>
               <div className={styles.helpTags}>
-                <span>Modification rapide</span>
+                <span>Édition directe</span>
+                <span>Configuration</span>
                 <span>WYSIWYG</span>
-                <span>Intuitive</span>
               </div>
             </div>
 
@@ -204,6 +184,17 @@ export default function AdminPages() {
                 <span>Validation</span>
               </div>
             </div>
+
+            <div className={styles.helpCard}>
+              <div className={styles.helpIcon}>🔧</div>
+              <h3>Fonctionnalités</h3>
+              <p>Ajoutez des sections, réorganisez par glisser-déposer, configurez le style, et éditez le contenu en temps réel.</p>
+              <div className={styles.helpTags}>
+                <span>Drag & Drop</span>
+                <span>Multi-sections</span>
+                <span>Temps réel</span>
+              </div>
+            </div>
           </div>
 
           <div className={styles.helpTip}>
@@ -211,8 +202,9 @@ export default function AdminPages() {
             <div>
               <h4>Conseil d'utilisation</h4>
               <p>
-                <strong>Éditeur Visuel</strong> pour vos modifications quotidiennes (textes, images) •
-                <strong>Éditeur Formulaires</strong> pour la restructuration et les ajouts complexes
+                L'éditeur visuel combine le meilleur des deux mondes : 
+                <strong>édition rapide</strong> en mode aperçu et 
+                <strong>configuration avancée</strong> via les modals de paramétrage.
               </p>
             </div>
           </div>
