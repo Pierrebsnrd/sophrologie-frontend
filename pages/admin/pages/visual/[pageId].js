@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import EnhancedVisualEditor from '../../../../components/EnhancedVisualEditor';
+import SimplifiedVisualEditor from '../../../../components/SimplifiedVisualEditor';
 
-export default function VisualEditPage() {
+export default function SimplifiedVisualEditPage() {
   const router = useRouter();
   const { pageId } = router.query;
   const [pageTitle, setPageTitle] = useState('');
@@ -29,7 +29,6 @@ export default function VisualEditPage() {
     if (pageId && pageNames[pageId]) {
       setPageTitle(pageNames[pageId]);
     } else if (pageId && !pageNames[pageId]) {
-      // Page ID non valide, rediriger
       router.replace('/admin/pages');
     }
   }, [router, pageId]);
@@ -61,14 +60,6 @@ export default function VisualEditPage() {
             fontWeight: '500',
             transition: 'all 0.3s ease'
           }}
-          onMouseOver={(e) => {
-            e.target.style.transform = 'translateY(-2px)';
-            e.target.style.boxShadow = '0 4px 15px rgba(72, 187, 120, 0.4)';
-          }}
-          onMouseOut={(e) => {
-            e.target.style.transform = 'translateY(0)';
-            e.target.style.boxShadow = 'none';
-          }}
         >
           ← Retour aux pages
         </a>
@@ -80,11 +71,11 @@ export default function VisualEditPage() {
     <>
       <Head>
         <meta name="robots" content="noindex, nofollow" />
-        <title>Éditeur Visuel - {pageTitle} - Administration</title>
-        <meta name="description" content={`Édition visuelle de la page ${pageTitle}`} />
+        <title>Éditeur Simplifié - {pageTitle} - Administration</title>
+        <meta name="description" content={`Édition simplifiée de la page ${pageTitle}`} />
       </Head>
 
-      <EnhancedVisualEditor pageId={pageId} />
+      <SimplifiedVisualEditor pageId={pageId} />
     </>
   );
 }
