@@ -10,7 +10,7 @@
   box-shadow: 0 10px 30px rgba(72, 187, 120, 0.1);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  height: 545px;
+  height: 620px;
 }
 
 .mapContainer iframe {

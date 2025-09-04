@@ -120,7 +120,12 @@ export default function AdminDashboard() {
   };
 
   const handleReply = async (msg) => {
-    window.location.href = `mailto:${msg.email}?subject=Réponse à votre message`;
+    const subject = encodeURIComponent(`Réponse à votre message`);
+    const body = encodeURIComponent(`Bonjour ${msg.name},\n\nMerci pour votre message.\n\nCordialement,\nStéphanie Habert\nSophrologue\n06 11 42 17 65`);
+
+    // Construire l'URL mailto avec le sujet et le corps
+    window.location.href = `mailto:${msg.email}?subject=${subject}&body=${body}`;
+
     try {
       await api.patch(`/admin/contact-messages/${msg._id}/answered`);
       await fetchData(currentPageTemoignages, currentPageMessages);
@@ -501,7 +506,8 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                         <div className={styles.itemInfo}>
-                          <p><strong>Email:</strong> {msg.email}</p>
+                          <p><strong>Email:</strong> <a href={`mailto:${msg.email}`} style={{ color: '#48bb78', textDecoration: 'none' }}>{msg.email}</a></p>
+                          <p><strong>Téléphone:</strong> <a href={`tel:${msg.phone}`} style={{ color: '#48bb78', textDecoration: 'none' }}>{msg.phone}</a></p>
                           <p><strong>Message:</strong> {msg.message}</p>
                         </div>
                       </div>

@@ -16,6 +16,7 @@ export default function Home() {
             alt="Paysage"
             layout="fill"
             objectFit="cover"
+            objectPosition="50% 35%"
             className={styles.heroImage}
             priority
           />

@@ -7,6 +7,13 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
+function isValidPhone(phone) {
+  // Accepte différents formats français : 06.12.34.56.78, 06 12 34 56 78, 0612345678, +33612345678
+  const phoneRegex = /^(?:(?:\+33|0)[1-9](?:[0-9]{8}))$/;
+  const cleanPhone = phone.replace(/[\s\.\-]/g, ''); // Retire espaces, points, tirets
+  return phoneRegex.test(cleanPhone);
+}
+
 export default function ContactForm() {
   const [sending, setSending] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
@@ -14,6 +21,7 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: ""
   });
 
@@ -28,7 +36,7 @@ export default function ContactForm() {
   };
 
   const handleSubmit = async () => {
-    const { name, email, message } = formData;
+    const { name, email, phone, message } = formData;
     const newErrors = [];
 
     // Validation front
@@ -37,6 +45,13 @@ export default function ContactForm() {
 
     if (!email.trim()) newErrors.push("L'email est requis.");
     else if (!isValidEmail(email)) newErrors.push("Veuillez entrer un email valide.");
+
+    // Validation téléphone (obligatoire)
+    if (!phone.trim()) {
+      newErrors.push("Le numéro de téléphone est requis.");
+    } else if (!isValidPhone(phone)) {
+      newErrors.push("Veuillez entrer un numéro de téléphone valide (format français).");
+    }
 
     if (!message.trim()) newErrors.push("Le message est requis.");
     else if (message.trim().length < 10) newErrors.push("Le message doit contenir au moins 10 caractères.");
@@ -51,11 +66,11 @@ export default function ContactForm() {
     setConfirmationMessage("");
 
     try {
-      const res = await api.post("/contact", { name, email, message });
+      const res = await api.post("/contact", { name, email, phone, message });
 
       if (res.data.success) {
         setConfirmationMessage(res.data.message || "Votre message a bien été envoyé.");
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", phone: "", message: "" });
       } else if (res.data.errors) {
         // Backend renvoie erreurs champ par champ
         setErrorMessages(Object.values(res.data.errors));
@@ -103,6 +118,7 @@ export default function ContactForm() {
             value={formData.name}
             onChange={handleInputChange}
             placeholder="Entrez votre prénom et nom"
+            required
           />
         </div>
 
@@ -115,6 +131,20 @@ export default function ContactForm() {
             value={formData.email}
             onChange={handleInputChange}
             placeholder="Entrez votre email"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="phone">Téléphone</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            placeholder="06 12 34 56 78"
+            required
           />
         </div>
 
@@ -126,6 +156,7 @@ export default function ContactForm() {
             value={formData.message}
             onChange={handleInputChange}
             placeholder="Décrivez votre besoin ou posez votre question..."
+            required
           />
         </div>
 
