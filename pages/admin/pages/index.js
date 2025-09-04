@@ -159,55 +159,64 @@ export default function AdminPages() {
           })}
         </div>
 
-        {/* Section d'aide */}
+        {/* Section d'aide discrète et repliable */}
         <div className={styles.helpSection}>
-          <h2>Comment utiliser l'éditeur ?</h2>
-          <div className={styles.helpCards}>
-            <div className={styles.helpCard}>
-              <div className={styles.helpIcon}>✏️</div>
-              <h3>Éditeur Visuel</h3>
-              <p>Interface moderne qui combine édition directe et configuration avancée. Parfait pour toutes les modifications.</p>
-              <div className={styles.helpTags}>
-                <span>Édition directe</span>
-                <span>Configuration</span>
-                <span>WYSIWYG</span>
+          <details className={styles.helpToggle}>
+            <summary className={styles.helpSummary}>
+              Guide d'utilisation de l'éditeur
+            </summary>
+
+            <div className={styles.helpContent}>
+              <div className={styles.helpCards}>
+                <div className={styles.helpCard}>
+                  <div className={styles.helpIcon}>✏️</div>
+                  <h3>Éditeur Visuel</h3>
+                  <p>
+                    Modifiez directement le contenu en cliquant sur les textes.
+                    L'interface reproduit fidèlement l'apparence de votre site.
+                  </p>
+                  <div className={styles.helpTags}>
+                    <span>Édition directe</span>
+                    <span>WYSIWYG</span>
+                  </div>
+                </div>
+
+                <div className={styles.helpCard}>
+                  <div className={styles.helpIcon}>👁️</div>
+                  <h3>Aperçu</h3>
+                  <p>
+                    Visualisez exactement comment votre page apparaîtra sur votre site web.
+                  </p>
+                  <div className={styles.helpTags}>
+                    <span>Prévisualisation</span>
+                    <span>Vérification</span>
+                  </div>
+                </div>
+
+                <div className={styles.helpCard}>
+                  <div className={styles.helpIcon}>💾</div>
+                  <h3>Sauvegarde</h3>
+                  <p>
+                    Vos modifications sont sauvegardées automatiquement toutes les 30 secondes.
+                  </p>
+                  <div className={styles.helpTags}>
+                    <span>Auto-save</span>
+                    <span>Historique</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.helpTip}>
+                <div className={styles.tipIcon}>⚡</div>
+                <div>
+                  <h4>Conseil pratique</h4>
+                  <p>
+                    Cliquez simplement sur n'importe quel texte dans l'éditeur pour le modifier directement.
+                  </p>
+                </div>
               </div>
             </div>
-
-            <div className={styles.helpCard}>
-              <div className={styles.helpIcon}>👁️</div>
-              <h3>Aperçu</h3>
-              <p>Visualisez exactement comment votre page apparaîtra sur votre site web avant de publier les modifications.</p>
-              <div className={styles.helpTags}>
-                <span>Prévisualisation</span>
-                <span>Vérification</span>
-                <span>Validation</span>
-              </div>
-            </div>
-
-            <div className={styles.helpCard}>
-              <div className={styles.helpIcon}>🔧</div>
-              <h3>Fonctionnalités</h3>
-              <p>Ajoutez des sections, réorganisez par glisser-déposer, configurez le style, et éditez le contenu en temps réel.</p>
-              <div className={styles.helpTags}>
-                <span>Drag & Drop</span>
-                <span>Multi-sections</span>
-                <span>Temps réel</span>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.helpTip}>
-            <div className={styles.tipIcon}>💡</div>
-            <div>
-              <h4>Conseil d'utilisation</h4>
-              <p>
-                L'éditeur visuel combine le meilleur des deux mondes : 
-                <strong>édition rapide</strong> en mode aperçu et 
-                <strong>configuration avancée</strong> via les modals de paramétrage.
-              </p>
-            </div>
-          </div>
+          </details>
         </div>
       </div>
     </>

@@ -1,8 +1,8 @@
-// components/EnhancedWYSIWYGEditor.js - Version complète et corrigée
+// components/EnhancedWYSIWYGEditor.js - Version complète avec mode structure
+
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import ContactForm from './ContactForm';
 import ContactInfo from './ContactInfo';
 import TestimonialForm from './TestimonialForm';
@@ -28,6 +28,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
   const [versions, setVersions] = useState([]);
   const [selectedVersion, setSelectedVersion] = useState(null);
   const [versionComment, setVersionComment] = useState('');
+  const [showHelpPanel, setShowHelpPanel] = useState(false);
 
   // États pour l'édition inline
   const [editingElement, setEditingElement] = useState(null);
@@ -46,6 +47,24 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     testimonials: 'Témoignages',
     contact: 'Contact',
     ethics: 'Charte éthique'
+  };
+
+  // Configuration des types de sections
+  const sectionTypeLabels = {
+    hero: 'Section Hero',
+    text: 'Section Texte',
+    image: 'Section Image',
+    'card-grid': 'Grille de cartes',
+    cta: 'Appel à l\'action',
+    list: 'Liste',
+    'contact-info': 'Informations contact',
+    'testimonial-form': 'Formulaire témoignages',
+    'pricing-table': 'Table des tarifs',
+    'image-text': 'Image + Texte',
+    'testimonial-list': 'Liste témoignages',
+    'appointment-widget': 'Widget RDV',
+    'contact-form-map': 'Formulaire + Carte',
+    'list-sections': 'Sections de liste'
   };
 
   // Chargement des données de la page
@@ -82,12 +101,10 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
   useEffect(() => {
     if (!pageData || !hasUnsavedChanges) return;
 
-    // Nettoyer l'intervalle précédent
     if (autoSaveIntervalRef.current) {
       clearTimeout(autoSaveIntervalRef.current);
     }
 
-    // Planifier l'auto-sauvegarde dans 30 secondes
     autoSaveIntervalRef.current = setTimeout(async () => {
       if (hasUnsavedChanges && pageData) {
         await handleAutoSave();
@@ -147,7 +164,6 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
         setLastSaved(new Date());
         setHasUnsavedChanges(false);
         
-        // Rafraîchir les versions
         await fetchVersions();
         
         console.log('✅ Sauvegarde réussie');
@@ -171,23 +187,6 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
       console.error('Erreur chargement versions:', err);
     }
   }, [pageId]);
-
-  // Gestion du drag & drop
-  const handleDragEnd = useCallback((result) => {
-    if (!result.destination || !pageData) return;
-
-    const sections = Array.from(pageData.sections);
-    const [reorderedSection] = sections.splice(result.source.index, 1);
-    sections.splice(result.destination.index, 0, reorderedSection);
-
-    // Mettre à jour les indices d'ordre
-    sections.forEach((section, index) => {
-      section.order = index;
-    });
-
-    setPageData(prev => ({ ...prev, sections }));
-    setHasUnsavedChanges(true);
-  }, [pageData]);
 
   // Édition inline
   const startEditing = useCallback((sectionId, field, currentValue) => {
@@ -243,6 +242,118 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     }
   }, [selectedVersion, versionComment, pageId, fetchPageData]);
 
+  // Rendu d'un aperçu de section pour le mode structure
+  const renderSectionPreview = useCallback((section) => {
+    switch (section.type) {
+      case 'hero':
+        return (
+          <div className={styles.previewHero}>
+            <span className={styles.previewTag}>Hero</span>
+            <p><strong>{section.title || 'Titre manquant'}</strong></p>
+            {section.subtitle && <p>{section.subtitle}</p>}
+            {section.image?.url && <span className={styles.previewBadge}>Avec image</span>}
+          </div>
+        );
+
+      case 'text':
+        return (
+          <div className={styles.previewText}>
+            <span className={styles.previewTag}>Texte</span>
+            <p><strong>{section.title || 'Titre manquant'}</strong></p>
+            {section.content && (
+              <small>{section.content.substring(0, 100)}...</small>
+            )}
+          </div>
+        );
+
+      case 'card-grid':
+        return (
+          <div className={styles.previewCards}>
+            <span className={styles.previewTag}>Grille</span>
+            <p><strong>{section.title || 'Titre manquant'}</strong></p>
+            <span className={styles.previewBadge}>{section.items?.length || 0} cartes</span>
+          </div>
+        );
+
+      case 'pricing-table':
+        return (
+          <div className={styles.previewPricing}>
+            <span className={styles.previewTag}>Tarifs</span>
+            <p><strong>{section.title || 'Titre manquant'}</strong></p>
+            <span className={styles.previewBadge}>{section.items?.length || 0} tarifs</span>
+          </div>
+        );
+
+      case 'cta':
+        return (
+          <div className={styles.previewCta}>
+            <span className={styles.previewTag}>CTA</span>
+            <p><strong>{section.title || 'Titre manquant'}</strong></p>
+            <span className={styles.previewBadge}>{section.buttons?.length || 0} boutons</span>
+          </div>
+        );
+
+      default:
+        return (
+          <div className={styles.previewDefault}>
+            <span className={styles.previewTag}>{sectionTypeLabels[section.type] || section.type}</span>
+            <p><strong>{section.title || 'Section sans titre'}</strong></p>
+          </div>
+        );
+    }
+  }, []);
+
+  // Rendu du mode structure
+  const renderStructureMode = useCallback(() => {
+    if (!pageData || !pageData.sections) {
+      return (
+        <div className={styles.emptyState}>
+          <h2>Aucune section trouvée</h2>
+          <p>Cette page ne contient pas encore de sections à afficher.</p>
+        </div>
+      );
+    }
+
+    const sortedSections = [...pageData.sections].sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    return (
+      <div className={styles.structureMode}>
+        <div className={styles.structureHeader}>
+          <h2>Structure de la page : {pageNames[pageId]}</h2>
+          <p>Vue d'ensemble de l'organisation des sections de votre page</p>
+        </div>
+
+        <div className={styles.structureList}>
+          {sortedSections.map((section, index) => (
+            <div key={section.id} className={styles.structureItem}>
+              <div className={styles.structureInfo}>
+                <div className={styles.structureOrder}>
+                  {index + 1}
+                </div>
+                
+                <div className={styles.structureDetails}>
+                  <span className={styles.structureType}>
+                    {sectionTypeLabels[section.type] || section.type}
+                  </span>
+                  <h3 className={styles.structureTitle}>
+                    {section.title || 'Section sans titre'}
+                  </h3>
+                  <span className={styles.structureVisibility}>
+                    {section.settings?.visible !== false ? 'Visible' : 'Masquée'}
+                  </span>
+                </div>
+              </div>
+
+              <div className={styles.structurePreview}>
+                {renderSectionPreview(section)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }, [pageData, pageId, pageNames, renderSectionPreview]);
+
   // Rendu des sections WYSIWYG avec style fidèle au site public
   const renderWYSIWYGSection = useCallback((section, index) => {
     const isEditing = editingElement?.startsWith(section.id);
@@ -250,7 +361,10 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     // Section Hero
     if (section.type === 'hero') {
       return (
-        <section className={`${styles.publicHero} ${isEditing ? styles.editingMode : ''}`}>
+        <section 
+          key={section.id} 
+          className={`${styles.publicHero} ${isEditing ? styles.editingMode : ''}`}
+        >
           {section.image?.url && (
             <Image
               src={section.image.url}
@@ -288,6 +402,10 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               />
             )}
           </div>
+          
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+          </div>
         </section>
       );
     }
@@ -300,6 +418,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
 
       return (
         <section 
+          key={section.id}
           className={sectionClasses}
           style={{
             textAlign: section.settings?.alignment || 'center',
@@ -336,6 +455,10 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               />
             )}
           </div>
+          
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+          </div>
         </section>
       );
     }
@@ -343,7 +466,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     // Section Grille de cartes
     if (section.type === 'card-grid') {
       return (
-        <section className={styles.publicSection}>
+        <section key={section.id} className={styles.publicSection}>
           <div className={styles.publicSectionInner}>
             {section.title && (
               <EditableText
@@ -392,14 +515,18 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               </div>
             )}
           </div>
+          
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+          </div>
         </section>
       );
     }
 
-    // Section Tarifs - CORRECTION IMPORTANTE
+    // Section Tarifs
     if (section.type === 'pricing-table') {
       return (
-        <section className={styles.publicSection}>
+        <section key={section.id} className={styles.publicSection}>
           <div className={styles.publicSectionInner}>
             {section.title && (
               <EditableText
@@ -442,6 +569,10 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               </div>
             )}
           </div>
+          
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+          </div>
         </section>
       );
     }
@@ -449,7 +580,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     // Section CTA
     if (section.type === 'cta') {
       return (
-        <section className={styles.publicSection}>
+        <section key={section.id} className={styles.publicSection}>
           <div className={styles.publicSectionInner}>
             {section.title && (
               <EditableText
@@ -491,6 +622,10 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               </div>
             )}
           </div>
+          
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+          </div>
         </section>
       );
     }
@@ -498,7 +633,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     // Section Image + Texte
     if (section.type === 'image-text') {
       return (
-        <section className={styles.publicSection}>
+        <section key={section.id} className={styles.publicSection}>
           <div className={styles.publicImageTextContainer}>
             {section.image?.url && (
               <div className={styles.publicImageContainer}>
@@ -541,14 +676,18 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               )}
             </div>
           </div>
+          
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+          </div>
         </section>
       );
     }
 
-    // Section Listes (pour charte éthique)
+    // Autres types de sections...
     if (section.type === 'list-sections') {
       return (
-        <section className={styles.publicSection}>
+        <section key={section.id} className={styles.publicSection}>
           <div className={styles.publicSectionInner}>
             {section.sections && section.sections.map((listSection, listIndex) => (
               <div key={listIndex} className={styles.publicListSection}>
@@ -563,31 +702,9 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               </div>
             ))}
           </div>
-        </section>
-      );
-    }
-
-    // Section Témoignages
-    if (section.type === 'testimonial-list') {
-      return (
-        <section className={styles.publicSection}>
-          <div className={styles.publicSectionInner}>
-            <div className={styles.publicTestimonialsGrid}>
-              {/* Témoignages statiques */}
-              {section.staticTestimonials && section.staticTestimonials.map((testimonial, index) => (
-                <TestimonialCard
-                  key={`static-${index}`}
-                  message={testimonial.message}
-                  author={testimonial.author}
-                  date={testimonial.date}
-                />
-              ))}
-            </div>
-            <div className={styles.publicLoadMoreContainer}>
-              <button className={styles.publicLoadMoreButton}>
-                Voir plus de témoignages
-              </button>
-            </div>
+          
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
         </section>
       );
@@ -596,9 +713,12 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     // Composants spéciaux
     if (section.type === 'contact-info') {
       return (
-        <section className={styles.publicSection}>
+        <section key={section.id} className={styles.publicSection}>
           <div className={styles.publicSectionInner}>
             <ContactInfo />
+          </div>
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
         </section>
       );
@@ -606,42 +726,54 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
 
     if (section.type === 'testimonial-form') {
       return (
-        <section className={styles.publicSection}>
+        <section key={section.id} className={styles.publicSection}>
           <div className={styles.publicSectionInner}>
             <TestimonialForm />
+          </div>
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
         </section>
       );
     }
 
     if (section.type === 'appointment-widget') {
-      return <Resalib />;
+      return (
+        <div key={section.id}>
+          <Resalib />
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+          </div>
+        </div>
+      );
     }
 
     if (section.type === 'contact-form-map') {
       return (
-        <section className={styles.publicSection}>
+        <section key={section.id} className={styles.publicSection}>
           <div className={styles.publicSectionInner}>
             <div className={styles.publicContactFormMapContainer}>
               <ContactForm />
               <Map />
             </div>
           </div>
+          <div className={styles.sectionIndicator}>
+            <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+          </div>
         </section>
       );
     }
 
-    // Section non supportée avec diagnostic
+    // Section non supportée
     return (
-      <section className={styles.unsupportedSection}>
+      <section key={section.id} className={styles.unsupportedSection}>
         <h3>⚠️ Section non supportée</h3>
         <p>Type: <code>{section.type}</code></p>
         <p>Cette section n'est pas encore implémentée dans l'éditeur visuel.</p>
         
-        <details className={styles.debugInfo}>
-          <summary>Informations de débogage</summary>
-          <pre>{JSON.stringify(section, null, 2)}</pre>
-        </details>
+        <div className={styles.sectionIndicator}>
+          <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+        </div>
       </section>
     );
   }, [editingElement, editingValue, startEditing, saveEdit, cancelEdit]);
@@ -756,12 +888,26 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
   // Rendu principal
   return (
     <div className={styles.wysiwygEditor}>
-      {/* Toolbar */}
+      {/* Toolbar complète */}
       <div className={styles.toolbar}>
         <div className={styles.toolbarLeft}>
           <Link href="/admin/pages" className={styles.backButton}>
             ← Retour
           </Link>
+          
+          <button
+            className={`${styles.modeButton} ${currentMode === 'wysiwyg' ? styles.active : ''}`}
+            onClick={() => setCurrentMode('wysiwyg')}
+          >
+            🎨 Visuel
+          </button>
+          
+          <button
+            className={`${styles.modeButton} ${currentMode === 'structure' ? styles.active : ''}`}
+            onClick={() => setCurrentMode('structure')}
+          >
+            📋 Structure
+          </button>
         </div>
 
         <div className={styles.toolbarCenter}>
@@ -772,20 +918,6 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
         </div>
 
         <div className={styles.toolbarRight}>
-          <button
-            className={`${styles.modeButton} ${currentMode === 'wysiwyg' ? styles.active : ''}`}
-            onClick={() => setCurrentMode('wysiwyg')}
-          >
-            👁️ Visuel
-          </button>
-
-          <button
-            className={`${styles.modeButton} ${currentMode === 'structure' ? styles.active : ''}`}
-            onClick={() => setCurrentMode('structure')}
-          >
-            📋 Structure
-          </button>
-
           <button
             className={styles.versionButton}
             onClick={() => setShowVersionModal(true)}
@@ -801,133 +933,27 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
           >
             💾 Sauver
           </button>
+
+          <button
+            className={styles.helpButton}
+            onClick={() => setShowHelpPanel(!showHelpPanel)}
+          >
+            ❓ Aide
+          </button>
         </div>
       </div>
 
-      {/* Contenu de l'éditeur */}
+      {/* Contenu de l'éditeur selon le mode */}
       <div className={styles.editorContent}>
-        {currentMode === 'wysiwyg' && pageData && (
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <div className={styles.wysiwygContent}>
-              <Droppable droppableId="sections">
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className={styles.wysiwygSections}
-                  >
-                    {pageData.sections
-                      .sort((a, b) => (a.order || 0) - (b.order || 0))
-                      .map((section, index) => (
-                        <Draggable
-                          key={section.id}
-                          draggableId={section.id}
-                          index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              className={`${styles.wysiwygSection} ${
-                                snapshot.isDragging ? styles.dragging : ''
-                              }`}
-                            >
-                              <div
-                                {...provided.dragHandleProps}
-                                className={styles.sectionHandle}
-                              >
-                                ⋮⋮ Section {index + 1} - {section.type}
-                              </div>
-                              {renderWYSIWYGSection(section, index)}
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          </DragDropContext>
-        )}
-
-        {currentMode === 'structure' && pageData && (
-          <div className={styles.structureMode}>
-            <div className={styles.structureHeader}>
-              <h2>Structure de la page</h2>
-              <p>Vue d'ensemble des sections et de leur organisation</p>
-            </div>
-
-            <div className={styles.structureList}>
-              {pageData.sections
-                .sort((a, b) => (a.order || 0) - (b.order || 0))
-                .map((section, index) => (
-                  <div key={section.id} className={styles.structureItem}>
-                    <div className={styles.structureInfo}>
-                      <div className={styles.structureOrder}>{index + 1}</div>
-                      <div className={styles.structureDetails}>
-                        <div className={styles.structureType}>{section.type}</div>
-                        <h3 className={styles.structureTitle}>
-                          {section.title || `Section ${section.type}`}
-                        </h3>
-                        <div className={styles.structureVisibility}>
-                          {section.settings?.visible !== false ? '👁️ Visible' : '🚫 Masquée'}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className={styles.structurePreview}>
-                      {section.type === 'hero' && (
-                        <div className={styles.previewHero}>
-                          <div className={styles.previewTag}>Hero</div>
-                          <p>Titre: {section.title || 'Non défini'}</p>
-                          {section.image?.url && <div className={styles.previewBadge}>Image</div>}
-                        </div>
-                      )}
-                      
-                      {section.type === 'text' && (
-                        <div className={styles.previewText}>
-                          <div className={styles.previewTag}>Texte</div>
-                          <p>{section.title || 'Section de texte'}</p>
-                          <small>{section.content?.substring(0, 100) || 'Pas de contenu'}...</small>
-                        </div>
-                      )}
-                      
-                      {section.type === 'card-grid' && (
-                        <div className={styles.previewCards}>
-                          <div className={styles.previewTag}>Cartes</div>
-                          <p>{section.title || 'Grille de cartes'}</p>
-                          <div className={styles.previewBadge}>{section.items?.length || 0} cartes</div>
-                        </div>
-                      )}
-                      
-                      {section.type === 'pricing-table' && (
-                        <div className={styles.previewPricing}>
-                          <div className={styles.previewTag}>Tarifs</div>
-                          <p>{section.title || 'Tableau des tarifs'}</p>
-                          <div className={styles.previewBadge}>{section.items?.length || 0} tarifs</div>
-                        </div>
-                      )}
-                      
-                      {section.type === 'cta' && (
-                        <div className={styles.previewCta}>
-                          <div className={styles.previewTag}>CTA</div>
-                          <p>{section.title || 'Call to Action'}</p>
-                          <div className={styles.previewBadge}>{section.buttons?.length || 0} boutons</div>
-                        </div>
-                      )}
-                      
-                      {!['hero', 'text', 'card-grid', 'pricing-table', 'cta'].includes(section.type) && (
-                        <div className={styles.previewDefault}>
-                          <div className={styles.previewTag}>{section.type}</div>
-                          <p>{section.title || `Section ${section.type}`}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-            </div>
+        {currentMode === 'wysiwyg' ? (
+          <div className={styles.wysiwygContent}>
+            {pageData && pageData.sections
+              .sort((a, b) => (a.order || 0) - (b.order || 0))
+              .map((section, index) => renderWYSIWYGSection(section, index))
+            }
           </div>
+        ) : (
+          renderStructureMode()
         )}
       </div>
 
@@ -946,81 +972,42 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
             </div>
             
             <div className={styles.versionModalBody}>
-              <div className={styles.versionLayout}>
-                <div className={styles.versionList}>
-                  <h3>Versions disponibles</h3>
-                  {versions.map((version) => (
-                    <div
-                      key={version.versionNumber}
-                      className={`${styles.versionItem} ${
-                        selectedVersion?.versionNumber === version.versionNumber ? styles.selected : ''
-                      }`}
-                      onClick={() => setSelectedVersion(version)}
-                    >
-                      <div className={styles.versionHeader}>
-                        <div className={styles.versionInfo}>
-                          <span className={styles.versionNumber}>v{version.versionNumber}</span>
-                          <span className={styles.versionDate}>
-                            {new Date(version.createdAt).toLocaleDateString('fr-FR', {
-                              day: '2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </span>
-                        </div>
-                        <div className={styles.versionActions}>
-                          <button className={styles.previewButton}>👁️</button>
-                        </div>
-                      </div>
-                      
-                      <div className={styles.versionDetails}>
-                        <span className={styles.sectionsCount}>
-                          {version.sectionsCount} sections
+              <div className={styles.versionList}>
+                <h3>Versions disponibles</h3>
+                {versions.map((version) => (
+                  <div
+                    key={version.versionNumber}
+                    className={`${styles.versionItem} ${
+                      selectedVersion?.versionNumber === version.versionNumber ? styles.selected : ''
+                    }`}
+                    onClick={() => setSelectedVersion(version)}
+                  >
+                    <div className={styles.versionHeader}>
+                      <div className={styles.versionInfo}>
+                        <span className={styles.versionNumber}>v{version.versionNumber}</span>
+                        <span className={styles.versionDate}>
+                          {new Date(version.createdAt).toLocaleDateString('fr-FR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
                         </span>
-                        {version.comment?.includes('Auto-sauvegarde') && (
-                          <span className={styles.autoSaveBadge}>AUTO</span>
-                        )}
-                      </div>
-                      
-                      <div className={styles.versionComment}>
-                        {version.comment || 'Aucun commentaire'}
-                      </div>
-                      
-                      {version.createdBy && (
-                        <div className={styles.versionAuthor}>
-                          Par {version.createdBy}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <div className={styles.versionPreview}>
-                  <h3>Aperçu de la version</h3>
-                  {selectedVersion ? (
-                    <div className={styles.miniPreview}>
-                      <h4>Version {selectedVersion.versionNumber}</h4>
-                      <p><strong>Titre:</strong> {selectedVersion.title}</p>
-                      <p><strong>Créée le:</strong> {new Date(selectedVersion.createdAt).toLocaleString('fr-FR')}</p>
-                      <p><strong>Commentaire:</strong> {selectedVersion.comment}</p>
-                      
-                      <div className={styles.sectionsList}>
-                        <h5>Sections ({selectedVersion.sectionsCount || 0}):</h5>
-                        {/* Simuler l'aperçu des sections */}
-                        {Array.from({ length: selectedVersion.sectionsCount || 0 }, (_, i) => (
-                          <div key={i} className={styles.miniSection}>
-                            <span className={styles.sectionType}>Section {i + 1}</span>
-                            <span className={styles.sectionTitle}>Contenu de la section</span>
-                          </div>
-                        ))}
                       </div>
                     </div>
-                  ) : (
-                    <p>Sélectionnez une version pour voir l'aperçu</p>
-                  )}
-                </div>
+                    
+                    <div className={styles.versionComment}>
+                      {version.comment || 'Aucun commentaire'}
+                    </div>
+                    
+                    {version.createdBy && (
+                      <div className={styles.versionAuthor}>
+                        Par {version.createdBy}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
 
               {selectedVersion && (
@@ -1056,38 +1043,55 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
         </div>
       )}
 
-      {/* Panel d'aide */}
-      <div className={styles.helpPanel}>
-        <h3>💡 Guide d'utilisation</h3>
-        <div className={styles.helpContent}>
-          <div className={styles.helpSection}>
-            <h4>🎯 Mode Visuel</h4>
-            <ul>
-              <li>Cliquez sur n'importe quel texte pour l'éditer</li>
-              <li>Glissez-déposez les sections pour les réorganiser</li>
-              <li>Les modifications sont automatiquement sauvées</li>
-            </ul>
-          </div>
-          
-          <div className={styles.helpSection}>
-            <h4>📋 Mode Structure</h4>
-            <ul>
-              <li>Vue d'ensemble de l'organisation de la page</li>
-              <li>Vérifiez la visibilité des sections</li>
-              <li>Identifiez rapidement les types de contenu</li>
-            </ul>
-          </div>
-          
-          <div className={styles.helpSection}>
-            <h4>🕒 Versions</h4>
-            <ul>
-              <li>Chaque sauvegarde crée une nouvelle version</li>
-              <li>Restaurez une version antérieure si nécessaire</li>
-              <li>L'historique est conservé automatiquement</li>
-            </ul>
+      {/* Panel d'aide en modal */}
+      {showHelpPanel && (
+        <div className={styles.helpPanelOverlay} onClick={() => setShowHelpPanel(false)}>
+          <div className={styles.helpPanelModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.helpPanelHeader}>
+              <h3>💡 Guide d'utilisation</h3>
+              <button onClick={() => setShowHelpPanel(false)}>✕</button>
+            </div>
+            <div className={styles.helpPanelContent}>
+              <div className={styles.helpSection}>
+                <h4>🎨 Modes d'édition</h4>
+                <ul>
+                  <li><strong>WYSIWYG</strong> : Édition visuelle directe</li>
+                  <li><strong>Structure</strong> : Vue d'ensemble des sections</li>
+                  <li>Basculez entre les modes selon vos besoins</li>
+                </ul>
+              </div>
+              
+              <div className={styles.helpSection}>
+                <h4>🎯 Édition directe</h4>
+                <ul>
+                  <li>Cliquez sur n'importe quel texte pour l'éditer</li>
+                  <li>Appuyez sur Entrée pour sauver</li>
+                  <li>Échap pour annuler</li>
+                  <li>Ctrl+Entrée pour les textes longs</li>
+                </ul>
+              </div>
+              
+              <div className={styles.helpSection}>
+                <h4>💾 Sauvegarde</h4>
+                <ul>
+                  <li>Auto-sauvegarde toutes les 30 secondes</li>
+                  <li>Bouton "Sauver" pour sauver immédiatement</li>
+                  <li>L'historique conserve toutes les versions</li>
+                </ul>
+              </div>
+              
+              <div className={styles.helpSection}>
+                <h4>🕒 Historique</h4>
+                <ul>
+                  <li>Consultez les versions précédentes</li>
+                  <li>Restaurez une version si besoin</li>
+                  <li>Ajoutez un commentaire à chaque restauration</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
