@@ -57,11 +57,11 @@ export default function Tarifs() {
                                     <strong>Séance suivi individuelle adulte :</strong> 70 € (1h00)
                                 </li>
                                 <li>
-                                    <strong>Première séance individuelle mineur :</strong> 70 € (1h30)
+                                    <strong>Première séance individuelle adolescent :</strong> 70 € (1h30)
                                     <em>Bilan, définition des objectifs, première pratique</em>
                                 </li>
                                 <li>
-                                    <strong>Séance suivi individuelle mineur :</strong> 60 € (1h00)
+                                    <strong>Séance suivi individuelle adolescent :</strong> 60 € (1h00)
                                 </li>
                                 <li>
                                     <strong>Séance de groupe :</strong> 20 € par personne (1h00)<br />

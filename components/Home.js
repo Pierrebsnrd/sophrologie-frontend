@@ -50,7 +50,7 @@ export default function Home() {
         {/* BIENFAITS */}
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Les bienfaits de la sophrologie</h2>
-          <p className={styles.benefitHighlight}>La sophrologie s’adapte à chacun et peut accompagner dans de nombreuses situations.</p>
+          <p className={styles.benefitHighlight}>La sophrologie s’adapte à chacun et peut accompagner dans de nombreuses situations. Je vous accompagne dans :</p>
           <div className={styles.grid}>
             <div className={styles.card}><h3>Gestion du stress et des émotions</h3><p>(Surmenage, charge mentale, Anxiété, angoisses, irritabilité, Burn-out, prévention de l'épuisement…)</p></div>
             <div className={styles.card}><h3>Confiance en soi</h3><p>(Manque d'estime de soi, Peur du jugement ou du regard des autres, Besoin de s'affirmer dans sa vie personnelle et/ou professionnelle…)</p></div>

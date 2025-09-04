@@ -115,8 +115,8 @@ const SEO = ({
                             "@type": "Offer",
                             "itemOffered": {
                                 "@type": "Service",
-                                "name": "Séance individuelle mineur",
-                                "description": "Accompagnement sophrologique pour les mineurs"
+                                "name": "Séance individuelle adolescent",
+                                "description": "Accompagnement sophrologique pour les adolescents"
                             },
                             "price": "60-70",
                             "priceCurrency": "EUR"
