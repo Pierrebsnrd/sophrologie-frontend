@@ -82,6 +82,19 @@
   grid-column: 1 / -1; /* S'étend sur toutes les colonnes */
 }
 
+/* MESSAGE SI PAS DE TEMOIGNAGE */
+.noTemoignage {
+  grid-column: 1 / -1; /* occupe toute la largeur de la grille */
+  text-align: center;
+  font-style: italic;
+  color: #4a5568; /* gris doux */
+  background: #f7fafc; /* fond clair */
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  animation: fadeInUp 1s ease-out;
+}
+
 /* LOAD MORE BUTTON */
 .submitButton {
   background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);

@@ -18,7 +18,7 @@ export default function Temoignages() {
     }, []);
 
     const fetchTemoignages = async () => {
-        try {   
+        try {
             const res = await api.get("/temoignage");
             console.log('📡 Réponse API:', res.data);
 
@@ -41,29 +41,10 @@ export default function Temoignages() {
     };
 
     // Trie les témoignages par date décroissante
-    const sortedTemoignages = [...temoignages].sort((a, b) => 
+    const sortedTemoignages = [...temoignages].sort((a, b) =>
         new Date(b.createdAt) - new Date(a.createdAt)
     );
     const visibleTemoignages = showAll ? sortedTemoignages : sortedTemoignages.slice(0, 4);
-
-    // Témoignages statiques
-    const staticTestimonials = [
-        {
-            message: "Grâce à Stéphanie, j'ai appris à mieux gérer mon stress et à retrouver un sommeil réparateur.",
-            author: "Sophie Martin",
-            date: "12/03/2025"
-        },
-        {
-            message: "La sophrologie avec Stéphanie m'a permis de renforcer ma confiance en moi et d'aborder les défis du quotidien avec plus de sérénité.",
-            author: "Luc Dubois", 
-            date: "28/04/2025"
-        },
-        {
-            message: "Un accompagnement bienveillant et professionnel. Stéphanie a su créer un espace de confiance où j'ai pu me reconnecter à moi-même.",
-            author: "Marie Lemoine",
-            date: "15/06/2025"
-        }
-    ];
 
     return (
         <>
@@ -98,31 +79,27 @@ export default function Temoignages() {
                 <div className={styles.content}>
                     {/* SECTION TEMOIGNAGES */}
                     <section className={styles.temoignage}>
-                        {/* Témoignages statiques */}
-                        {staticTestimonials.map((testimonial, index) => (
-                            <TestimonialCard
-                                key={`static-${index}`}
-                                message={testimonial.message}
-                                author={testimonial.author}
-                                date={testimonial.date}
-                            />
-                        ))}
-
                         {/* Message d'erreur pour le chargement */}
                         {error && (
-                            <div style={{ 
-                                color: "#c53030", 
-                                textAlign: "center", 
-                                backgroundColor: "#fed7d7", 
-                                padding: "10px", 
-                                borderRadius: "5px", 
-                                marginBottom: "15px" 
+                            <div style={{
+                                color: "#c53030",
+                                textAlign: "center",
+                                backgroundColor: "#fed7d7",
+                                padding: "10px",
+                                borderRadius: "5px",
+                                marginBottom: "15px"
                             }}>
                                 {error}
                             </div>
                         )}
 
                         {/* Témoignages depuis la BDD */}
+                        {visibleTemoignages.length === 0 && !error && (
+                            <p className={styles.noTemoignage}>
+                                « Aucun témoignage pour le moment, soyez le premier à partager votre expérience ! »
+                            </p>
+                        )}
+
                         {visibleTemoignages.map((testimonial, index) => (
                             <TestimonialCard
                                 key={testimonial._id || `dynamic-${index}`}
@@ -132,10 +109,11 @@ export default function Temoignages() {
                             />
                         ))}
 
+
                         {sortedTemoignages.length > 4 && (
                             <div className={styles.loadMoreContainer}>
-                                <button 
-                                    className={styles.submitButton} 
+                                <button
+                                    className={styles.submitButton}
                                     onClick={() => setShowAll(!showAll)}
                                 >
                                     {showAll ? 'Masquer les anciens témoignages' : 'Afficher tous les témoignages'}

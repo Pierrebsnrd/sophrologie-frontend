@@ -47,16 +47,7 @@
   flex-direction: column;
   min-height: 100vh;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-}
-
-.pageContainer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #48bb78 50%, transparent 100%);
+  position: relative;
 }
 
 .formContainer {
@@ -120,28 +111,24 @@
   margin-right: auto;
 }
 
-/* CALENDLY CONTAINER */
-.calendlyContainer {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 8px 30px rgba(72, 187, 120, 0.1);
-  overflow: hidden;
-  border: 2px solid rgba(72, 187, 120, 0.1);
-  position: relative;
+/* RESALIB CARD */
+.resalibContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
-.calendlyContainer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #48bb78, #38a169, #2f855a);
-  z-index: 1;
+.resalibCard {
+  width: 100%;
+  max-width: 700px;
+  border-radius: 15px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.resalibCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.25);
 }
 
 /* ANIMATIONS */
@@ -158,8 +145,10 @@
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
-  .calendlyContainer {
-    max-width: 95%;
+  .formContainer {
+    margin: 2rem 1rem;
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
   }
 }
 
@@ -168,24 +157,9 @@
     height: 30vh;
     min-height: 250px;
   }
-
-  .formContainer {
-    margin: 2rem 1rem;
-    padding: 2rem 1.5rem;
-    border-radius: 15px;
-  }
-
-  .calendlyContainer {
-    margin: 0 -1rem;
-    border-radius: 10px;
-    border-left: none;
-    border-right: none;
-  }
-
   .title {
     font-size: 1.8rem;
   }
-
   .subtitle {
     font-size: 1rem;
     margin-bottom: 2rem;
@@ -197,28 +171,22 @@
     height: 25vh;
     min-height: 200px;
   }
-
   .heroTitle {
     font-size: 1.8rem;
     letter-spacing: 1px;
   }
-
   .formContainer {
     margin: 1rem 0.5rem;
     padding: 1.5rem 1rem;
     border-radius: 10px;
   }
-
-  .calendlyContainer {
-    margin: 0 -0.5rem;
-    border-radius: 8px;
-  }
-
   .title {
     font-size: 1.6rem;
   }
-
   .subtitle {
     font-size: 0.95rem;
+  }
+  .resalibCard {
+    max-width: 95%;
   }
 }

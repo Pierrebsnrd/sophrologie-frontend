@@ -4,6 +4,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -11,9 +12,12 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
+
   50% {
     transform: translateY(-10px) rotate(2deg);
   }
@@ -104,7 +108,8 @@
 }
 
 /* TITRES */
-.title, .subTitle {
+.title,
+.subTitle {
   font-family: 'Georgia', serif;
   position: relative;
   display: inline-block;
@@ -152,7 +157,9 @@
 }
 
 /* TEXTES */
-.intro, .info, .note {
+.intro,
+.info,
+.note {
   font-size: 1.1rem;
   line-height: 1.8;
   color: #4a5568;
@@ -372,13 +379,33 @@
 }
 
 /* ANIMATIONS POUR LES ÉLÉMENTS DE LA LISTE */
-.tarifList li:nth-child(1) { animation-delay: 0.1s; }
-.tarifList li:nth-child(2) { animation-delay: 0.2s; }
-.tarifList li:nth-child(3) { animation-delay: 0.3s; }
-.tarifList li:nth-child(4) { animation-delay: 0.4s; }
-.tarifList li:nth-child(5) { animation-delay: 0.5s; }
-.tarifList li:nth-child(6) { animation-delay: 0.6s; }
-.tarifList li:nth-child(7) { animation-delay: 0.7s; }
+.tarifList li:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.tarifList li:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.tarifList li:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.tarifList li:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.tarifList li:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.tarifList li:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+.tarifList li:nth-child(7) {
+  animation-delay: 0.7s;
+}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {

@@ -50,7 +50,7 @@ export default function Tarifs() {
                             <h3 className={styles.subTitle}>Séances de sophrologie</h3>
                             <ul className={styles.tarifList}>
                                 <li>
-                                    <strong>Première séance individuelle adulte :</strong> 80 € (1h30)<br />
+                                    <strong>Première séance individuelle adulte :</strong> 80 € (1h30 à 2h00)<br />
                                     <em>Bilan, définition des objectifs, première pratique</em>
                                 </li>
                                 <li>
@@ -58,6 +58,7 @@ export default function Tarifs() {
                                 </li>
                                 <li>
                                     <strong>Première séance individuelle mineur :</strong> 70 € (1h30)
+                                    <em>Bilan, définition des objectifs, première pratique</em>
                                 </li>
                                 <li>
                                     <strong>Séance suivi individuelle mineur :</strong> 60 € (1h00)

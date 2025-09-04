@@ -219,27 +219,6 @@
   margin-bottom: 0;
 }
 
-/* ANIMATIONS */
-/* @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-.section:nth-child(even) {
-  animation: float 8s ease-in-out infinite;
-  animation-delay: 2s;
-}
-
-.section:nth-child(odd) {
-  animation: float 8s ease-in-out infinite;
-  animation-delay: 4s;
-  animation-direction: reverse;
-} */
-
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .hero {

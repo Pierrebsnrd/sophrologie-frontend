@@ -6,13 +6,12 @@ export default function ContactInfo() {
         <section className={styles.contactSection}>
             <h2 className={styles.mainTitle}>Coordonnées</h2>
             <p><strong>Cabinet :</strong> Stéphanie Habert Sophrologue</p>
-            <p><strong>Adresse :</strong> Villepreux, 78450</p>
+            <p><strong>Adresse :</strong> 38 ter, rue des Ursulines, 78100 Saint-Germain-en-Laye</p>
             
             <h3>Horaires d'ouverture</h3>
             <ul>
-                <li>Lundi au vendredi : 9h - 18h</li>
-                <li>Samedi : 9h - 12h</li>
-                <li>Dimanche : Fermé</li>
+                <li>Mardi : 9h30 - 17h30 au cabinet</li>
+                <li>Vendredi : 9h30 - 17h30 en visioconsultation</li>
             </ul>
             
             <h3>Contact</h3>

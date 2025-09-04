@@ -1,10 +1,10 @@
 import styles from '../styles/components/Map.module.css';
 
 export default function Map({ 
-    embedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.4126037209037!2d1.9877313156759884!3d48.828308979286794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e68b780bffb055%3A0x2c2a75f8e34365cd!2sVillepreux%2078450!5e0!3m2i1sfr!2sfr!4v1697890000000!5m2!1sfr!2sfr",
+    embedUrl = "https://www.google.com/maps?q=38+ter+rue+des+Ursulines+78100+Saint-Germain-en-Laye&output=embed",
     title = "Cabinet Stéphanie Habert",
     businessName = "Stéphanie Habert - Sophrologue",
-    address = "Villepreux, France"
+    address = "38 ter, rue des Ursulines, 78100 Saint-Germain-en-Laye, France"
 }) {
     return (
         <div className={styles.mapContainer}>

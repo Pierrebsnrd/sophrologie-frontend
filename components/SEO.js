@@ -48,7 +48,7 @@ const SEO = ({
                 "@type": "LocalBusiness",
                 "@id": "https://www.sophrologuevillepreux.fr/#business",
                 "name": "Stéphanie Habert - Cabinet de Sophrologie",
-                "description": "Cabinet de sophrologie proposant des séances individuelles et de groupe à Villepreux et en visioconférence.",
+                "description": "Cabinet de sophrologie proposant des séances individuelles et de groupe à Saint-Germain-en-Laye et en visioconsultation.",
                 "url": "https://www.sophrologuevillepreux.fr",
                 "telephone": "+33611421765",
                 "email": "stephaniehabert.sophrologue@gmail.com",
@@ -56,8 +56,8 @@ const SEO = ({
                 "paymentAccepted": "Cash, Check, Bank transfer",
                 "currenciesAccepted": "EUR",
                 "openingHours": [
-                    "Mo-Fr 09:00-18:00",
-                    "Sa 09:00-12:00"
+                    "Mo 09:30-17:30",
+                    "Fr 09:30-17:30"
                 ],
                 "address": {
                     "@type": "PostalAddress",

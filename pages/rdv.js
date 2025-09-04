@@ -1,6 +1,6 @@
 import SEO from "../components/SEO";
 import Header from '../components/Header';
-import Calendly from "../components/Calendly";
+import Resalib from "../components/Resalib";
 import Footer from '../components/Footer';
 
 function RdvPage() {
@@ -16,7 +16,7 @@ function RdvPage() {
         keywords="rendez-vous sophrologie, réserver séance, planning, Stéphanie Habert Villepreux"
       />
       <Header />
-      <Calendly />
+      <Resalib />
       <Footer />
     </>
   );

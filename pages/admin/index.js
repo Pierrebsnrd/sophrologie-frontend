@@ -324,15 +324,15 @@ export default function AdminDashboard() {
         <div className={styles.infoBox}>
           <h3 className={styles.infoTitle}>📅 Gestion des rendez-vous</h3>
           <p className={styles.infoText}>
-            Consultez votre tableau de bord Calendly pour voir vos réservations.
+            Consultez votre tableau de bord Resalib pour voir vos réservations.
           </p>
           <a
-            href="https://calendly.com/app/scheduled_events"
+            href="https://www.resalib.fr/bo/home"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.calendlyLink}
+            className={styles.resalibLink}
           >
-            Ouvrir Calendly →
+            Ouvrir Resalib →
           </a>
         </div>
         <div className={styles.tabs}>
