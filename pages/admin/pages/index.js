@@ -26,7 +26,7 @@ export default function AdminPages() {
     home: 'Page principale du site avec présentation et bienfaits',
     about: 'Présentation personnelle et parcours professionnel',
     pricing: 'Tarifs des prestations et séances',
-    appointment: 'Interface de prise de rendez-vous Calendly',
+    appointment: 'Interface de prise de rendez-vous Resalib',
     testimonials: 'Témoignages clients et formulaire de soumission',
     contact: 'Coordonnées et formulaire de contact',
     ethics: 'Charte éthique et déontologique'

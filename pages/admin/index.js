@@ -352,7 +352,7 @@ export default function AdminDashboard() {
           </p>
           <button
             onClick={goToPageEditor}
-            className={styles.calendlyLink} // tu peux créer un style spécifique type bouton
+            className={styles.resalibLink} // tu peux créer un style spécifique type bouton
           >
             Ouvrir l’éditeur →
           </button>

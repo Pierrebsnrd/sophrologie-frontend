@@ -5,7 +5,7 @@ import ContactForm from './ContactForm';
 import ContactInfo from './ContactInfo';
 import TestimonialForm from './TestimonialForm';
 import TestimonialCard from './TestimonialCard';
-import Calendly from './Calendly';
+import Resalib from './Resalib';
 import Map from './Map';
 import api from '../utils/api';
 import styles from '../styles/components/DynamicPageRenderer.module.css';
@@ -286,7 +286,7 @@ const TestimonialListSection = ({ section }) => {
 // Nouveau composant pour le widget de rendez-vous
 const AppointmentWidgetSection = ({ section }) => (
   <div>
-    <Calendly />
+    <Resalib />
   </div>
 );
 
@@ -393,8 +393,8 @@ const DynamicPageRenderer = ({ pageId, fallbackContent = null }) => {
           </section>
         );
 
-      case 'calendly':
-        return <Calendly key={key} />;
+      case 'resalib':
+        return <Resalib key={key} />;
 
       default:
         console.warn(`Type de section non supporté: ${section.type}`);

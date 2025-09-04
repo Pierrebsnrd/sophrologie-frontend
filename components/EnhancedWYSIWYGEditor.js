@@ -7,7 +7,7 @@ import ContactForm from './ContactForm';
 import ContactInfo from './ContactInfo';
 import TestimonialForm from './TestimonialForm';
 import TestimonialCard from './TestimonialCard';
-import Calendly from './Calendly';
+import Resalib from './Resalib';
 import Map from './Map';
 import api from '../utils/api';
 import styles from '../styles/components/EnhancedWYSIWYGEditor.module.css';
@@ -615,7 +615,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     }
 
     if (section.type === 'appointment-widget') {
-      return <Calendly />;
+      return <Resalib />;
     }
 
     if (section.type === 'contact-form-map') {
