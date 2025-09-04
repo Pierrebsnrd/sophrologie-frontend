@@ -121,7 +121,7 @@ export default function AdminDashboard() {
 
   const handleReply = async (msg) => {
     const subject = encodeURIComponent(`Réponse à votre message`);
-    const body = encodeURIComponent(`Bonjour ${msg.name},\n\nMerci pour votre message.\n\nCordialement,\nStéphanie Habert\nSophrologue\n06 11 42 17 65`);
+    const body = encodeURIComponent(`Bonjour ${msg.name},\n\nCordialement,\nStéphanie Habert\nSophrologue\n06 11 42 17 65`);
 
     // Construire l'URL mailto avec le sujet et le corps
     window.location.href = `mailto:${msg.email}?subject=${subject}&body=${body}`;
