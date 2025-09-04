@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import SimplifiedVisualEditor from '../../../../components/SimplifiedVisualEditor';
+import EnhancedWYSIWYGEditor from '../../../../components/EnhancedWYSIWYGEditor';
 
 export default function SimplifiedVisualEditPage() {
   const router = useRouter();
@@ -75,7 +75,7 @@ export default function SimplifiedVisualEditPage() {
         <meta name="description" content={`Édition simplifiée de la page ${pageTitle}`} />
       </Head>
 
-      <SimplifiedVisualEditor pageId={pageId} />
+      <EnhancedWYSIWYGEditor pageId={pageId} />
     </>
   );
 }
