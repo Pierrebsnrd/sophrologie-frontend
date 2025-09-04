@@ -3226,11 +3226,6 @@ react-beautiful-dnd@^13.1.1:
     redux "^4.0.4"
     use-memo-one "^1.1.1"
 
-react-calendly@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/react-calendly/-/react-calendly-4.4.0.tgz#ce4f09ca3232b61cdcdac7dc1b9b1ec4e7a0c3c2"
-  integrity sha512-kMd8fEby0plL5aCebhjq9aesOJ6YWcmR3Pjs3bufncykrp7b6TryaCnWGoq4xZc/oipyudAVCIRgPVUjUEr8nQ==
-
 react-dom@18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
