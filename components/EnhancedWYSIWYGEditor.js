@@ -23,7 +23,6 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // États pour les modes et modals
-  const [currentMode, setCurrentMode] = useState('wysiwyg');
   const [showVersionModal, setShowVersionModal] = useState(false);
   const [versions, setVersions] = useState([]);
   const [selectedVersion, setSelectedVersion] = useState(null);
@@ -74,7 +73,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     try {
       setLoading(true);
       const response = await api.get(`/admin/pages/${pageId}?includeVersions=true`);
-      
+
       if (response.data.success) {
         const data = response.data.data;
         setPageData(data);
@@ -124,7 +123,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
 
     try {
       setAutoSaving(true);
-      
+
       const draftData = {
         title: pageData.title,
         metaDescription: pageData.metaDescription,
@@ -132,7 +131,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
       };
 
       await api.post(`/admin/pages/${pageId}/draft`, draftData);
-      
+
       setLastSaved(new Date());
       lastAutoSaveRef.current = new Date();
       console.log('✅ Auto-sauvegarde réussie');
@@ -149,7 +148,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
 
     try {
       setSaving(true);
-      
+
       const updateData = {
         title: pageData.title,
         metaDescription: pageData.metaDescription,
@@ -163,9 +162,9 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
       if (response.data.success) {
         setLastSaved(new Date());
         setHasUnsavedChanges(false);
-        
+
         await fetchVersions();
-        
+
         console.log('✅ Sauvegarde réussie');
       }
     } catch (err) {
@@ -198,7 +197,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     if (!editingElement || !pageData) return;
 
     const [sectionId, field] = editingElement.split('-');
-    
+
     setPageData(prev => ({
       ...prev,
       sections: prev.sections.map(section => {
@@ -241,6 +240,107 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
       setError(err.response?.data?.message || 'Erreur de restauration');
     }
   }, [selectedVersion, versionComment, pageId, fetchPageData]);
+
+  const renderTestimonialListSection = useCallback((section) => {
+    const [testimonials, setTestimonials] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [showAll, setShowAll] = useState(false);
+
+    useEffect(() => {
+      const fetchTestimonials = async () => {
+        if (!section.fetchFromApi) {
+          setTestimonials(section.staticTestimonials || []);
+          setLoading(false);
+          return;
+        }
+
+        try {
+          const response = await api.get('/temoignage/all');
+          const apiTestimonials = Array.isArray(response.data?.data?.temoignages)
+            ? response.data.data.temoignages
+            : [];
+
+          // Combiner témoignages statiques et API
+          const combined = [
+            ...(section.staticTestimonials || []),
+            ...apiTestimonials
+          ];
+
+          setTestimonials(combined);
+        } catch (error) {
+          console.error('Erreur chargement témoignages:', error);
+          setTestimonials(section.staticTestimonials || []);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchTestimonials();
+    }, [section.fetchFromApi, section.staticTestimonials]);
+
+    const sortedTestimonials = testimonials.sort((a, b) =>
+      new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date)
+    );
+
+    const visibleTestimonials = showAll ? sortedTestimonials : sortedTestimonials.slice(0, 4);
+
+    return (
+      <section className={`${styles.publicSection} ${isEditing ? styles.editingMode : ''}`}>
+        <div className={styles.publicSectionInner}>
+          {section.title && (
+            <EditableText
+              value={section.title}
+              onEdit={(value) => startEditing(`${section.id}.title`, value)}
+              onSave={() => saveEdit('title', section)}
+              onCancel={cancelEdit}
+              isEditing={editingElement === `${section.id}.title`}
+              editingValue={editingValue}
+              setEditingValue={setEditingValue}
+              className={styles.publicSectionTitle}
+              placeholder="Titre de la section témoignages"
+            />
+          )}
+
+          {loading ? (
+            <div className={styles.loadingSpinner}>Chargement des témoignages...</div>
+          ) : (
+            <div className={styles.publicTestimonialsGrid}>
+              {visibleTestimonials.map((testimonial, index) => (
+                <div key={testimonial._id || `testimonial-${index}`} className={styles.publicTestimonialCard}>
+                  <div className={styles.publicTestimonialMessage}>
+                    "{testimonial.message}"
+                  </div>
+                  <div className={styles.publicTestimonialAuthor}>
+                    — {testimonial.name || testimonial.author}
+                  </div>
+                  {testimonial.createdAt && (
+                    <div className={styles.publicTestimonialDate}>
+                      {new Date(testimonial.createdAt).toLocaleDateString('fr-FR')}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {sortedTestimonials.length > 4 && (
+            <div className={styles.publicLoadMoreContainer}>
+              <button
+                className={styles.publicLoadMoreButton}
+                onClick={() => setShowAll(!showAll)}
+              >
+                {showAll ? 'Masquer les anciens témoignages' : 'Afficher tous les témoignages'}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.sectionIndicator}>
+          <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
+        </div>
+      </section>
+    );
+  }, [editingElement, editingValue, startEditing, saveEdit, cancelEdit]);
 
   // Rendu d'un aperçu de section pour le mode structure
   const renderSectionPreview = useCallback((section) => {
@@ -293,6 +393,9 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
           </div>
         );
 
+      case 'testimonial-list':
+        return renderTestimonialListSection(section);
+
       default:
         return (
           <div className={styles.previewDefault}>
@@ -303,57 +406,6 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     }
   }, []);
 
-  // Rendu du mode structure
-  const renderStructureMode = useCallback(() => {
-    if (!pageData || !pageData.sections) {
-      return (
-        <div className={styles.emptyState}>
-          <h2>Aucune section trouvée</h2>
-          <p>Cette page ne contient pas encore de sections à afficher.</p>
-        </div>
-      );
-    }
-
-    const sortedSections = [...pageData.sections].sort((a, b) => (a.order || 0) - (b.order || 0));
-
-    return (
-      <div className={styles.structureMode}>
-        <div className={styles.structureHeader}>
-          <h2>Structure de la page : {pageNames[pageId]}</h2>
-          <p>Vue d'ensemble de l'organisation des sections de votre page</p>
-        </div>
-
-        <div className={styles.structureList}>
-          {sortedSections.map((section, index) => (
-            <div key={section.id} className={styles.structureItem}>
-              <div className={styles.structureInfo}>
-                <div className={styles.structureOrder}>
-                  {index + 1}
-                </div>
-                
-                <div className={styles.structureDetails}>
-                  <span className={styles.structureType}>
-                    {sectionTypeLabels[section.type] || section.type}
-                  </span>
-                  <h3 className={styles.structureTitle}>
-                    {section.title || 'Section sans titre'}
-                  </h3>
-                  <span className={styles.structureVisibility}>
-                    {section.settings?.visible !== false ? 'Visible' : 'Masquée'}
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.structurePreview}>
-                {renderSectionPreview(section)}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }, [pageData, pageId, pageNames, renderSectionPreview]);
-
   // Rendu des sections WYSIWYG avec style fidèle au site public
   const renderWYSIWYGSection = useCallback((section, index) => {
     const isEditing = editingElement?.startsWith(section.id);
@@ -361,8 +413,8 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     // Section Hero
     if (section.type === 'hero') {
       return (
-        <section 
-          key={section.id} 
+        <section
+          key={section.id}
           className={`${styles.publicHero} ${isEditing ? styles.editingMode : ''}`}
         >
           {section.image?.url && (
@@ -402,7 +454,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               />
             )}
           </div>
-          
+
           <div className={styles.sectionIndicator}>
             <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
@@ -412,12 +464,11 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
 
     // Section Texte
     if (section.type === 'text') {
-      const sectionClasses = `${styles.publicSection} ${
-        section.settings?.backgroundColor === '#f0fdfa' ? styles.publicSectionAlt : ''
-      }`;
+      const sectionClasses = `${styles.publicSection} ${section.settings?.backgroundColor === '#f0fdfa' ? styles.publicSectionAlt : ''
+        }`;
 
       return (
-        <section 
+        <section
           key={section.id}
           className={sectionClasses}
           style={{
@@ -455,7 +506,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               />
             )}
           </div>
-          
+
           <div className={styles.sectionIndicator}>
             <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
@@ -515,7 +566,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               </div>
             )}
           </div>
-          
+
           <div className={styles.sectionIndicator}>
             <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
@@ -569,7 +620,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               </div>
             )}
           </div>
-          
+
           <div className={styles.sectionIndicator}>
             <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
@@ -612,9 +663,8 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               <div className={styles.publicCtaButtons}>
                 {section.buttons.map((button, buttonIndex) => (
                   <Link key={buttonIndex} href={button.url || '#'}>
-                    <span className={`${styles.publicButton} ${
-                      button.style === 'secondary' ? styles.publicButtonSecondary : ''
-                    }`}>
+                    <span className={`${styles.publicButton} ${button.style === 'secondary' ? styles.publicButtonSecondary : ''
+                      }`}>
                       {button.text}
                     </span>
                   </Link>
@@ -622,7 +672,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               </div>
             )}
           </div>
-          
+
           <div className={styles.sectionIndicator}>
             <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
@@ -676,7 +726,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               )}
             </div>
           </div>
-          
+
           <div className={styles.sectionIndicator}>
             <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
@@ -702,7 +752,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
               </div>
             ))}
           </div>
-          
+
           <div className={styles.sectionIndicator}>
             <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
           </div>
@@ -770,7 +820,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
         <h3>⚠️ Section non supportée</h3>
         <p>Type: <code>{section.type}</code></p>
         <p>Cette section n'est pas encore implémentée dans l'éditeur visuel.</p>
-        
+
         <div className={styles.sectionIndicator}>
           <span className={styles.sectionLabel}>Section {index + 1}: {section.type}</span>
         </div>
@@ -779,15 +829,15 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
   }, [editingElement, editingValue, startEditing, saveEdit, cancelEdit]);
 
   // Composant pour l'édition de texte inline
-  const EditableText = ({ 
-    value, 
-    onEdit, 
-    onSave, 
-    onCancel, 
-    isEditing, 
-    editingValue, 
-    setEditingValue, 
-    className, 
+  const EditableText = ({
+    value,
+    onEdit,
+    onSave,
+    onCancel,
+    isEditing,
+    editingValue,
+    setEditingValue,
+    className,
     placeholder,
     multiline = false
   }) => {
@@ -835,7 +885,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
     }
 
     return (
-      <div 
+      <div
         className={`${styles.editableElement} ${className}`}
         onClick={() => onEdit(value)}
       >
@@ -894,20 +944,8 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
           <Link href="/admin/pages" className={styles.backButton}>
             ← Retour
           </Link>
-          
-          <button
-            className={`${styles.modeButton} ${currentMode === 'wysiwyg' ? styles.active : ''}`}
-            onClick={() => setCurrentMode('wysiwyg')}
-          >
-            🎨 Visuel
-          </button>
-          
-          <button
-            className={`${styles.modeButton} ${currentMode === 'structure' ? styles.active : ''}`}
-            onClick={() => setCurrentMode('structure')}
-          >
-            📋 Structure
-          </button>
+
+        <span className={styles.toolbarModeLabel}>🎨 Édition visuelle</span>
         </div>
 
         <div className={styles.toolbarCenter}>
@@ -944,17 +982,11 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
       </div>
 
       {/* Contenu de l'éditeur selon le mode */}
-      <div className={styles.editorContent}>
-        {currentMode === 'wysiwyg' ? (
-          <div className={styles.wysiwygContent}>
-            {pageData && pageData.sections
-              .sort((a, b) => (a.order || 0) - (b.order || 0))
-              .map((section, index) => renderWYSIWYGSection(section, index))
-            }
-          </div>
-        ) : (
-          renderStructureMode()
-        )}
+      <div className={styles.wysiwygContent}>
+        {pageData && pageData.sections
+          .sort((a, b) => (a.order || 0) - (b.order || 0))
+          .map((section, index) => renderWYSIWYGSection(section, index))
+        }
       </div>
 
       {/* Modal de gestion des versions */}
@@ -963,23 +995,22 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
           <div className={styles.versionModal}>
             <div className={styles.modalHeader}>
               <h2>Historique des versions</h2>
-              <button 
+              <button
                 className={styles.closeButton}
                 onClick={() => setShowVersionModal(false)}
               >
                 ✕
               </button>
             </div>
-            
+
             <div className={styles.versionModalBody}>
               <div className={styles.versionList}>
                 <h3>Versions disponibles</h3>
                 {versions.map((version) => (
                   <div
                     key={version.versionNumber}
-                    className={`${styles.versionItem} ${
-                      selectedVersion?.versionNumber === version.versionNumber ? styles.selected : ''
-                    }`}
+                    className={`${styles.versionItem} ${selectedVersion?.versionNumber === version.versionNumber ? styles.selected : ''
+                      }`}
                     onClick={() => setSelectedVersion(version)}
                   >
                     <div className={styles.versionHeader}>
@@ -996,11 +1027,11 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
                         </span>
                       </div>
                     </div>
-                    
+
                     <div className={styles.versionComment}>
                       {version.comment || 'Aucun commentaire'}
                     </div>
-                    
+
                     {version.createdBy && (
                       <div className={styles.versionAuthor}>
                         Par {version.createdBy}
@@ -1020,7 +1051,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
                     onChange={(e) => setVersionComment(e.target.value)}
                   />
                   <div className={styles.restoreActions}>
-                    <button 
+                    <button
                       className={styles.cancelButton}
                       onClick={() => {
                         setSelectedVersion(null);
@@ -1029,7 +1060,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
                     >
                       Annuler
                     </button>
-                    <button 
+                    <button
                       className={styles.restoreButton}
                       onClick={handleRestoreVersion}
                     >
@@ -1060,7 +1091,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
                   <li>Basculez entre les modes selon vos besoins</li>
                 </ul>
               </div>
-              
+
               <div className={styles.helpSection}>
                 <h4>🎯 Édition directe</h4>
                 <ul>
@@ -1070,7 +1101,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
                   <li>Ctrl+Entrée pour les textes longs</li>
                 </ul>
               </div>
-              
+
               <div className={styles.helpSection}>
                 <h4>💾 Sauvegarde</h4>
                 <ul>
@@ -1079,7 +1110,7 @@ const EnhancedWYSIWYGEditor = ({ pageId }) => {
                   <li>L'historique conserve toutes les versions</li>
                 </ul>
               </div>
-              
+
               <div className={styles.helpSection}>
                 <h4>🕒 Historique</h4>
                 <ul>
