@@ -121,7 +121,7 @@ Le fichier `utils/api.js` configure :
 - ✅ Formulaire de contact fonctionnel
 - ✅ Soumission témoignages avec modération
 - ✅ SEO optimisé avec sitemap automatique
-- ✅ Redirection vers Doctolib pour RDV
+- ✅ Redirection vers Resalib pour RDV
 
 ### Administration
 - ✅ Authentification sécurisée
