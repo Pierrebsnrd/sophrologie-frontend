@@ -50,28 +50,42 @@ yarn postbuild
 ```
 frontend/
 ├── components/          # Composants React réutilisables
+│   ├── BackgroundMusic.js  # Lecteur de musique de fond
 │   ├── ContactForm.js   # Formulaire de contact
-│   ├── Header.js        # Navigation
+│   ├── ContactInfo.js   # Informations de contact
 │   ├── Footer.js        # Pied de page
-│   ├── SEO.js          # Gestion meta tags
-│   ├── TestimonialCard.js
-│   └── TestimonialForm.js
+│   ├── Header.js        # Navigation principale
+│   ├── Home.js          # Contenu page d'accueil
+│   ├── Map.js           # Carte Google Maps
+│   ├── Resalib.js       # Widget de réservation
+│   ├── SEO.js           # Gestion meta tags
+│   ├── TestimonialCard.js  # Carte témoignage
+│   └── TestimonialForm.js  # Formulaire témoignage
 ├── pages/              # Pages Next.js (routing automatique)
 │   ├── admin/          # Interface d'administration
-│   ├── index.js        # Accueil
+│   │   ├── index.js    # Dashboard admin
+│   │   └── login.js    # Connexion admin
+│   ├── _app.js         # Configuration globale App
+│   ├── _document.js    # Document HTML personnalisé
+│   ├── charte.js       # Charte éthique
+│   ├── contact.js      # Page contact
+│   ├── index.js        # Page d'accueil
 │   ├── qui-suis-je.js  # Présentation
-│   ├── temoignages.js  # Témoignages
-│   ├── contact.js      # Contact
-│   ├── tarifs.js       # Tarifs
-│   └── rdv.js          # Rendez-vous
+│   ├── rdv.js          # Prise de rendez-vous
+│   ├── tarifs.js       # Tarifs et prestations
+│   └── temoignages.js  # Témoignages clients
 ├── styles/             # CSS Modules
 │   ├── components/     # Styles des composants
 │   ├── pages/          # Styles des pages
 │   └── globals.css     # Styles globaux
 ├── utils/
 │   └── api.js          # Configuration Axios
-└── public/             # Assets statiques
-    └── images/
+├── public/             # Assets statiques
+    ├── bannieres/      # Images de bannières
+    ├── icons/          # Favicons et icônes
+    └── logo/           # Logos
+    ├── music/          # Musique backgroundMusic
+    └── profile/        # Image du profile
 ```
 
 ## 🌐 Pages du site
@@ -80,11 +94,13 @@ frontend/
 |-------|-------------|-----------------|
 | `/` | Page d'accueil | Présentation sophrologie, bienfaits, CTA |
 | `/qui-suis-je` | Présentation | Parcours de Stéphanie Habert |
-| `/temoignages` | Témoignages clients | Affichage + formulaire de soumission |
-| `/contact` | Contact | Formulaire avec validation |
 | `/tarifs` | Tarifs et prestations | Grille tarifaire détaillée |
 | `/rdv` | Prise de rendez-vous | Redirection Doctolib |
-| `/admin` | Administration | Interface de gestion (login requis) |
+| `/temoignages` | Témoignages clients | Affichage + formulaire de soumission |
+| `/contact` | Contact | Formulaire avec validation |
+| `/charte` | Charte éthique | Code déontologique |
+| `/admin` | Administration | Dashboard de gestion (login requis) |
+| `/admin/login` | Connexion admin | Authentification JWT |
 
 ## 🧩 Composants clés
 
@@ -93,11 +109,18 @@ frontend/
 - **Footer** : Informations de contact et liens
 - **SEO** : Meta tags dynamiques par page
 
+### Contenu & Interaction
+- **Home** : Composant principal de la page d'accueil
+- **BackgroundMusic** : Lecteur audio pour ambiance
+- **Map** : Intégration Google Maps
+- **Resalib** : Widget de réservation en ligne
+
 ### Formulaires
 - **ContactForm** : Contact avec validation temps réel
 - **TestimonialForm** : Soumission témoignages
 
 ### Affichage
+- **ContactInfo** : bloc d'informations de contact
 - **TestimonialCard** : Carte témoignage individuelle
 
 ## ⚙️ Configuration API
@@ -121,7 +144,9 @@ Le fichier `utils/api.js` configure :
 - ✅ Formulaire de contact fonctionnel
 - ✅ Soumission témoignages avec modération
 - ✅ SEO optimisé avec sitemap automatique
-- ✅ Redirection vers Resalib pour RDV
+- ✅ Widget de réservation Resalib intégré
+- ✅ Carte Google Maps interactive
+- ✅ Lecteur de musique de fond (page qui-suis-je)
 
 ### Administration
 - ✅ Authentification sécurisée
