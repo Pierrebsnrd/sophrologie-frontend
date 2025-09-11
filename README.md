@@ -18,6 +18,10 @@ Site web pour le cabinet de sophrologie de Stéphanie Habert à Villepreux.
   - [Formulaires](#formulaires)
   - [Affichage](#affichage)
 - [⚙️ Configuration API](#️-configuration-api)
+- [🔍 Linting et formatage](#-linting-et-formatage)
+  - [ESLint](#eslint)
+  - [Prettier](#prettier)
+  - [Scripts disponibles](#scripts-disponibles)
 - [🎨 Styling](#-styling)
 - [📱 Fonctionnalités](#-fonctionnalités)
   - [Public](#public)
@@ -72,6 +76,8 @@ yarn postbuild
 - **Icônes** : React-icons
 - **SEO** : Next-sitemap
 - **Styling** : CSS Modules
+- **Linting** : ESLint avec configuration Next.js
+- **Formatage** : Prettier
 
 ## 📁 Structure du projet
 
@@ -163,6 +169,55 @@ Le fichier `utils/api.js` configure :
 - **Intercepteurs JWT** : Authentification automatique admin
 - **Gestion erreurs** : Redirection si token expiré
 - **Timeout** : 10 secondes max par requête
+
+## 🔍 Linting et formatage
+
+### ESLint
+
+Le projet utilise ESLint avec la configuration Next.js pour maintenir la qualité du code :
+
+- **Configuration** : `eslint-config-next` avec règles React, accessibility, et import
+- **Plugins** : 
+  - `eslint-plugin-react` : Règles spécifiques React
+  - `eslint-plugin-react-hooks` : Validation des hooks React
+  - `eslint-plugin-jsx-a11y` : Accessibilité JSX
+  - `eslint-plugin-import` : Organisation des imports
+  - `eslint-plugin-prettier` : Intégration avec Prettier
+
+### Prettier
+
+Prettier assure un formatage cohérent du code :
+
+- **Configuration** : Format automatique des fichiers JS, CSS, JSON, MD
+- **Intégration ESLint** : `eslint-config-prettier` évite les conflits
+- **Style** : Configuration standard avec règles Next.js
+
+### Scripts disponibles
+
+```bash
+# Linting
+yarn lint                # Vérification ESLint standard
+yarn lint:fix            # Correction automatique des erreurs ESLint
+yarn lint:strict         # Linting strict (0 warnings autorisés)
+
+# Formatage
+yarn format              # Formatage avec Prettier
+yarn format:check        # Vérification du formatage sans modification
+
+# Combinés
+yarn check               # Lint strict + vérification format
+yarn fix                 # Correction lint + formatage automatique
+```
+
+**Workflow recommandé :**
+
+```bash
+# Avant commit
+yarn check               # Vérifier que tout est conforme
+
+# Correction automatique si nécessaire  
+yarn fix                 # Corriger lint + format automatiquement
+```
 
 ## 🎨 Styling
 
