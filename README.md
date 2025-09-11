@@ -2,6 +2,29 @@
 
 Site web pour le cabinet de sophrologie de Stéphanie Habert à Villepreux.
 
+## 📋 Table des matières
+
+- [🚀 Installation et démarrage](#-installation-et-démarrage)
+  - [Prérequis](#prérequis)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Démarrage](#démarrage)
+- [🛠 Stack technique](#-stack-technique)
+- [📁 Structure du projet](#-structure-du-projet)
+- [🌐 Pages du site](#-pages-du-site)
+- [🧩 Composants clés](#-composants-clés)
+  - [Navigation & Layout](#navigation--layout)
+  - [Contenu & Interaction](#contenu--interaction)
+  - [Formulaires](#formulaires)
+  - [Affichage](#affichage)
+- [⚙️ Configuration API](#️-configuration-api)
+- [🎨 Styling](#-styling)
+- [📱 Fonctionnalités](#-fonctionnalités)
+  - [Public](#public)
+  - [Administration](#administration)
+- [🌐 Hébergement](#-hébergement)
+  - [Vercel (Recommandé)](#vercel-recommandé)
+
 ## 🚀 Installation et démarrage
 
 ### Prérequis
