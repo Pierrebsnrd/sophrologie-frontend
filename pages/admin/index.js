@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "../../styles/pages/Index.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -52,9 +52,9 @@ export default function AdminDashboard() {
     }
     fetchData();
     fetchAdminProfile();
-  }, [router]);
+  }, [router, fetchData, fetchAdminProfile]);
 
-  const fetchData = async (temoignagePage = 1, messagePage = 1) => {
+  const fetchData = useCallback( async (temoignagePage = 1, messagePage = 1) => {
     setLoading(true);
     setError("");
     try {
@@ -101,9 +101,9 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  },[currentPageTemoignages, currentPageMessages]);
 
-  const fetchAdminProfile = async () => {
+  const fetchAdminProfile = useCallback (async () => {
     try {
       const response = await api.get("/admin/profile");
       if (response.data.success) {
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
         router.replace("/admin/login");
       }
     }
-  };
+  },[]);
 
   const handleTemoignagePage = (page) => {
     fetchData(page, currentPageMessages);
