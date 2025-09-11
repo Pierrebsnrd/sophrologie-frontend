@@ -10,7 +10,7 @@ function isValidEmail(email) {
 function isValidPhone(phone) {
   // Accepte différents formats français : 06.12.34.56.78, 06 12 34 56 78, 0612345678, +33612345678
   const phoneRegex = /^(?:(?:\+33|0)[1-9](?:[0-9]{8}))$/;
-  const cleanPhone = phone.replace(/[\s\.\-]/g, ''); // Retire espaces, points, tirets
+  const cleanPhone = phone.replace(/[\s\.\-]/g, ""); // Retire espaces, points, tirets
   return phoneRegex.test(cleanPhone);
 }
 
@@ -22,14 +22,14 @@ export default function ContactForm() {
     name: "",
     email: "",
     phone: "",
-    message: ""
+    message: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     setErrorMessages([]);
     setConfirmationMessage("");
@@ -41,20 +41,25 @@ export default function ContactForm() {
 
     // Validation front
     if (!name.trim()) newErrors.push("Le prénom est requis.");
-    else if (name.trim().length < 2) newErrors.push("Le prénom doit contenir au moins 2 caractères.");
+    else if (name.trim().length < 2)
+      newErrors.push("Le prénom doit contenir au moins 2 caractères.");
 
     if (!email.trim()) newErrors.push("L'email est requis.");
-    else if (!isValidEmail(email)) newErrors.push("Veuillez entrer un email valide.");
+    else if (!isValidEmail(email))
+      newErrors.push("Veuillez entrer un email valide.");
 
     // Validation téléphone (obligatoire)
     if (!phone.trim()) {
       newErrors.push("Le numéro de téléphone est requis.");
     } else if (!isValidPhone(phone)) {
-      newErrors.push("Veuillez entrer un numéro de téléphone valide (format français).");
+      newErrors.push(
+        "Veuillez entrer un numéro de téléphone valide (format français).",
+      );
     }
 
     if (!message.trim()) newErrors.push("Le message est requis.");
-    else if (message.trim().length < 10) newErrors.push("Le message doit contenir au moins 10 caractères.");
+    else if (message.trim().length < 10)
+      newErrors.push("Le message doit contenir au moins 10 caractères.");
 
     if (newErrors.length > 0) {
       setErrorMessages(newErrors);
@@ -69,7 +74,9 @@ export default function ContactForm() {
       const res = await api.post("/contact", { name, email, phone, message });
 
       if (res.data.success) {
-        setConfirmationMessage(res.data.message || "Votre message a bien été envoyé.");
+        setConfirmationMessage(
+          res.data.message || "Votre message a bien été envoyé.",
+        );
         setFormData({ name: "", email: "", phone: "", message: "" });
       } else if (res.data.errors) {
         // Backend renvoie erreurs champ par champ
@@ -82,7 +89,10 @@ export default function ContactForm() {
       if (err.response?.data?.errors) {
         setErrorMessages(Object.values(err.response.data.errors));
       } else {
-        setErrorMessages([err.response?.data?.message || "Une erreur est survenue lors de l'envoi."]);
+        setErrorMessages([
+          err.response?.data?.message ||
+            "Une erreur est survenue lors de l'envoi.",
+        ]);
       }
     } finally {
       setSending(false);
@@ -93,10 +103,13 @@ export default function ContactForm() {
     <section className={styles.contactFormSection}>
       <h2>Formulaire de contact</h2>
       <p className={styles.contactFormText}>
-        Vous avez des questions sur la sophrologie ? N'hésitez pas à me contacter, je vous répondrai dans les plus brefs délais.
+        Vous avez des questions sur la sophrologie ? N'hésitez pas à me
+        contacter, je vous répondrai dans les plus brefs délais.
       </p>
 
-      {confirmationMessage && <p className={styles.confirmationMessage}>{confirmationMessage}</p>}
+      {confirmationMessage && (
+        <p className={styles.confirmationMessage}>{confirmationMessage}</p>
+      )}
 
       {errorMessages.length > 0 && (
         <div className={styles.errorBox}>

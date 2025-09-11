@@ -1,6 +1,6 @@
-import React from 'react';
-import styles from '../styles/components/Resalib.module.css';
-import Image from 'next/image';
+import React from "react";
+import styles from "../styles/components/Resalib.module.css";
+import Image from "next/image";
 
 export default function Resalib() {
   return (
@@ -23,8 +23,8 @@ export default function Resalib() {
       <div className={styles.formContainer}>
         <h2 className={styles.title}>Réservez votre consultation</h2>
         <p className={styles.subtitle}>
-          Choisissez directement le créneau qui vous convient dans l'agenda ci-dessous.
-          Vous recevrez une confirmation automatique par email.
+          Choisissez directement le créneau qui vous convient dans l'agenda
+          ci-dessous. Vous recevrez une confirmation automatique par email.
         </p>
 
         <div className={styles.resalibContainer}>

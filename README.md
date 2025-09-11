@@ -28,22 +28,27 @@ Site web pour le cabinet de sophrologie de Stéphanie Habert à Villepreux.
 ## 🚀 Installation et démarrage
 
 ### Prérequis
+
 - Node.js (version 16+)
 - Yarn
 - Backend API en cours d'exécution
 
 ### Installation
+
 ```bash
 yarn install
 ```
 
 ### Configuration
+
 Créer un fichier `.env.local` :
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
 
 ### Démarrage
+
 ```bash
 # Développement (port 3001)
 yarn dev
@@ -113,42 +118,47 @@ frontend/
 
 ## 🌐 Pages du site
 
-| Route | Description | Fonctionnalités |
-|-------|-------------|-----------------|
-| `/` | Page d'accueil | Présentation sophrologie, bienfaits, CTA |
-| `/qui-suis-je` | Présentation | Parcours de Stéphanie Habert |
-| `/tarifs` | Tarifs et prestations | Grille tarifaire détaillée |
-| `/rdv` | Prise de rendez-vous | Redirection Doctolib |
-| `/temoignages` | Témoignages clients | Affichage + formulaire de soumission |
-| `/contact` | Contact | Formulaire avec validation |
-| `/charte` | Charte éthique | Code déontologique |
-| `/admin` | Administration | Dashboard de gestion (login requis) |
-| `/admin/login` | Connexion admin | Authentification JWT |
+| Route          | Description           | Fonctionnalités                          |
+| -------------- | --------------------- | ---------------------------------------- |
+| `/`            | Page d'accueil        | Présentation sophrologie, bienfaits, CTA |
+| `/qui-suis-je` | Présentation          | Parcours de Stéphanie Habert             |
+| `/tarifs`      | Tarifs et prestations | Grille tarifaire détaillée               |
+| `/rdv`         | Prise de rendez-vous  | Redirection Doctolib                     |
+| `/temoignages` | Témoignages clients   | Affichage + formulaire de soumission     |
+| `/contact`     | Contact               | Formulaire avec validation               |
+| `/charte`      | Charte éthique        | Code déontologique                       |
+| `/admin`       | Administration        | Dashboard de gestion (login requis)      |
+| `/admin/login` | Connexion admin       | Authentification JWT                     |
 
 ## 🧩 Composants clés
 
 ### Navigation & Layout
+
 - **Header** : Navigation responsive avec menu mobile
 - **Footer** : Informations de contact et liens
 - **SEO** : Meta tags dynamiques par page
 
 ### Contenu & Interaction
+
 - **Home** : Composant principal de la page d'accueil
 - **BackgroundMusic** : Lecteur audio pour ambiance
 - **Map** : Intégration Google Maps
 - **Resalib** : Widget de réservation en ligne
 
 ### Formulaires
+
 - **ContactForm** : Contact avec validation temps réel
 - **TestimonialForm** : Soumission témoignages
 
 ### Affichage
+
 - **ContactInfo** : bloc d'informations de contact
 - **TestimonialCard** : Carte témoignage individuelle
 
 ## ⚙️ Configuration API
 
 Le fichier `utils/api.js` configure :
+
 - **Base URL** : Connexion vers le backend
 - **Intercepteurs JWT** : Authentification automatique admin
 - **Gestion erreurs** : Redirection si token expiré
@@ -163,6 +173,7 @@ Le fichier `utils/api.js` configure :
 ## 📱 Fonctionnalités
 
 ### Public
+
 - ✅ Site vitrine responsive
 - ✅ Formulaire de contact fonctionnel
 - ✅ Soumission témoignages avec modération
@@ -172,6 +183,7 @@ Le fichier `utils/api.js` configure :
 - ✅ Lecteur de musique de fond (page qui-suis-je)
 
 ### Administration
+
 - ✅ Authentification sécurisée
 - ✅ Gestion des témoignages (validation/suppression)
 - ✅ Consultation messages de contact

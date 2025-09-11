@@ -21,7 +21,11 @@
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.3) 0%, rgba(26, 32, 44, 0.6) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(72, 187, 120, 0.3) 0%,
+    rgba(26, 32, 44, 0.6) 100%
+  );
   z-index: 2;
   display: flex;
   justify-content: center;
@@ -38,7 +42,7 @@
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   opacity: 0;
   animation: fadeInUp 1.5s ease-out 0.5s forwards;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
 }
 
 /* PAGE LAYOUT */
@@ -66,7 +70,7 @@
 }
 
 .formContainer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -89,7 +93,7 @@
 }
 
 .title::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 50%;
@@ -122,13 +126,15 @@
   width: 100%;
   max-width: 700px;
   border-radius: 15px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .resalibCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
 }
 
 /* ANIMATIONS */

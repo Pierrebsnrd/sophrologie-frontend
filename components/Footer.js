@@ -1,13 +1,15 @@
-import React from 'react';
-import { FaInstagram, FaFacebookF } from 'react-icons/fa';
-import styles from '../styles/components/Footer.module.css';
+import React from "react";
+import { FaInstagram, FaFacebookF } from "react-icons/fa";
+import styles from "../styles/components/Footer.module.css";
 
 export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
         <p>
-          © {new Date().getFullYear()} Stéphanie Habert - Sophrologue à Villepreux<br />
+          © {new Date().getFullYear()} Stéphanie Habert - Sophrologue à
+          Villepreux
+          <br />
           <span className={styles.credit}>Site créé par Pierre Boisnard</span>
         </p>
         <div className={styles.socialIcons}>

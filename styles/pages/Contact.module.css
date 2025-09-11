@@ -33,7 +33,11 @@
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.3), rgba(26, 32, 44, 0.6));
+  background: linear-gradient(
+    135deg,
+    rgba(72, 187, 120, 0.3),
+    rgba(26, 32, 44, 0.6)
+  );
   z-index: 2;
   display: flex;
   justify-content: center;
@@ -50,7 +54,7 @@
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   opacity: 0;
   animation: fadeInUp 1.5s ease-out 0.5s forwards;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
 }
 
 /* PAGE LAYOUT */
@@ -87,7 +91,7 @@
 }
 
 .contactFormMapSection::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -111,16 +115,16 @@
     height: 50vh;
     min-height: 300px;
   }
-  
+
   .contentWrapper {
     padding: 2rem 1rem;
     gap: 3rem;
   }
-  
+
   .contactFormMapSection {
     padding: 2rem;
   }
-  
+
   .flexContainer {
     flex-direction: column;
     gap: 2rem;
@@ -138,7 +142,7 @@
     height: 45vh;
     min-height: 250px;
   }
-  
+
   .contactFormMapSection {
     padding: 1.5rem;
   }

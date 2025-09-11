@@ -28,7 +28,7 @@
 }
 
 .temoignageCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -95,7 +95,7 @@
 }
 
 .temoignageAuthor::before {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   top: -8px;

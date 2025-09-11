@@ -1,8 +1,7 @@
-import Home from '../components/Home';
+import Home from "../components/Home";
 import SEO from "../components/SEO";
 
 function Index() {
-
   return (
     <>
       <SEO

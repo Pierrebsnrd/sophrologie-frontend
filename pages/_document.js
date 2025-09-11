@@ -6,10 +6,19 @@ export default function Document() {
       <Head>
         <meta charSet="utf-8" />
         {/* Favicon commun */}
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon.png" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/icons/favicon.png"
+        />
         <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
         <link rel="shortcut icon" href="/icons/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/icons/apple-touch-icon.png"
+        />
       </Head>
       <body>
         <Main />

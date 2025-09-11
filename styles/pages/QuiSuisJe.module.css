@@ -41,7 +41,11 @@
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.4) 0%, rgba(26, 32, 44, 0.7) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(72, 187, 120, 0.4) 0%,
+    rgba(26, 32, 44, 0.7) 100%
+  );
   z-index: 2;
   display: flex;
   justify-content: center;
@@ -58,7 +62,7 @@
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   opacity: 0;
   animation: fadeInUp 1.5s ease-out 0.5s forwards;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
 }
 
 /* CONTENU PRINCIPAL */
@@ -90,7 +94,7 @@
 }
 
 .presentationSection::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -139,11 +143,11 @@
   letter-spacing: 1px;
   position: relative;
   display: inline-block;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
 }
 
 .title::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -169,7 +173,7 @@
   position: absolute;
   top: -20px;
   left: -20px;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
   opacity: 0.3;
 }
 
@@ -187,14 +191,23 @@
 }
 
 .historySection::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(72, 187, 120, 0.05) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(56, 161, 105, 0.05) 0%, transparent 50%);
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(72, 187, 120, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(56, 161, 105, 0.05) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
@@ -206,11 +219,11 @@
   letter-spacing: 1px;
   position: relative;
   display: inline-block;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
 }
 
 .historyTitle::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -263,13 +276,18 @@
 }
 
 .ctaButton::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.6s;
 }
 

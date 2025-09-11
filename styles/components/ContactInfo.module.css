@@ -27,7 +27,7 @@
 }
 
 .contactSection::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -49,7 +49,7 @@
 }
 
 .mainTitle::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 50%;

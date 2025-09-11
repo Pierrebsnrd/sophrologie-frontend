@@ -1,52 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import api from '../../utils/api';
-import styles from '../../styles/pages/Login.module.css';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import api from "../../utils/api";
+import styles from "../../styles/pages/Login.module.css";
 
 export default function AdminLogin() {
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (token) router.replace('/admin');
+    const token = localStorage.getItem("adminToken");
+    if (token) router.replace("/admin");
   }, [router]);
 
   const handleChange = (e) => {
     setCredentials((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await api.post('/admin/login', credentials);
-      
+      const response = await api.post("/admin/login", credentials);
+
       // ✅ Structure de réponse corrigée
       if (response.data.success) {
         const token = response.data.token; // ✅ Directement dans response.data.token
         if (token) {
-          localStorage.setItem('adminToken', token);
-          router.replace('/admin');
+          localStorage.setItem("adminToken", token);
+          router.replace("/admin");
         } else {
-          setError('Token non reçu');
+          setError("Token non reçu");
         }
       } else {
-        setError(response.data.error || 'Erreur de connexion');
+        setError(response.data.error || "Erreur de connexion");
       }
     } catch (err) {
-      console.error('Erreur de connexion:', err);
+      console.error("Erreur de connexion:", err);
       setError(
         err.response?.data?.error || // ✅ Utiliser 'error' au lieu de 'message'
-        'Erreur de connexion. Veuillez vérifier vos identifiants.'
+          "Erreur de connexion. Veuillez vérifier vos identifiants.",
       );
     } finally {
       setLoading(false);
@@ -114,7 +114,7 @@ export default function AdminLogin() {
                   Connexion en cours...
                 </div>
               ) : (
-                'Se connecter'
+                "Se connecter"
               )}
             </button>
           </form>

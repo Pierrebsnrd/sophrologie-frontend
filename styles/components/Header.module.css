@@ -1,7 +1,11 @@
 /* === CONTAINER PRINCIPAL === */
 .headerContainer {
   width: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 255, 254, 0.95) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 255, 254, 0.95) 100%
+  );
   backdrop-filter: blur(20px);
   box-shadow: 0 4px 20px rgba(72, 187, 120, 0.1);
   padding: 1rem 2rem;
@@ -77,7 +81,7 @@
 }
 
 .navLink::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -162,7 +166,6 @@
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px);
@@ -216,7 +219,6 @@
 
 /* === RESPONSIVE MOBILE STABLE === */
 @media (max-width: 768px) {
-
   .headerContainer {
     padding: 0 1rem !important;
     transition: none !important;

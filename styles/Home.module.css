@@ -33,7 +33,11 @@
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.3) 0%, rgba(26, 32, 44, 0.6) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(72, 187, 120, 0.3) 0%,
+    rgba(26, 32, 44, 0.6) 100%
+  );
   z-index: 2;
   display: flex;
   justify-content: center;
@@ -50,11 +54,12 @@
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   opacity: 0;
   animation: fadeInUp 1.5s ease-out 0.5s forwards;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
 }
 
 /* SECTIONS GÉNÉRALES */
-.section, .sectionAlt {
+.section,
+.sectionAlt {
   padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 2rem);
   text-align: center;
   position: relative;
@@ -73,19 +78,24 @@
 }
 
 .sectionAlt::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #48bb78 50%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #48bb78 50%,
+    transparent 100%
+  );
 }
 
 /* Séparateur entre les sections */
 .section::after,
 .sectionAlt::after {
-  content: '';
+  content: "";
   display: block;
   margin: 2.5rem auto 0;
   width: 60px;
@@ -94,25 +104,26 @@
   border-radius: 2px;
 }
 
-
 /* INNER CONTAINER */
 .sectionInner {
   max-width: 1000px;
   margin: 0 auto;
 }
 
-.sectionInner h2, .sectionTitle {
+.sectionInner h2,
+.sectionTitle {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   margin-bottom: 1.5rem;
   font-weight: 400;
   color: #2d5a3d;
   letter-spacing: 1px;
   position: relative;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
 }
 
-.sectionInner h2::after, .sectionTitle::after {
-  content: '';
+.sectionInner h2::after,
+.sectionTitle::after {
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 50%;
@@ -206,7 +217,7 @@
 }
 
 .card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -236,7 +247,7 @@
 }
 
 .card h3::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -275,13 +286,18 @@
 }
 
 .button::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.6s;
 }
 
@@ -315,7 +331,8 @@
     padding: 0 1rem;
   }
 
-  .section, .sectionAlt {
+  .section,
+  .sectionAlt {
     padding: 2rem 1rem;
   }
 
