@@ -4,5 +4,9 @@ module.exports = {
   changefreq: "weekly",
   priority: 0.7,
   sitemapSize: 5000,
-  exclude: ["/admin", "/admin/*"], // ⬅️ Exclusion explicite de toutes les pages admin
+  exclude: [
+    "/admin",
+    "/admin/*",
+    "/politique-de-confidentialite",
+  ],
 };
