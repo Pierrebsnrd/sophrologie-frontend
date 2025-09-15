@@ -9,6 +9,7 @@ const SEO = ({
   pageType = "website",
   specificJsonLd = null,
   keywords = "sophrologie, Villepreux, bien-être, stress, relaxation, Stéphanie Habert, sophrologue, accompagnement, sommeil, confiance en soi",
+  noIndex = false,
 }) => {
   // JSON-LD Global - Organisation/Personne
   const globalJsonLd = {
@@ -294,7 +295,12 @@ const SEO = ({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content="Stéphanie Habert" />
-      <meta name="robots" content="index, follow" />
+      {/* 👇 condition noIndex */}
+      {noIndex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow" />
+      )}
       <meta name="language" content="fr" />
       <meta name="revisit-after" content="7 days" />
 

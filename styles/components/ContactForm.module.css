@@ -202,6 +202,58 @@
   cursor: not-allowed;
 }
 
+/* Bouton en état de chargement */
+.contactSubmitButton.loading {
+  cursor: wait;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.contactSubmitButton.loading span {
+  opacity: 0.9;
+}
+
+/* Désactiver les inputs pendant l'envoi */
+.contactFormFields input:disabled,
+.contactFormFields textarea:disabled {
+  background: rgba(240, 240, 240, 0.7);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Ajouts dans TestimonialForm.module.css */
+
+.submitButton.loading {
+  cursor: wait;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.submitButton.loading span {
+  opacity: 0.9;
+}
+
+/* Styles généraux pour les formulaires en chargement */
+.formLoading {
+  pointer-events: none;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.formLoading input,
+.formLoading textarea {
+  background: rgba(240, 240, 240, 0.5);
+  cursor: not-allowed;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .contactFormFields input,

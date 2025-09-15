@@ -10,18 +10,19 @@
   }
 }
 
-/* FORM SECTION */
+/* SECTION PRINCIPALE */
 .post {
-  background: linear-gradient(145deg, #f0fdfa 0%, #ecfdf5 100%);
-  padding: 3rem;
-  border-radius: 30px;
-  box-shadow: 0 20px 40px rgba(72, 187, 120, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: clamp(2rem, 5vw, 3rem);
+  margin: clamp(2rem, 5vw, 4rem) auto 0;
+  box-shadow: 0 20px 40px rgba(72, 187, 120, 0.15);
   border: 1px solid rgba(72, 187, 120, 0.1);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
   opacity: 0;
-  animation: fadeInUp 1s ease-out 0.5s forwards;
+  animation: fadeInUp 1s ease-out 0.3s forwards;
 }
 
 .post::before {
@@ -30,25 +31,19 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    #48bb78 50%,
-    transparent 100%
-  );
+  height: 4px;
+  background: linear-gradient(90deg, #48bb78, #38a169, #2f855a);
 }
 
+/* TITRE ET TEXTE */
 .postTitle {
   font-size: clamp(1.5rem, 3vw, 2rem);
   margin-bottom: 1.5rem;
   font-weight: 400;
   color: #2d5a3d;
   letter-spacing: 1px;
-  position: relative;
-  display: inline-block;
   text-align: center;
-  width: 100%;
+  position: relative;
 }
 
 .postTitle::after {
@@ -57,7 +52,7 @@
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
+  width: 60px;
   height: 3px;
   background: linear-gradient(90deg, #48bb78, #38a169);
   border-radius: 2px;
@@ -66,28 +61,34 @@
 .postText {
   font-size: 1.1rem;
   line-height: 1.8;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   color: #4a5568;
   text-align: center;
-  max-width: 700px;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
 
+/* CONTENEUR DES CHAMPS */
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* STYLES DES INPUTS */
 .textarea {
   width: 100%;
-  height: 150px;
   padding: 1rem;
-  font-size: 1rem;
   border: 2px solid rgba(72, 187, 120, 0.2);
   border-radius: 15px;
-  resize: vertical;
-  margin-bottom: 1.5rem;
+  font-size: 1rem;
   background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
   font-family: inherit;
   box-sizing: border-box;
+  resize: vertical;
 }
 
 .textarea:focus {
@@ -97,6 +98,12 @@
   background: white;
 }
 
+.textarea::placeholder {
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* BOUTON SUBMIT */
 .submitButton {
   background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
   color: white;
@@ -113,6 +120,7 @@
   overflow: hidden;
   display: block;
   margin: 0 auto;
+  min-width: 200px;
 }
 
 .submitButton::before {
@@ -148,6 +156,41 @@
 .submitButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+/* 🎯 ÉTATS DE CHARGEMENT */
+.submitButton.loading {
+  cursor: wait;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.submitButton.loading span {
+  opacity: 0.9;
+}
+
+/* Formulaire en état de chargement */
+.formFields.formLoading {
+  pointer-events: none;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.formFields.formLoading .textarea {
+  background: rgba(240, 240, 240, 0.7);
+  cursor: not-allowed;
+}
+
+/* Inputs désactivés */
+.textarea:disabled {
+  background: rgba(240, 240, 240, 0.7);
+  cursor: not-allowed;
+  opacity: 0.7;
+  color: #6b7280;
 }
 
 /* BOÎTE D'ERREURS GLOBALE */
@@ -194,13 +237,48 @@
 @media (max-width: 768px) {
   .post {
     padding: 2rem;
+    margin: 2rem auto 0;
+  }
+  
+  .formFields {
+    gap: 1.2rem;
+  }
+  
+  .textarea {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+  
+  .submitButton {
+    padding: 0.9rem 1.8rem;
+    font-size: 1rem;
   }
 }
+
 @media (max-width: 480px) {
   .post {
     padding: 1.5rem;
+    margin: 1.5rem auto 0;
+    border-radius: 15px;
   }
+  
+  .postTitle {
+    font-size: 1.4rem;
+  }
+  
+  .postText {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
   .textarea {
     padding: 0.8rem;
+    border-radius: 12px;
+  }
+  
+  .submitButton {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.95rem;
+    min-width: 180px;
   }
 }

@@ -1,7 +1,29 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import GoogleAnalytics from "../components/GoogleAnalytics";
+import CookieConsent from "../components/CookieConsent";
+import { GA_MEASUREMENT_ID, pageview } from "../utils/analytics";
 import "../styles/globals.css";
 
 function App({ Component, pageProps }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Tracker les changements de page (seulement si consentement donné)
+    const handleRouteChange = (url) => {
+      const consent = localStorage.getItem('cookieConsent');
+      if (consent === 'accepted') {
+        pageview(url);
+      }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
   return (
     <>
       <Head>
@@ -27,7 +49,15 @@ function App({ Component, pageProps }) {
           content="Sophrologie à Villepreux avec Stéphanie Habert. Séances personnalisées pour votre bien-être."
         />
       </Head>
+
+      {/* Google Analytics - seulement si consentement */}
+      {GA_MEASUREMENT_ID && <GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} />}
+
       <Component {...pageProps} />
+
+      {/* Banner de consentement aux cookies */}
+      <CookieConsent />
+      
       <style jsx global>{`
         @keyframes spin {
           0% {

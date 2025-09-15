@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import api from "../../utils/api";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import Notification from "../../components/Notification";
 import styles from "../../styles/pages/Login.module.css";
 
 export default function AdminLogin() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -15,40 +18,65 @@ export default function AdminLogin() {
     if (token) router.replace("/admin");
   }, [router]);
 
+  const showNotification = (message, type = 'error') => {
+    setNotification({ message, type });
+  };
+
   const handleChange = (e) => {
     setCredentials((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    setError("");
+    if (notification) setNotification(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validation simple
+    if (!credentials.email || !credentials.password) {
+      setError("Veuillez remplir tous les champs.");
+      showNotification("⚠️ Veuillez remplir tous les champs.", "error");
+      return;
+    }
+
+    // 🔄 PHASE 1 : Démarrer le chargement
     setLoading(true);
     setError("");
+    setNotification(null);
 
     try {
       const response = await api.post("/admin/login", credentials);
 
-      // ✅ Structure de réponse corrigée
       if (response.data.success) {
-        const token = response.data.token; // ✅ Directement dans response.data.token
+        const token = response.data.token;
         if (token) {
           localStorage.setItem("adminToken", token);
-          router.replace("/admin");
+          
+          // 🎉 PHASE 2 : Notification de succès
+          showNotification("Connexion réussie ! Redirection...", "success");
+          
+          // Petite pause pour voir la notification
+          setTimeout(() => {
+            router.replace("/admin");
+          }, 1000);
         } else {
           setError("Token non reçu");
+          showNotification("❌ Erreur de sécurité. Contactez l'administrateur.", "error");
         }
       } else {
         setError(response.data.error || "Erreur de connexion");
+        showNotification("❌ " + (response.data.error || "Identifiants incorrects"), "error");
       }
     } catch (err) {
       console.error("Erreur de connexion:", err);
-      setError(
-        err.response?.data?.error || // ✅ Utiliser 'error' au lieu de 'message'
-          "Erreur de connexion. Veuillez vérifier vos identifiants.",
-      );
+      const errorMessage = err.response?.data?.error || 
+                          "Erreur de connexion. Veuillez vérifier vos identifiants.";
+      setError(errorMessage);
+      showNotification("❌ " + errorMessage, "error");
     } finally {
+      // 🔄 PHASE 3 : Arrêter le chargement
       setLoading(false);
     }
   };
@@ -56,63 +84,67 @@ export default function AdminLogin() {
   return (
     <>
       <Head>
+        <title>Connexion Admin - Stéphanie Habert Sophrologue</title>
         <meta name="robots" content="noindex, nofollow" />
-        <title>Connexion administrateur</title>
       </Head>
 
-      <div className={styles.container}>
-        <div className={styles.formWrapper}>
-          <h2 className={styles.title}>Administration</h2>
-          <p className={styles.subtitle}>Connexion à l'espace administrateur</p>
+      {/* 🎯 Notification toast */}
+      <Notification
+        message={notification?.message}
+        type={notification?.type}
+        duration={4000}
+        onClose={() => setNotification(null)}
+      />
 
-          <form className={styles.form} onSubmit={handleSubmit}>
+      <div className={styles.container}>
+        <div className={styles.loginBox}>
+          <h1 className={styles.title}>Administration</h1>
+          <p className={styles.subtitle}>Accès réservé à l'administrateur</p>
+
+          {error && <div className={styles.errorMessage}>{error}</div>}
+
+          <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.inputGroup}>
+              <label htmlFor="email">Email</label>
               <input
+                type="email"
                 id="email"
                 name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className={styles.input}
-                placeholder="Adresse email"
                 value={credentials.email}
                 onChange={handleChange}
-                disabled={loading}
-              />
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
+                placeholder="admin@example.com"
                 required
-                className={styles.input}
-                placeholder="Mot de passe"
-                value={credentials.password}
-                onChange={handleChange}
                 disabled={loading}
+                className={styles.input}
               />
             </div>
 
-            {error && (
-              <div className={styles.errorBox}>
-                <div className={styles.errorIcon}>⚠️</div>
-                <div>
-                  <h3 className={styles.errorTitle}>Erreur de connexion</h3>
-                  <p className={styles.errorMessage}>{error}</p>
-                </div>
-              </div>
-            )}
+            <div className={styles.inputGroup}>
+              <label htmlFor="password">Mot de passe</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={credentials.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
+                disabled={loading}
+                className={styles.input}
+              />
+            </div>
 
+            {/* 🎯 Bouton avec LoadingSpinner */}
             <button
               type="submit"
+              className={`${styles.submitButton} ${loading ? styles.loading : ''}`}
               disabled={loading}
-              className={styles.submitButton}
             >
               {loading ? (
-                <div className={styles.loadingWrapper}>
-                  <div className={styles.spinner} />
-                  Connexion en cours...
-                </div>
+                <>
+                  <LoadingSpinner size="small" color="white" />
+                  <span>Connexion...</span>
+                </>
               ) : (
                 "Se connecter"
               )}

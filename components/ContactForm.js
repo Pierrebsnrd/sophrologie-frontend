@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styles from "../styles/components/ContactForm.module.css";
 import api from "../utils/api";
+import { trackEvents } from "../utils/analytics";
+import LoadingSpinner from "./LoadingSpinner";
 
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -8,15 +10,13 @@ function isValidEmail(email) {
 }
 
 function isValidPhone(phone) {
-  // Accepte différents formats français : 06.12.34.56.78, 06 12 34 56 78, 0612345678, +33612345678
   const phoneRegex = /^(?:(?:\+33|0)[1-9](?:[0-9]{8}))$/;
-  const cleanPhone = phone.replace(/[\s\.\-]/g, ""); // Retire espaces, points, tirets
+  const cleanPhone = phone.replace(/[\s\.\-]/g, "");
   return phoneRegex.test(cleanPhone);
 }
 
-export default function ContactForm() {
+export default function ContactForm({ onNotification }) {
   const [sending, setSending] = useState(false);
-  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -32,7 +32,6 @@ export default function ContactForm() {
       [name]: value,
     }));
     setErrorMessages([]);
-    setConfirmationMessage("");
   };
 
   const handleSubmit = async () => {
@@ -48,7 +47,6 @@ export default function ContactForm() {
     else if (!isValidEmail(email))
       newErrors.push("Veuillez entrer un email valide.");
 
-    // Validation téléphone (obligatoire)
     if (!phone.trim()) {
       newErrors.push("Le numéro de téléphone est requis.");
     } else if (!isValidPhone(phone)) {
@@ -63,26 +61,42 @@ export default function ContactForm() {
 
     if (newErrors.length > 0) {
       setErrorMessages(newErrors);
+      if (onNotification) {
+        onNotification("Veuillez corriger les erreurs ci-dessous.", "error");
+      }
       return;
     }
 
     setSending(true);
     setErrorMessages([]);
-    setConfirmationMessage("");
 
     try {
       const res = await api.post("/contact", { name, email, phone, message });
 
       if (res.data.success) {
-        setConfirmationMessage(
-          res.data.message || "Votre message a bien été envoyé.",
-        );
+        // Tracker l'événement
+        trackEvents.contactFormSubmit();
+        
+        // Notification de succès
+        if (onNotification) {
+          onNotification(
+            "Message envoyé avec succès ! Nous vous répondrons rapidement.",
+            "success"
+          );
+        }
+        
+        // Reset du formulaire
         setFormData({ name: "", email: "", phone: "", message: "" });
       } else if (res.data.errors) {
-        // Backend renvoie erreurs champ par champ
         setErrorMessages(Object.values(res.data.errors));
+        if (onNotification) {
+          onNotification("Erreur lors de l'envoi. Vérifiez vos informations.", "error");
+        }
       } else {
         setErrorMessages([res.data.message || "Une erreur est survenue."]);
+        if (onNotification) {
+          onNotification("Une erreur inattendue s'est produite.", "error");
+        }
       }
     } catch (err) {
       console.error(err);
@@ -93,6 +107,9 @@ export default function ContactForm() {
           err.response?.data?.message ||
             "Une erreur est survenue lors de l'envoi.",
         ]);
+      }
+      if (onNotification) {
+        onNotification("Problème de connexion. Veuillez réessayer.", "error");
       }
     } finally {
       setSending(false);
@@ -107,10 +124,7 @@ export default function ContactForm() {
         contacter, je vous répondrai dans les plus brefs délais.
       </p>
 
-      {confirmationMessage && (
-        <p className={styles.confirmationMessage}>{confirmationMessage}</p>
-      )}
-
+      {/* Messages d'erreur dans la page (complément aux notifications) */}
       {errorMessages.length > 0 && (
         <div className={styles.errorBox}>
           <ul>
@@ -132,6 +146,7 @@ export default function ContactForm() {
             onChange={handleInputChange}
             placeholder="Entrez votre prénom et nom"
             required
+            disabled={sending}
           />
         </div>
 
@@ -145,6 +160,7 @@ export default function ContactForm() {
             onChange={handleInputChange}
             placeholder="Entrez votre email"
             required
+            disabled={sending}
           />
         </div>
 
@@ -158,6 +174,7 @@ export default function ContactForm() {
             onChange={handleInputChange}
             placeholder="06 12 34 56 78"
             required
+            disabled={sending}
           />
         </div>
 
@@ -170,16 +187,24 @@ export default function ContactForm() {
             onChange={handleInputChange}
             placeholder="Décrivez votre besoin ou posez votre question..."
             required
+            disabled={sending}
           />
         </div>
 
         <button
           type="button"
-          className={styles.contactSubmitButton}
+          className={`${styles.contactSubmitButton} ${sending ? styles.loading : ''}`}
           onClick={handleSubmit}
           disabled={sending}
         >
-          {sending ? "Envoi en cours..." : "Envoyer"}
+          {sending ? (
+            <>
+              <LoadingSpinner size="small" color="white" />
+              <span>Envoi en cours...</span>
+            </>
+          ) : (
+            "Envoyer"
+          )}
         </button>
       </div>
     </section>

@@ -1,13 +1,22 @@
+import { useState } from "react";
 import SEO from "../components/SEO";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ContactInfo from "../components/ContactInfo";
 import ContactForm from "../components/ContactForm";
 import Map from "../components/Map";
+import Notification from "../components/Notification";
 import styles from "../styles/pages/Contact.module.css";
 import Image from "next/image";
 
 export default function Contact() {
+  // État pour les notifications au niveau de la page
+  const [notification, setNotification] = useState(null);
+
+  const handleNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+  };
+
   return (
     <>
       <SEO
@@ -18,6 +27,15 @@ export default function Contact() {
         pageType="contact"
         keywords="contact sophrologue Villepreux, rendez-vous, Stéphanie Habert, téléphone"
       />
+
+      {/* Notification toast au niveau de la page */}
+      <Notification
+        message={notification?.message}
+        type={notification?.type}
+        duration={6000}
+        onClose={() => setNotification(null)}
+      />
+
       <Header />
       <main>
         <div className={styles.pageContainer}>
@@ -43,7 +61,7 @@ export default function Contact() {
             <ContactInfo />
             <section className={styles.contactFormMapSection}>
               <div className={styles.flexContainer}>
-                <ContactForm />
+                <ContactForm onNotification={handleNotification} />
                 <Map />
               </div>
             </section>

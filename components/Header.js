@@ -4,6 +4,7 @@ import { FaFacebookF, FaInstagram, FaBars } from "react-icons/fa";
 import styles from "../styles/components/Header.module.css";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { trackEvents } from "../utils/analytics";
 
 const navLinks = [
   { href: "/", label: "Accueil" },
@@ -18,6 +19,20 @@ const navLinks = [
 export default function Header() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Fonction pour gérer les clics sur les liens de navigation
+  const handleNavClick = (href, label) => {
+    // Tracker les clics sur "Prendre rendez-vous"
+    if (href === "/rdv") {
+      trackEvents.clickRdv();
+    }
+    setMenuOpen(false);
+  };
+
+  // Fonction pour gérer les clics sur les réseaux sociaux
+  const handleSocialClick = (platform) => {
+    trackEvents.clickSocial(platform);
+  };
 
   return (
     <header className={styles.headerContainer}>
@@ -36,7 +51,8 @@ export default function Header() {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`${styles.navLink} ${router.pathname === href ? styles.active : ""}`}
+                  className={`${styles.navLink} ${router.pathname === href ? styles.activeLink : ""}`}
+                  onClick={() => handleNavClick(href, label)}
                 >
                   {label}
                 </Link>
@@ -45,57 +61,76 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Icônes sociales à droite desktop, à gauche mobile */}
+        {/* Réseaux sociaux à droite (desktop uniquement) */}
         <div className={styles.socialIcons}>
           <a
-            href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr"
+            href="https://www.facebook.com/profile.php?id=61566511205757"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Facebook"
+            className={styles.socialIcon}
+            onClick={() => handleSocialClick('Facebook')}
           >
             <FaFacebookF />
           </a>
           <a
-            href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr"
+            href="https://www.instagram.com/stephanie_habert_sophrologue/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Instagram"
+            className={styles.socialIcon}
+            onClick={() => handleSocialClick('Instagram')}
           >
             <FaInstagram />
           </a>
         </div>
 
-        {/* Hamburger menu (visible uniquement mobile) */}
+        {/* Bouton menu mobile */}
         <button
-          className={styles.hamburger}
+          className={styles.menuToggle}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Menu"
-          aria-expanded={menuOpen}
         >
           <FaBars />
         </button>
       </div>
 
-      {/* Menu mobile (dropdown) */}
+      {/* Menu mobile */}
       {menuOpen && (
-        <nav className={styles.mobileNav}>
+        <nav className={styles.mobileMenu}>
           <ul className={styles.mobileNavList}>
             {navLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    if (href === "/qui-suis-je")
-                      sessionStorage.setItem("playMusic", "true");
-                  }}
-                  className={`${styles.navLink} ${router.pathname === href ? styles.active : ""}`}
+                  className={`${styles.mobileNavLink} ${router.pathname === href ? styles.activeMobileLink : ""}`}
+                  onClick={() => handleNavClick(href, label)}
                 >
                   {label}
                 </Link>
               </li>
             ))}
           </ul>
+
+          {/* Réseaux sociaux mobile */}
+          <div className={styles.mobileSocialIcons}>
+            <a
+              href="https://www.facebook.com/profile.php?id=61566511205757"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.mobileSocialIcon}
+              onClick={() => handleSocialClick('Facebook')}
+            >
+              <FaFacebookF />
+            </a>
+            <a
+              href="https://www.instagram.com/stephanie_habert_sophrologue/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.mobileSocialIcon}
+              onClick={() => handleSocialClick('Instagram')}
+            >
+              <FaInstagram />
+            </a>
+          </div>
         </nav>
       )}
     </header>

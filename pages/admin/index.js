@@ -3,6 +3,8 @@ import styles from "../../styles/pages/Index.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import api from "../../utils/api";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import Notification from "../../components/Notification";
 
 export default function AdminDashboard() {
   // States
@@ -14,15 +16,14 @@ export default function AdminDashboard() {
   const [updatingTemoignage, setUpdatingTemoignage] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [showDeleteTemoignageModal, setShowDeleteTemoignageModal] =
-    useState(false);
+  const [showDeleteTemoignageModal, setShowDeleteTemoignageModal] = useState(false);
   const [deleteTemoignageId, setDeleteTemoignageId] = useState(null);
-  const pendingTemoignagesCount = temoignages.filter(
-    (t) => t.status === "pending",
-  ).length;
-  const unansweredMessagesCount = contactMessages.filter(
-    (m) => !m.answered,
-  ).length;
+  
+  // États pour les notifications
+  const [notification, setNotification] = useState(null);
+
+  const pendingTemoignagesCount = temoignages.filter((t) => t.status === "pending").length;
+  const unansweredMessagesCount = contactMessages.filter((m) => !m.answered).length;
 
   // Pagination states
   const [currentPageTemoignages, setCurrentPageTemoignages] = useState(1);
@@ -43,6 +44,11 @@ export default function AdminDashboard() {
   const [passwordSuccess, setPasswordSuccess] = useState("");
 
   const router = useRouter();
+
+  // Fonction pour afficher les notifications
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
@@ -65,38 +71,25 @@ export default function AdminDashboard() {
 
       if (temoignageRes.data.success) {
         setTemoignages(temoignageRes.data.data.temoignages || []);
-        setTotalPagesTemoignages(
-          temoignageRes.data.data.pagination?.totalPages || 1,
-        );
-        setCurrentPageTemoignages(
-          temoignageRes.data.data.pagination?.currentPage || 1,
-        );
+        setTotalPagesTemoignages(temoignageRes.data.data.pagination?.totalPages || 1);
+        setCurrentPageTemoignages(temoignageRes.data.data.pagination?.currentPage || 1);
       } else {
-        setTemoignages(
-          Array.isArray(temoignageRes.data) ? temoignageRes.data : [],
-        );
+        setTemoignages(Array.isArray(temoignageRes.data) ? temoignageRes.data : []);
       }
 
       if (contactRes.data.success) {
         setContactMessages(contactRes.data.data.messages || []);
         setTotalPagesMessages(contactRes.data.data.pagination?.totalPages || 1);
-        setCurrentPageMessages(
-          contactRes.data.data.pagination?.currentPage || 1,
-        );
+        setCurrentPageMessages(contactRes.data.data.pagination?.currentPage || 1);
       } else {
-        setContactMessages(
-          Array.isArray(contactRes.data) ? contactRes.data : [],
-        );
+        setContactMessages(Array.isArray(contactRes.data) ? contactRes.data : []);
       }
     } catch (err) {
       if (err.response?.status === 401) {
         localStorage.removeItem("adminToken");
         router.replace("/admin/login");
       } else {
-        setError(
-          "Erreur lors du chargement des données: " +
-            (err.response?.data?.error || err.message),
-        );
+        setError("Erreur lors du chargement des données: " + (err.response?.data?.error || err.message));
       }
     } finally {
       setLoading(false);
@@ -130,8 +123,13 @@ export default function AdminDashboard() {
     try {
       await api.patch(`/admin/temoignages/${id}/status`, { status });
       await fetchData(currentPageTemoignages, currentPageMessages);
+      
+      // Notification de succès
+      const statusText = status === 'validated' ? 'approuvé' : 'rejeté';
+      showNotification(`Témoignage ${statusText} avec succès !`, 'success');
     } catch (err) {
       setError("Erreur lors de la mise à jour du statut");
+      showNotification("Erreur lors de la mise à jour", 'error');
     } finally {
       setUpdatingTemoignage(null);
     }
@@ -143,14 +141,15 @@ export default function AdminDashboard() {
       `Bonjour ${msg.name},\n\nCordialement,\nStéphanie Habert\nSophrologue\n06 11 42 17 65`,
     );
 
-    // Construire l'URL mailto avec le sujet et le corps
     window.location.href = `mailto:${msg.email}?subject=${subject}&body=${body}`;
 
     try {
       await api.patch(`/admin/contact-messages/${msg._id}/answered`);
       await fetchData(currentPageTemoignages, currentPageMessages);
+      showNotification("Message marqué comme répondu", 'info');
     } catch (err) {
       setError("Erreur lors du changement de statut du message");
+      showNotification("Erreur lors de la mise à jour", 'error');
     }
   };
 
@@ -165,8 +164,10 @@ export default function AdminDashboard() {
       await fetchData(currentPageTemoignages, currentPageMessages);
       setShowDeleteModal(false);
       setDeleteId(null);
+      showNotification("Message supprimé", 'info');
     } catch (err) {
       setError("Erreur lors de la suppression du message");
+      showNotification("Erreur lors de la suppression", 'error');
       setShowDeleteModal(false);
       setDeleteId(null);
     }
@@ -183,8 +184,10 @@ export default function AdminDashboard() {
       await fetchData(currentPageTemoignages, currentPageMessages);
       setShowDeleteTemoignageModal(false);
       setDeleteTemoignageId(null);
+      showNotification("Témoignage supprimé", 'info');
     } catch (err) {
       setError("Erreur lors de la suppression du témoignage");
+      showNotification("Erreur lors de la suppression", 'error');
       setShowDeleteTemoignageModal(false);
       setDeleteTemoignageId(null);
     }
@@ -197,10 +200,7 @@ export default function AdminDashboard() {
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setPasswordForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setPasswordForm((prev) => ({ ...prev, [name]: value }));
     if (passwordError) setPasswordError("");
     if (passwordSuccess) setPasswordSuccess("");
   };
@@ -212,9 +212,7 @@ export default function AdminDashboard() {
       return;
     }
     if (passwordForm.newPassword.length < 8) {
-      setPasswordError(
-        "Le nouveau mot de passe doit contenir au moins 8 caractères",
-      );
+      setPasswordError("Le nouveau mot de passe doit contenir au moins 8 caractères");
       return;
     }
     setPasswordLoading(true);
@@ -225,20 +223,13 @@ export default function AdminDashboard() {
         newPassword: passwordForm.newPassword,
       });
       setPasswordSuccess("Mot de passe changé avec succès");
-      setPasswordForm({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
+      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
       setTimeout(() => {
         setShowPasswordModal(false);
         setPasswordSuccess("");
       }, 2000);
     } catch (err) {
-      setPasswordError(
-        err.response?.data?.message ||
-          "Erreur lors du changement de mot de passe",
-      );
+      setPasswordError(err.response?.data?.message || "Erreur lors du changement de mot de passe");
     } finally {
       setPasswordLoading(false);
     }
@@ -246,22 +237,18 @@ export default function AdminDashboard() {
 
   const closePasswordModal = () => {
     setShowPasswordModal(false);
-    setPasswordForm({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
+    setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     setPasswordError("");
     setPasswordSuccess("");
   };
 
   const formatDate = (date) => new Date(date).toLocaleString("fr-FR");
 
-  const getStatusColor = (status) => {
-    if (status === "pending") return "#f39c12";
-    if (status === "validated") return "#27ae60";
-    if (status === "rejected") return "#e74c3c";
-    return "#7f8c8d";
+  const getStatusBadgeClass = (status) => {
+    if (status === "pending") return styles.statusPending;
+    if (status === "validated") return styles.statusApproved;
+    if (status === "rejected") return styles.statusRejected;
+    return styles.statusBadge;
   };
 
   const getStatusTextTemoignage = (status) => {
@@ -271,23 +258,14 @@ export default function AdminDashboard() {
     return status;
   };
 
-  const PaginationComponent = ({
-    currentPage,
-    totalPages,
-    onPageChange,
-    type,
-  }) => {
+  const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
     if (totalPages <= 1) return null;
     return (
-      <div className={styles.pagination}>
+      <div className={styles.paginationContainer}>
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
           className={styles.paginationButton}
-          style={{
-            opacity: currentPage <= 1 ? 0.5 : 1,
-            cursor: currentPage <= 1 ? "not-allowed" : "pointer",
-          }}
         >
           Précédent
         </button>
@@ -298,10 +276,6 @@ export default function AdminDashboard() {
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
           className={styles.paginationButton}
-          style={{
-            opacity: currentPage >= totalPages ? 0.5 : 1,
-            cursor: currentPage >= totalPages ? "not-allowed" : "pointer",
-          }}
         >
           Suivant
         </button>
@@ -312,8 +286,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner}></div>
-        <p>Chargement...</p>
+        <LoadingSpinner size="large" text="Chargement du dashboard..." color="primary" />
       </div>
     );
   }
@@ -324,13 +297,21 @@ export default function AdminDashboard() {
         <meta name="robots" content="noindex, nofollow" />
         <title>Dashboard Admin - Stéphanie Habert Sophrologue</title>
       </Head>
+
+      {/* Notifications */}
+      <Notification
+        message={notification?.message}
+        type={notification?.type}
+        duration={4000}
+        onClose={() => setNotification(null)}
+      />
+
       <div className={styles.container}>
+        {/* HEADER */}
         <div className={styles.header}>
           <div>
             <h1 className={styles.title}>Dashboard Admin</h1>
-            <p className={styles.subtitle}>
-              Gestion des témoignages et messages
-            </p>
+            <p className={styles.subtitle}>Gestion des témoignages et messages</p>
             {adminProfile && (
               <p className={styles.profileInfo}>
                 Connecté en tant que: <strong>{adminProfile.email}</strong>
@@ -348,9 +329,13 @@ export default function AdminDashboard() {
             </button>
           </div>
         </div>
-        {error && <div className={styles.errorMessage}>❌ {error}</div>}
+
+        {/* ERROR MESSAGE */}
+        {error && <div className={styles.errorMessage}>{error}</div>}
+
+        {/* INFO BOX */}
         <div className={styles.infoBox}>
-          <h3 className={styles.infoTitle}>📅 Gestion des rendez-vous</h3>
+          <h3 className={styles.infoTitle}>Gestion des rendez-vous</h3>
           <p className={styles.infoText}>
             Consultez votre tableau de bord Resalib pour voir vos réservations.
           </p>
@@ -363,6 +348,8 @@ export default function AdminDashboard() {
             Ouvrir Resalib →
           </a>
         </div>
+
+        {/* TABS NAVIGATION */}
         <div className={styles.tabs}>
           <button
             className={`${styles.tabButton} ${activeTab === "temoignage" ? styles.activeTabButton : ""}`}
@@ -389,12 +376,15 @@ export default function AdminDashboard() {
             Mon Profil
           </button>
         </div>
+
+        {/* TAB CONTENT */}
         <div>
+          {/* TÉMOIGNAGES TAB */}
           {activeTab === "temoignage" && (
             <div className={styles.sectionContainer}>
-              <h2 className={styles.sectionTitle}>
-                Témoignages ({temoignages.length})
-              </h2>
+              <h2 className={styles.sectionTitle}>Témoignages ({temoignages.length})</h2>
+              
+              {/* STATS */}
               <div className={styles.stats}>
                 <div className={styles.statCard}>
                   <h3 className={styles.statNumber}>
@@ -415,59 +405,45 @@ export default function AdminDashboard() {
                   <p className={styles.statLabel}>Rejetés</p>
                 </div>
               </div>
+
               {temoignages.length === 0 ? (
                 <div className={styles.emptyState}>
                   <p>Aucun témoignage pour le moment</p>
                 </div>
               ) : (
                 <>
-                  <div className={styles.itemGrid}>
+                  <div className={styles.itemsGrid}>
                     {temoignages.map((t) => (
-                      <div key={t._id} className={styles.itemCard}>
+                      <div key={t._id} className={styles.item}>
                         <div className={styles.itemHeader}>
                           <div>
-                            <h3 className={styles.itemName}>{t.name}</h3>
-                            <p className={styles.createdAt}>
-                              Posté le {formatDate(t.createdAt)}
-                            </p>
+                            <h3 className={styles.itemTitle}>{t.name}</h3>
+                            <p className={styles.itemMeta}>Posté le {formatDate(t.createdAt)}</p>
                           </div>
-                          <div className={styles.statusActions}>
-                            <span
-                              className={styles.statusBadge}
-                              style={{
-                                backgroundColor: getStatusColor(t.status),
-                              }}
-                            >
+                          <div className={styles.itemActions}>
+                            <span className={`${styles.statusBadge} ${getStatusBadgeClass(t.status)}`}>
                               {getStatusTextTemoignage(t.status)}
                             </span>
                             {t.status === "pending" && (
-                              <div className={styles.actions}>
+                              <>
                                 <button
-                                  onClick={() =>
-                                    updateTemoignageStatus(t._id, "validated")
-                                  }
+                                  onClick={() => updateTemoignageStatus(t._id, "validated")}
                                   disabled={updatingTemoignage === t._id}
-                                  className={`${styles.actionButton} ${styles.confirmButton}`}
+                                  className={`${styles.actionButton} ${styles.approveButton}`}
                                 >
-                                  {updatingTemoignage === t._id
-                                    ? "..."
-                                    : "✅ Valider"}
+                                  {updatingTemoignage === t._id ? "..." : "Valider"}
                                 </button>
                                 <button
-                                  onClick={() =>
-                                    updateTemoignageStatus(t._id, "rejected")
-                                  }
+                                  onClick={() => updateTemoignageStatus(t._id, "rejected")}
                                   disabled={updatingTemoignage === t._id}
-                                  className={`${styles.actionButton} ${styles.cancelButton}`}
+                                  className={`${styles.actionButton} ${styles.rejectButton}`}
                                 >
-                                  {updatingTemoignage === t._id
-                                    ? "..."
-                                    : "❌ Rejeter"}
+                                  {updatingTemoignage === t._id ? "..." : "Rejeter"}
                                 </button>
-                              </div>
+                              </>
                             )}
                             <button
-                              className={styles.deleteButton}
+                              className={`${styles.actionButton} ${styles.deleteButton}`}
                               onClick={() => confirmDeleteTemoignage(t._id)}
                             >
                               Supprimer
@@ -475,9 +451,7 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                         <div className={styles.itemInfo}>
-                          <p>
-                            <strong>Message:</strong> {t.message}
-                          </p>
+                          <p><strong>Message:</strong> {t.message}</p>
                         </div>
                       </div>
                     ))}
@@ -486,22 +460,21 @@ export default function AdminDashboard() {
                     currentPage={currentPageTemoignages}
                     totalPages={totalPagesTemoignages}
                     onPageChange={handleTemoignagePage}
-                    type="temoignages"
                   />
                 </>
               )}
             </div>
           )}
+
+          {/* MESSAGES TAB */}
           {activeTab === "contact" && (
             <div className={styles.sectionContainer}>
-              <h2 className={styles.sectionTitle}>
-                Messages de contact ({contactMessages.length})
-              </h2>
+              <h2 className={styles.sectionTitle}>Messages de contact ({contactMessages.length})</h2>
+              
+              {/* STATS */}
               <div className={styles.stats}>
                 <div className={styles.statCard}>
-                  <h3 className={styles.statNumber}>
-                    {contactMessages.length}
-                  </h3>
+                  <h3 className={styles.statNumber}>{contactMessages.length}</h3>
                   <p className={styles.statLabel}>Total</p>
                 </div>
                 <div className={styles.statCard}>
@@ -517,48 +490,34 @@ export default function AdminDashboard() {
                   <p className={styles.statLabel}>À traiter</p>
                 </div>
               </div>
+
               {contactMessages.length === 0 ? (
                 <div className={styles.emptyState}>
                   <p>Aucun message de contact pour le moment</p>
                 </div>
               ) : (
                 <>
-                  <div className={styles.itemGrid}>
+                  <div className={styles.itemsGrid}>
                     {contactMessages.map((msg) => (
-                      <div key={msg._id} className={styles.itemCard}>
+                      <div key={msg._id} className={styles.item}>
                         <div className={styles.itemHeader}>
                           <div>
-                            <h3 className={styles.itemName}>{msg.name}</h3>
-                            <p className={styles.createdAt}>
-                              Reçu le {formatDate(msg.createdAt)}
-                            </p>
+                            <h3 className={styles.itemTitle}>{msg.name}</h3>
+                            <p className={styles.itemMeta}>Reçu le {formatDate(msg.createdAt)}</p>
                           </div>
-                          <div className={styles.statusActions}>
-                            <span
-                              className={styles.statusBadge}
-                              style={{
-                                backgroundColor: msg.answered
-                                  ? "#27ae60"
-                                  : "#f39c12",
-                              }}
-                            >
+                          <div className={styles.itemActions}>
+                            <span className={`${styles.statusBadge} ${msg.answered ? styles.statusApproved : styles.statusPending}`}>
                               {msg.answered ? "Répondu" : "À traiter"}
                             </span>
                             <button
-                              className={styles.replyButton}
-                              style={{
-                                backgroundColor: msg.answered
-                                  ? "#27ae60"
-                                  : "#f39c12",
-                                opacity: msg.answered ? 0.7 : 1,
-                              }}
+                              className={`${styles.actionButton} ${styles.replyButton}`}
                               disabled={msg.answered}
                               onClick={() => handleReply(msg)}
                             >
                               {msg.answered ? "Répondu" : "Répondre"}
                             </button>
                             <button
-                              className={styles.deleteButton}
+                              className={`${styles.actionButton} ${styles.deleteButton}`}
                               onClick={() => confirmDelete(msg._id)}
                             >
                               Supprimer
@@ -566,33 +525,9 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                         <div className={styles.itemInfo}>
-                          <p>
-                            <strong>Email:</strong>{" "}
-                            <a
-                              href={`mailto:${msg.email}`}
-                              style={{
-                                color: "#48bb78",
-                                textDecoration: "none",
-                              }}
-                            >
-                              {msg.email}
-                            </a>
-                          </p>
-                          <p>
-                            <strong>Téléphone:</strong>{" "}
-                            <a
-                              href={`tel:${msg.phone}`}
-                              style={{
-                                color: "#48bb78",
-                                textDecoration: "none",
-                              }}
-                            >
-                              {msg.phone}
-                            </a>
-                          </p>
-                          <p>
-                            <strong>Message:</strong> {msg.message}
-                          </p>
+                          <p><strong>Email:</strong> <a href={`mailto:${msg.email}`}>{msg.email}</a></p>
+                          <p><strong>Téléphone:</strong> <a href={`tel:${msg.phone}`}>{msg.phone}</a></p>
+                          <p><strong>Message:</strong> {msg.message}</p>
                         </div>
                       </div>
                     ))}
@@ -601,12 +536,13 @@ export default function AdminDashboard() {
                     currentPage={currentPageMessages}
                     totalPages={totalPagesMessages}
                     onPageChange={handleMessagePage}
-                    type="messages"
                   />
                 </>
               )}
             </div>
           )}
+
+          {/* PROFILE TAB */}
           {activeTab === "profile" && (
             <div className={styles.sectionContainer}>
               <h2 className={styles.sectionTitle}>Mon Profil</h2>
@@ -618,9 +554,7 @@ export default function AdminDashboard() {
                         {adminProfile.email?.[0]?.toUpperCase() || "A"}
                       </div>
                       <div>
-                        <h3 className={styles.profileEmail}>
-                          {adminProfile.email}
-                        </h3>
+                        <h3 className={styles.profileEmail}>{adminProfile.email}</h3>
                         <p className={styles.profileRole}>Administrateur</p>
                       </div>
                     </div>
@@ -628,17 +562,13 @@ export default function AdminDashboard() {
                       <div className={styles.profileStatItem}>
                         <strong>Membre depuis:</strong>
                         <span>
-                          {adminProfile.createdAt
-                            ? formatDate(adminProfile.createdAt)
-                            : "Date non disponible"}
+                          {adminProfile.createdAt ? formatDate(adminProfile.createdAt) : "Date non disponible"}
                         </span>
                       </div>
                       <div className={styles.profileStatItem}>
                         <strong>Dernière connexion:</strong>
                         <span>
-                          {adminProfile.lastLogin
-                            ? formatDate(adminProfile.lastLogin)
-                            : "Jamais connecté"}
+                          {adminProfile.lastLogin ? formatDate(adminProfile.lastLogin) : "Jamais connecté"}
                         </span>
                       </div>
                       <div className={styles.profileStatItem}>
@@ -651,13 +581,10 @@ export default function AdminDashboard() {
                         onClick={() => setShowPasswordModal(true)}
                         className={styles.changePasswordButton}
                       >
-                        🔒 Changer le mot de passe
+                        Changer le mot de passe
                       </button>
-                      <button
-                        onClick={fetchAdminProfile}
-                        className={styles.refreshButton}
-                      >
-                        🔄 Actualiser les informations
+                      <button onClick={fetchAdminProfile} className={styles.refreshButton}>
+                        Actualiser les informations
                       </button>
                     </div>
                   </div>
@@ -670,15 +597,18 @@ export default function AdminDashboard() {
             </div>
           )}
         </div>
+
+        {/* MODALS */}
         {showPasswordModal && (
           <div className={styles.modalOverlay}>
-            <div className={styles.modalContent} style={{ minWidth: "400px" }}>
+            <div className={`${styles.modalContent} ${styles.passwordModal}`}>
+              <div className={styles.modalIcon}>
+                <div className={styles.securityIcon}>🔒</div>
+              </div>
               <h3 className={styles.modalTitle}>Changer le mot de passe</h3>
               <form onSubmit={handlePasswordSubmit}>
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Mot de passe actuel
-                  </label>
+                  <label className={styles.formLabel}>Mot de passe actuel</label>
                   <input
                     type="password"
                     name="currentPassword"
@@ -690,9 +620,7 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Nouveau mot de passe
-                  </label>
+                  <label className={styles.formLabel}>Nouveau mot de passe</label>
                   <input
                     type="password"
                     name="newPassword"
@@ -703,14 +631,10 @@ export default function AdminDashboard() {
                     minLength={8}
                     disabled={passwordLoading}
                   />
-                  <small className={styles.formHint}>
-                    Minimum 8 caractères
-                  </small>
+                  <small className={styles.formHint}>Minimum 8 caractères</small>
                 </div>
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Confirmer le nouveau mot de passe
-                  </label>
+                  <label className={styles.formLabel}>Confirmer le nouveau mot de passe</label>
                   <input
                     type="password"
                     name="confirmPassword"
@@ -721,14 +645,8 @@ export default function AdminDashboard() {
                     disabled={passwordLoading}
                   />
                 </div>
-                {passwordError && (
-                  <div className={styles.passwordError}>❌ {passwordError}</div>
-                )}
-                {passwordSuccess && (
-                  <div className={styles.passwordSuccess}>
-                    ✅ {passwordSuccess}
-                  </div>
-                )}
+                {passwordError && <div className={styles.passwordError}>{passwordError}</div>}
+                {passwordSuccess && <div className={styles.passwordSuccess}>{passwordSuccess}</div>}
                 <div className={styles.modalActions}>
                   <button
                     type="button"
@@ -741,23 +659,34 @@ export default function AdminDashboard() {
                   <button
                     type="submit"
                     className={styles.confirmButton}
-                    style={{ opacity: passwordLoading ? 0.7 : 1 }}
                     disabled={passwordLoading}
                   >
-                    {passwordLoading
-                      ? "Changement..."
-                      : "Changer le mot de passe"}
+                    {passwordLoading ? (
+                      <>
+                        <LoadingSpinner size="small" color="white" />
+                        <span>Changement...</span>
+                      </>
+                    ) : (
+                      "Changer le mot de passe"
+                    )}
                   </button>
                 </div>
               </form>
             </div>
           </div>
         )}
+
         {showDeleteModal && (
           <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-              <h3>Confirmer la suppression</h3>
-              <p>Voulez-vous vraiment supprimer ce message ?</p>
+              <div className={styles.modalIcon}>
+                <div className={styles.dangerIcon}>⚠️</div>
+              </div>
+              <h3 className={styles.modalTitle}>Supprimer le message</h3>
+              <p className={styles.modalDescription}>
+                Cette action est irréversible. Le message sera définitivement supprimé 
+                de la base de données.
+              </p>
               <div className={styles.modalActions}>
                 <button
                   className={styles.modalCancelButton}
@@ -765,21 +694,29 @@ export default function AdminDashboard() {
                 >
                   Annuler
                 </button>
-                <button
-                  className={styles.deleteButton}
+                <button 
+                  className={`${styles.actionButton} ${styles.deleteButton} ${styles.modalDeleteButton}`} 
                   onClick={handleDeleteConfirmed}
                 >
-                  Supprimer
+                  <span>🗑️</span>
+                  Supprimer définitivement
                 </button>
               </div>
             </div>
           </div>
         )}
+
         {showDeleteTemoignageModal && (
           <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-              <h3>Confirmer la suppression</h3>
-              <p>Voulez-vous vraiment supprimer ce témoignage ?</p>
+              <div className={styles.modalIcon}>
+                <div className={styles.dangerIcon}>⚠️</div>
+              </div>
+              <h3 className={styles.modalTitle}>Supprimer le témoignage</h3>
+              <p className={styles.modalDescription}>
+                Cette action est irréversible. Le témoignage sera définitivement supprimé 
+                et ne pourra plus être récupéré.
+              </p>
               <div className={styles.modalActions}>
                 <button
                   className={styles.modalCancelButton}
@@ -787,11 +724,12 @@ export default function AdminDashboard() {
                 >
                   Annuler
                 </button>
-                <button
-                  className={styles.deleteButton}
+                <button 
+                  className={`${styles.actionButton} ${styles.deleteButton} ${styles.modalDeleteButton}`} 
                   onClick={handleDeleteTemoignageConfirmed}
                 >
-                  Supprimer
+                  <span>🗑️</span>
+                  Supprimer définitivement
                 </button>
               </div>
             </div>
