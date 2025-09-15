@@ -76,21 +76,24 @@ export default function ContactForm({ onNotification }) {
       if (res.data.success) {
         // Tracker l'événement
         trackEvents.contactFormSubmit();
-        
+
         // Notification de succès
         if (onNotification) {
           onNotification(
             "Message envoyé avec succès ! Nous vous répondrons rapidement.",
-            "success"
+            "success",
           );
         }
-        
+
         // Reset du formulaire
         setFormData({ name: "", email: "", phone: "", message: "" });
       } else if (res.data.errors) {
         setErrorMessages(Object.values(res.data.errors));
         if (onNotification) {
-          onNotification("Erreur lors de l'envoi. Vérifiez vos informations.", "error");
+          onNotification(
+            "Erreur lors de l'envoi. Vérifiez vos informations.",
+            "error",
+          );
         }
       } else {
         setErrorMessages([res.data.message || "Une erreur est survenue."]);
@@ -193,7 +196,7 @@ export default function ContactForm({ onNotification }) {
 
         <button
           type="button"
-          className={`${styles.contactSubmitButton} ${sending ? styles.loading : ''}`}
+          className={`${styles.contactSubmitButton} ${sending ? styles.loading : ""}`}
           onClick={handleSubmit}
           disabled={sending}
         >

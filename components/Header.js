@@ -68,7 +68,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialIcon}
-            onClick={() => handleSocialClick('Facebook')}
+            onClick={() => handleSocialClick("Facebook")}
           >
             <FaFacebookF />
           </a>
@@ -77,7 +77,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialIcon}
-            onClick={() => handleSocialClick('Instagram')}
+            onClick={() => handleSocialClick("Instagram")}
           >
             <FaInstagram />
           </a>
@@ -117,7 +117,7 @@ export default function Header() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.mobileSocialIcon}
-              onClick={() => handleSocialClick('Facebook')}
+              onClick={() => handleSocialClick("Facebook")}
             >
               <FaFacebookF />
             </a>
@@ -126,7 +126,7 @@ export default function Header() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.mobileSocialIcon}
-              onClick={() => handleSocialClick('Instagram')}
+              onClick={() => handleSocialClick("Instagram")}
             >
               <FaInstagram />
             </a>

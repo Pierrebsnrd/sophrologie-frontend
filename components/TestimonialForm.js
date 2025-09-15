@@ -14,7 +14,7 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
   // 🎯 État pour les notifications toast
   const [notification, setNotification] = useState(null);
 
-  const showNotification = (message, type = 'success') => {
+  const showNotification = (message, type = "success") => {
     setNotification({ message, type });
   };
 
@@ -56,7 +56,7 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
     try {
       // 🔄 PHASE 1 : Démarrer le chargement (LoadingSpinner)
       setSubmitting(true);
-      
+
       const response = await api.post("/temoignage", {
         name: name.trim(),
         message: message.trim(),
@@ -65,17 +65,17 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
       if (response.data.success) {
         // 🎯 Tracker l'événement
         trackEvents.testimonialSubmit();
-        
+
         // 🎉 PHASE 2 : Notification de succès + reset formulaire
         showNotification(
           "🙏 Merci pour votre témoignage ! Il sera publié après validation.",
-          "success"
+          "success",
         );
-        
+
         // Reset du formulaire
         setName("");
         setMessage("");
-        
+
         // Callback pour actualiser la liste des témoignages
         if (onTestimonialSubmitted) onTestimonialSubmitted();
       } else if (response.data.error) {
@@ -97,7 +97,10 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
           err.message ||
             "Erreur lors de l'envoi du témoignage. Veuillez réessayer.",
         ]);
-        showNotification("❌ Problème de connexion. Veuillez réessayer.", "error");
+        showNotification(
+          "❌ Problème de connexion. Veuillez réessayer.",
+          "error",
+        );
       }
     } finally {
       // 🔄 PHASE 3 : Arrêter le chargement
@@ -134,7 +137,9 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
           </div>
         )}
 
-        <div className={`${styles.formFields} ${submitting ? styles.formLoading : ''}`}>
+        <div
+          className={`${styles.formFields} ${submitting ? styles.formLoading : ""}`}
+        >
           <input
             type="text"
             placeholder="Votre prénom et nom"
@@ -144,7 +149,7 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
             style={{ height: "50px" }}
             disabled={submitting} // 🔒 Désactiver pendant l'envoi
           />
-          
+
           <textarea
             className={styles.textarea}
             placeholder="Votre témoignage ici... (minimum 10 caractères)"
@@ -153,10 +158,10 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
             disabled={submitting}
             rows={5}
           />
-          
+
           {/* 🎯 Bouton avec LoadingSpinner intégré */}
           <button
-            className={`${styles.submitButton} ${submitting ? styles.loading : ''}`}
+            className={`${styles.submitButton} ${submitting ? styles.loading : ""}`}
             onClick={submitTestimonial}
             disabled={submitting}
           >

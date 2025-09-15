@@ -177,7 +177,7 @@ Le fichier `utils/api.js` configure :
 Le projet utilise ESLint avec la configuration Next.js pour maintenir la qualité du code :
 
 - **Configuration** : `eslint-config-next` avec règles React, accessibility, et import
-- **Plugins** : 
+- **Plugins** :
   - `eslint-plugin-react` : Règles spécifiques React
   - `eslint-plugin-react-hooks` : Validation des hooks React
   - `eslint-plugin-jsx-a11y` : Accessibilité JSX
@@ -215,7 +215,7 @@ yarn fix                 # Correction lint + formatage automatique
 # Avant commit
 yarn check               # Vérifier que tout est conforme
 
-# Correction automatique si nécessaire  
+# Correction automatique si nécessaire
 yarn fix                 # Corriger lint + format automatiquement
 ```
 

@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import styles from '../styles/components/Notification.module.css';
+import { useEffect, useState } from "react";
+import styles from "../styles/components/Notification.module.css";
 
-export default function Notification({ 
-  message, 
-  type = 'success', // 'success', 'error', 'info'
+export default function Notification({
+  message,
+  type = "success", // 'success', 'error', 'info'
   duration = 5000,
-  onClose 
+  onClose,
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
@@ -35,19 +35,25 @@ export default function Notification({
 
   const getIcon = () => {
     switch (type) {
-      case 'success': return '✅';
-      case 'error': return '❌';
-      case 'info': return 'ℹ️';
-      default: return '✅';
+      case "success":
+        return "✅";
+      case "error":
+        return "❌";
+      case "info":
+        return "ℹ️";
+      default:
+        return "✅";
     }
   };
 
   return (
-    <div className={`${styles.notification} ${styles[type]} ${isLeaving ? styles.leaving : ''}`}>
+    <div
+      className={`${styles.notification} ${styles[type]} ${isLeaving ? styles.leaving : ""}`}
+    >
       <div className={styles.content}>
         <span className={styles.icon}>{getIcon()}</span>
         <span className={styles.message}>{message}</span>
-        <button 
+        <button
           className={styles.closeButton}
           onClick={handleClose}
           aria-label="Fermer"

@@ -64,7 +64,7 @@
   align-items: flex-start;
   margin-bottom: 1rem;
   gap: 1rem;
-}  
+}
 /* CONTAINER PRINCIPAL */
 .container {
   min-height: 100vh;
@@ -75,24 +75,41 @@
 
 /* Effet de fond animé cohérent avec login */
 .container::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(72, 187, 120, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(56, 161, 105, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(45, 90, 61, 0.03) 0%, transparent 50%);
+  background:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(72, 187, 120, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(56, 161, 105, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(45, 90, 61, 0.03) 0%,
+      transparent 50%
+    );
   animation: float 8s ease-in-out infinite;
   z-index: 0;
   pointer-events: none;
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(2deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
 }
 
 /* HEADER PRINCIPAL */
@@ -113,7 +130,7 @@
 
 /* Gradient border en haut */
 .header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -145,7 +162,7 @@
 }
 
 .title::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 0;
@@ -759,8 +776,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modalContent {
@@ -776,7 +797,7 @@
 }
 
 .modalContent::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -883,7 +904,11 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.1), rgba(56, 161, 105, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(72, 187, 120, 0.1),
+    rgba(56, 161, 105, 0.1)
+  );
   border: 3px solid rgba(72, 187, 120, 0.3);
   display: flex;
   align-items: center;
@@ -893,7 +918,8 @@
 }
 
 @keyframes securityPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.4);
   }
   50% {
@@ -937,13 +963,13 @@
   .container {
     padding: 1.5rem 0.5rem;
   }
-  
+
   .header {
     flex-direction: column;
     gap: 1.5rem;
     text-align: center;
   }
-  
+
   .tabs {
     flex-wrap: wrap;
   }
@@ -953,39 +979,39 @@
   .container {
     padding: 1rem 0.5rem;
   }
-  
+
   .header,
   .sectionContainer {
     padding: 1.5rem;
     border-radius: 15px;
   }
-  
+
   .title {
     font-size: 1.8rem;
   }
-  
+
   .subtitle {
     font-size: 1rem;
   }
-  
+
   .tabs {
     gap: 0.3rem;
   }
-  
+
   .tabButton {
     padding: 0.8rem 1rem;
     font-size: 0.9rem;
   }
-  
+
   .itemHeader {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .itemActions {
     gap: 0.5rem;
   }
-  
+
   .actionButton {
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
@@ -996,44 +1022,44 @@
   .container {
     padding: 0.5rem;
   }
-  
+
   .header,
   .sectionContainer {
     padding: 1rem;
     border-radius: 12px;
   }
-  
+
   .title {
     font-size: 1.5rem;
   }
-  
+
   .tabs {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .tabButton {
     justify-content: center;
   }
-  
+
   .item {
     padding: 1rem;
   }
-  
+
   .modalContent {
     padding: 1.5rem;
     margin: 0.5rem;
   }
-  
+
   .modalActions {
     flex-direction: column;
   }
-  
+
   .profileHeader {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .profileActions {
     flex-direction: column;
   }

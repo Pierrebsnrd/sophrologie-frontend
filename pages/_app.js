@@ -12,15 +12,15 @@ function App({ Component, pageProps }) {
   useEffect(() => {
     // Tracker les changements de page (seulement si consentement donné)
     const handleRouteChange = (url) => {
-      const consent = localStorage.getItem('cookieConsent');
-      if (consent === 'accepted') {
+      const consent = localStorage.getItem("cookieConsent");
+      if (consent === "accepted") {
         pageview(url);
       }
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router.events]);
 
@@ -51,13 +51,15 @@ function App({ Component, pageProps }) {
       </Head>
 
       {/* Google Analytics - seulement si consentement */}
-      {GA_MEASUREMENT_ID && <GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} />}
+      {GA_MEASUREMENT_ID && (
+        <GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} />
+      )}
 
       <Component {...pageProps} />
 
       {/* Banner de consentement aux cookies */}
       <CookieConsent />
-      
+
       <style jsx global>{`
         @keyframes spin {
           0% {

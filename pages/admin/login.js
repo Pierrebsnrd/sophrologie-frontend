@@ -18,7 +18,7 @@ export default function AdminLogin() {
     if (token) router.replace("/admin");
   }, [router]);
 
-  const showNotification = (message, type = 'error') => {
+  const showNotification = (message, type = "error") => {
     setNotification({ message, type });
   };
 
@@ -33,7 +33,7 @@ export default function AdminLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validation simple
     if (!credentials.email || !credentials.password) {
       setError("Veuillez remplir tous les champs.");
@@ -53,26 +53,33 @@ export default function AdminLogin() {
         const token = response.data.token;
         if (token) {
           localStorage.setItem("adminToken", token);
-          
+
           // 🎉 PHASE 2 : Notification de succès
           showNotification("Connexion réussie ! Redirection...", "success");
-          
+
           // Petite pause pour voir la notification
           setTimeout(() => {
             router.replace("/admin");
           }, 1000);
         } else {
           setError("Token non reçu");
-          showNotification("❌ Erreur de sécurité. Contactez l'administrateur.", "error");
+          showNotification(
+            "❌ Erreur de sécurité. Contactez l'administrateur.",
+            "error",
+          );
         }
       } else {
         setError(response.data.error || "Erreur de connexion");
-        showNotification("❌ " + (response.data.error || "Identifiants incorrects"), "error");
+        showNotification(
+          "❌ " + (response.data.error || "Identifiants incorrects"),
+          "error",
+        );
       }
     } catch (err) {
       console.error("Erreur de connexion:", err);
-      const errorMessage = err.response?.data?.error || 
-                          "Erreur de connexion. Veuillez vérifier vos identifiants.";
+      const errorMessage =
+        err.response?.data?.error ||
+        "Erreur de connexion. Veuillez vérifier vos identifiants.";
       setError(errorMessage);
       showNotification("❌ " + errorMessage, "error");
     } finally {
@@ -137,7 +144,7 @@ export default function AdminLogin() {
             {/* 🎯 Bouton avec LoadingSpinner */}
             <button
               type="submit"
-              className={`${styles.submitButton} ${loading ? styles.loading : ''}`}
+              className={`${styles.submitButton} ${loading ? styles.loading : ""}`}
               disabled={loading}
             >
               {loading ? (

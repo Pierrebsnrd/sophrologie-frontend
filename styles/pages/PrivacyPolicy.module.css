@@ -17,7 +17,11 @@
 
 /* Introduction avec icône */
 .intro {
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.1), rgba(56, 161, 105, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(72, 187, 120, 0.1),
+    rgba(56, 161, 105, 0.05)
+  );
   padding: 1.5rem;
   border-radius: 15px;
   border-left: 4px solid #48bb78;
@@ -239,7 +243,11 @@
 
 /* Section contact en bas */
 .contact {
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.05), rgba(56, 161, 105, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(72, 187, 120, 0.05),
+    rgba(56, 161, 105, 0.05)
+  );
   padding: 2rem;
   border-radius: 15px;
   text-align: center;
@@ -285,11 +293,11 @@
   .container {
     margin: 1.5rem auto;
   }
-  
+
   .content {
     padding: 2rem;
   }
-  
+
   .cookieInfo,
   .rightsGrid,
   .retentionGrid {
@@ -302,15 +310,15 @@
     margin: 1rem auto;
     border-radius: 15px;
   }
-  
+
   .content {
     padding: 1.5rem;
   }
-  
+
   .section h2 {
     font-size: 1.2rem;
   }
-  
+
   .contact {
     padding: 1.5rem;
   }
@@ -321,15 +329,15 @@
     margin: 0.5rem auto;
     border-radius: 12px;
   }
-  
+
   .content {
     padding: 1rem;
   }
-  
+
   .title {
     font-size: 1.6rem;
   }
-  
+
   .section h2 {
     font-size: 1.1rem;
     flex-direction: column;

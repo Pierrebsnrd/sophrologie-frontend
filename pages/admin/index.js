@@ -16,14 +16,19 @@ export default function AdminDashboard() {
   const [updatingTemoignage, setUpdatingTemoignage] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [showDeleteTemoignageModal, setShowDeleteTemoignageModal] = useState(false);
+  const [showDeleteTemoignageModal, setShowDeleteTemoignageModal] =
+    useState(false);
   const [deleteTemoignageId, setDeleteTemoignageId] = useState(null);
-  
+
   // États pour les notifications
   const [notification, setNotification] = useState(null);
 
-  const pendingTemoignagesCount = temoignages.filter((t) => t.status === "pending").length;
-  const unansweredMessagesCount = contactMessages.filter((m) => !m.answered).length;
+  const pendingTemoignagesCount = temoignages.filter(
+    (t) => t.status === "pending",
+  ).length;
+  const unansweredMessagesCount = contactMessages.filter(
+    (m) => !m.answered,
+  ).length;
 
   // Pagination states
   const [currentPageTemoignages, setCurrentPageTemoignages] = useState(1);
@@ -46,7 +51,7 @@ export default function AdminDashboard() {
   const router = useRouter();
 
   // Fonction pour afficher les notifications
-  const showNotification = (message, type = 'success') => {
+  const showNotification = (message, type = "success") => {
     setNotification({ message, type });
   };
 
@@ -71,25 +76,38 @@ export default function AdminDashboard() {
 
       if (temoignageRes.data.success) {
         setTemoignages(temoignageRes.data.data.temoignages || []);
-        setTotalPagesTemoignages(temoignageRes.data.data.pagination?.totalPages || 1);
-        setCurrentPageTemoignages(temoignageRes.data.data.pagination?.currentPage || 1);
+        setTotalPagesTemoignages(
+          temoignageRes.data.data.pagination?.totalPages || 1,
+        );
+        setCurrentPageTemoignages(
+          temoignageRes.data.data.pagination?.currentPage || 1,
+        );
       } else {
-        setTemoignages(Array.isArray(temoignageRes.data) ? temoignageRes.data : []);
+        setTemoignages(
+          Array.isArray(temoignageRes.data) ? temoignageRes.data : [],
+        );
       }
 
       if (contactRes.data.success) {
         setContactMessages(contactRes.data.data.messages || []);
         setTotalPagesMessages(contactRes.data.data.pagination?.totalPages || 1);
-        setCurrentPageMessages(contactRes.data.data.pagination?.currentPage || 1);
+        setCurrentPageMessages(
+          contactRes.data.data.pagination?.currentPage || 1,
+        );
       } else {
-        setContactMessages(Array.isArray(contactRes.data) ? contactRes.data : []);
+        setContactMessages(
+          Array.isArray(contactRes.data) ? contactRes.data : [],
+        );
       }
     } catch (err) {
       if (err.response?.status === 401) {
         localStorage.removeItem("adminToken");
         router.replace("/admin/login");
       } else {
-        setError("Erreur lors du chargement des données: " + (err.response?.data?.error || err.message));
+        setError(
+          "Erreur lors du chargement des données: " +
+            (err.response?.data?.error || err.message),
+        );
       }
     } finally {
       setLoading(false);
@@ -123,13 +141,13 @@ export default function AdminDashboard() {
     try {
       await api.patch(`/admin/temoignages/${id}/status`, { status });
       await fetchData(currentPageTemoignages, currentPageMessages);
-      
+
       // Notification de succès
-      const statusText = status === 'validated' ? 'approuvé' : 'rejeté';
-      showNotification(`Témoignage ${statusText} avec succès !`, 'success');
+      const statusText = status === "validated" ? "approuvé" : "rejeté";
+      showNotification(`Témoignage ${statusText} avec succès !`, "success");
     } catch (err) {
       setError("Erreur lors de la mise à jour du statut");
-      showNotification("Erreur lors de la mise à jour", 'error');
+      showNotification("Erreur lors de la mise à jour", "error");
     } finally {
       setUpdatingTemoignage(null);
     }
@@ -146,10 +164,10 @@ export default function AdminDashboard() {
     try {
       await api.patch(`/admin/contact-messages/${msg._id}/answered`);
       await fetchData(currentPageTemoignages, currentPageMessages);
-      showNotification("Message marqué comme répondu", 'info');
+      showNotification("Message marqué comme répondu", "info");
     } catch (err) {
       setError("Erreur lors du changement de statut du message");
-      showNotification("Erreur lors de la mise à jour", 'error');
+      showNotification("Erreur lors de la mise à jour", "error");
     }
   };
 
@@ -164,10 +182,10 @@ export default function AdminDashboard() {
       await fetchData(currentPageTemoignages, currentPageMessages);
       setShowDeleteModal(false);
       setDeleteId(null);
-      showNotification("Message supprimé", 'info');
+      showNotification("Message supprimé", "info");
     } catch (err) {
       setError("Erreur lors de la suppression du message");
-      showNotification("Erreur lors de la suppression", 'error');
+      showNotification("Erreur lors de la suppression", "error");
       setShowDeleteModal(false);
       setDeleteId(null);
     }
@@ -184,10 +202,10 @@ export default function AdminDashboard() {
       await fetchData(currentPageTemoignages, currentPageMessages);
       setShowDeleteTemoignageModal(false);
       setDeleteTemoignageId(null);
-      showNotification("Témoignage supprimé", 'info');
+      showNotification("Témoignage supprimé", "info");
     } catch (err) {
       setError("Erreur lors de la suppression du témoignage");
-      showNotification("Erreur lors de la suppression", 'error');
+      showNotification("Erreur lors de la suppression", "error");
       setShowDeleteTemoignageModal(false);
       setDeleteTemoignageId(null);
     }
@@ -212,7 +230,9 @@ export default function AdminDashboard() {
       return;
     }
     if (passwordForm.newPassword.length < 8) {
-      setPasswordError("Le nouveau mot de passe doit contenir au moins 8 caractères");
+      setPasswordError(
+        "Le nouveau mot de passe doit contenir au moins 8 caractères",
+      );
       return;
     }
     setPasswordLoading(true);
@@ -223,13 +243,20 @@ export default function AdminDashboard() {
         newPassword: passwordForm.newPassword,
       });
       setPasswordSuccess("Mot de passe changé avec succès");
-      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      setPasswordForm({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
       setTimeout(() => {
         setShowPasswordModal(false);
         setPasswordSuccess("");
       }, 2000);
     } catch (err) {
-      setPasswordError(err.response?.data?.message || "Erreur lors du changement de mot de passe");
+      setPasswordError(
+        err.response?.data?.message ||
+          "Erreur lors du changement de mot de passe",
+      );
     } finally {
       setPasswordLoading(false);
     }
@@ -237,7 +264,11 @@ export default function AdminDashboard() {
 
   const closePasswordModal = () => {
     setShowPasswordModal(false);
-    setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    setPasswordForm({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
     setPasswordError("");
     setPasswordSuccess("");
   };
@@ -286,7 +317,11 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
-        <LoadingSpinner size="large" text="Chargement du dashboard..." color="primary" />
+        <LoadingSpinner
+          size="large"
+          text="Chargement du dashboard..."
+          color="primary"
+        />
       </div>
     );
   }
@@ -311,7 +346,9 @@ export default function AdminDashboard() {
         <div className={styles.header}>
           <div>
             <h1 className={styles.title}>Dashboard Admin</h1>
-            <p className={styles.subtitle}>Gestion des témoignages et messages</p>
+            <p className={styles.subtitle}>
+              Gestion des témoignages et messages
+            </p>
             {adminProfile && (
               <p className={styles.profileInfo}>
                 Connecté en tant que: <strong>{adminProfile.email}</strong>
@@ -382,8 +419,10 @@ export default function AdminDashboard() {
           {/* TÉMOIGNAGES TAB */}
           {activeTab === "temoignage" && (
             <div className={styles.sectionContainer}>
-              <h2 className={styles.sectionTitle}>Témoignages ({temoignages.length})</h2>
-              
+              <h2 className={styles.sectionTitle}>
+                Témoignages ({temoignages.length})
+              </h2>
+
               {/* STATS */}
               <div className={styles.stats}>
                 <div className={styles.statCard}>
@@ -418,27 +457,39 @@ export default function AdminDashboard() {
                         <div className={styles.itemHeader}>
                           <div>
                             <h3 className={styles.itemTitle}>{t.name}</h3>
-                            <p className={styles.itemMeta}>Posté le {formatDate(t.createdAt)}</p>
+                            <p className={styles.itemMeta}>
+                              Posté le {formatDate(t.createdAt)}
+                            </p>
                           </div>
                           <div className={styles.itemActions}>
-                            <span className={`${styles.statusBadge} ${getStatusBadgeClass(t.status)}`}>
+                            <span
+                              className={`${styles.statusBadge} ${getStatusBadgeClass(t.status)}`}
+                            >
                               {getStatusTextTemoignage(t.status)}
                             </span>
                             {t.status === "pending" && (
                               <>
                                 <button
-                                  onClick={() => updateTemoignageStatus(t._id, "validated")}
+                                  onClick={() =>
+                                    updateTemoignageStatus(t._id, "validated")
+                                  }
                                   disabled={updatingTemoignage === t._id}
                                   className={`${styles.actionButton} ${styles.approveButton}`}
                                 >
-                                  {updatingTemoignage === t._id ? "..." : "Valider"}
+                                  {updatingTemoignage === t._id
+                                    ? "..."
+                                    : "Valider"}
                                 </button>
                                 <button
-                                  onClick={() => updateTemoignageStatus(t._id, "rejected")}
+                                  onClick={() =>
+                                    updateTemoignageStatus(t._id, "rejected")
+                                  }
                                   disabled={updatingTemoignage === t._id}
                                   className={`${styles.actionButton} ${styles.rejectButton}`}
                                 >
-                                  {updatingTemoignage === t._id ? "..." : "Rejeter"}
+                                  {updatingTemoignage === t._id
+                                    ? "..."
+                                    : "Rejeter"}
                                 </button>
                               </>
                             )}
@@ -451,7 +502,9 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                         <div className={styles.itemInfo}>
-                          <p><strong>Message:</strong> {t.message}</p>
+                          <p>
+                            <strong>Message:</strong> {t.message}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -469,12 +522,16 @@ export default function AdminDashboard() {
           {/* MESSAGES TAB */}
           {activeTab === "contact" && (
             <div className={styles.sectionContainer}>
-              <h2 className={styles.sectionTitle}>Messages de contact ({contactMessages.length})</h2>
-              
+              <h2 className={styles.sectionTitle}>
+                Messages de contact ({contactMessages.length})
+              </h2>
+
               {/* STATS */}
               <div className={styles.stats}>
                 <div className={styles.statCard}>
-                  <h3 className={styles.statNumber}>{contactMessages.length}</h3>
+                  <h3 className={styles.statNumber}>
+                    {contactMessages.length}
+                  </h3>
                   <p className={styles.statLabel}>Total</p>
                 </div>
                 <div className={styles.statCard}>
@@ -503,10 +560,14 @@ export default function AdminDashboard() {
                         <div className={styles.itemHeader}>
                           <div>
                             <h3 className={styles.itemTitle}>{msg.name}</h3>
-                            <p className={styles.itemMeta}>Reçu le {formatDate(msg.createdAt)}</p>
+                            <p className={styles.itemMeta}>
+                              Reçu le {formatDate(msg.createdAt)}
+                            </p>
                           </div>
                           <div className={styles.itemActions}>
-                            <span className={`${styles.statusBadge} ${msg.answered ? styles.statusApproved : styles.statusPending}`}>
+                            <span
+                              className={`${styles.statusBadge} ${msg.answered ? styles.statusApproved : styles.statusPending}`}
+                            >
                               {msg.answered ? "Répondu" : "À traiter"}
                             </span>
                             <button
@@ -525,9 +586,17 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                         <div className={styles.itemInfo}>
-                          <p><strong>Email:</strong> <a href={`mailto:${msg.email}`}>{msg.email}</a></p>
-                          <p><strong>Téléphone:</strong> <a href={`tel:${msg.phone}`}>{msg.phone}</a></p>
-                          <p><strong>Message:</strong> {msg.message}</p>
+                          <p>
+                            <strong>Email:</strong>{" "}
+                            <a href={`mailto:${msg.email}`}>{msg.email}</a>
+                          </p>
+                          <p>
+                            <strong>Téléphone:</strong>{" "}
+                            <a href={`tel:${msg.phone}`}>{msg.phone}</a>
+                          </p>
+                          <p>
+                            <strong>Message:</strong> {msg.message}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -554,7 +623,9 @@ export default function AdminDashboard() {
                         {adminProfile.email?.[0]?.toUpperCase() || "A"}
                       </div>
                       <div>
-                        <h3 className={styles.profileEmail}>{adminProfile.email}</h3>
+                        <h3 className={styles.profileEmail}>
+                          {adminProfile.email}
+                        </h3>
                         <p className={styles.profileRole}>Administrateur</p>
                       </div>
                     </div>
@@ -562,13 +633,17 @@ export default function AdminDashboard() {
                       <div className={styles.profileStatItem}>
                         <strong>Membre depuis:</strong>
                         <span>
-                          {adminProfile.createdAt ? formatDate(adminProfile.createdAt) : "Date non disponible"}
+                          {adminProfile.createdAt
+                            ? formatDate(adminProfile.createdAt)
+                            : "Date non disponible"}
                         </span>
                       </div>
                       <div className={styles.profileStatItem}>
                         <strong>Dernière connexion:</strong>
                         <span>
-                          {adminProfile.lastLogin ? formatDate(adminProfile.lastLogin) : "Jamais connecté"}
+                          {adminProfile.lastLogin
+                            ? formatDate(adminProfile.lastLogin)
+                            : "Jamais connecté"}
                         </span>
                       </div>
                       <div className={styles.profileStatItem}>
@@ -583,7 +658,10 @@ export default function AdminDashboard() {
                       >
                         Changer le mot de passe
                       </button>
-                      <button onClick={fetchAdminProfile} className={styles.refreshButton}>
+                      <button
+                        onClick={fetchAdminProfile}
+                        className={styles.refreshButton}
+                      >
                         Actualiser les informations
                       </button>
                     </div>
@@ -608,7 +686,9 @@ export default function AdminDashboard() {
               <h3 className={styles.modalTitle}>Changer le mot de passe</h3>
               <form onSubmit={handlePasswordSubmit}>
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Mot de passe actuel</label>
+                  <label className={styles.formLabel}>
+                    Mot de passe actuel
+                  </label>
                   <input
                     type="password"
                     name="currentPassword"
@@ -620,7 +700,9 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Nouveau mot de passe</label>
+                  <label className={styles.formLabel}>
+                    Nouveau mot de passe
+                  </label>
                   <input
                     type="password"
                     name="newPassword"
@@ -631,10 +713,14 @@ export default function AdminDashboard() {
                     minLength={8}
                     disabled={passwordLoading}
                   />
-                  <small className={styles.formHint}>Minimum 8 caractères</small>
+                  <small className={styles.formHint}>
+                    Minimum 8 caractères
+                  </small>
                 </div>
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Confirmer le nouveau mot de passe</label>
+                  <label className={styles.formLabel}>
+                    Confirmer le nouveau mot de passe
+                  </label>
                   <input
                     type="password"
                     name="confirmPassword"
@@ -645,8 +731,14 @@ export default function AdminDashboard() {
                     disabled={passwordLoading}
                   />
                 </div>
-                {passwordError && <div className={styles.passwordError}>{passwordError}</div>}
-                {passwordSuccess && <div className={styles.passwordSuccess}>{passwordSuccess}</div>}
+                {passwordError && (
+                  <div className={styles.passwordError}>{passwordError}</div>
+                )}
+                {passwordSuccess && (
+                  <div className={styles.passwordSuccess}>
+                    {passwordSuccess}
+                  </div>
+                )}
                 <div className={styles.modalActions}>
                   <button
                     type="button"
@@ -684,8 +776,8 @@ export default function AdminDashboard() {
               </div>
               <h3 className={styles.modalTitle}>Supprimer le message</h3>
               <p className={styles.modalDescription}>
-                Cette action est irréversible. Le message sera définitivement supprimé 
-                de la base de données.
+                Cette action est irréversible. Le message sera définitivement
+                supprimé de la base de données.
               </p>
               <div className={styles.modalActions}>
                 <button
@@ -694,8 +786,8 @@ export default function AdminDashboard() {
                 >
                   Annuler
                 </button>
-                <button 
-                  className={`${styles.actionButton} ${styles.deleteButton} ${styles.modalDeleteButton}`} 
+                <button
+                  className={`${styles.actionButton} ${styles.deleteButton} ${styles.modalDeleteButton}`}
                   onClick={handleDeleteConfirmed}
                 >
                   <span>🗑️</span>
@@ -714,8 +806,8 @@ export default function AdminDashboard() {
               </div>
               <h3 className={styles.modalTitle}>Supprimer le témoignage</h3>
               <p className={styles.modalDescription}>
-                Cette action est irréversible. Le témoignage sera définitivement supprimé 
-                et ne pourra plus être récupéré.
+                Cette action est irréversible. Le témoignage sera définitivement
+                supprimé et ne pourra plus être récupéré.
               </p>
               <div className={styles.modalActions}>
                 <button
@@ -724,8 +816,8 @@ export default function AdminDashboard() {
                 >
                   Annuler
                 </button>
-                <button 
-                  className={`${styles.actionButton} ${styles.deleteButton} ${styles.modalDeleteButton}`} 
+                <button
+                  className={`${styles.actionButton} ${styles.deleteButton} ${styles.modalDeleteButton}`}
                   onClick={handleDeleteTemoignageConfirmed}
                 >
                   <span>🗑️</span>

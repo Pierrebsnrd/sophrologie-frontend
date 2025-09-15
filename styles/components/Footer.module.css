@@ -87,7 +87,7 @@
 }
 
 .footerLink::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -221,7 +221,7 @@
     text-align: center;
     gap: 1.5rem;
   }
-  
+
   .footerInfo {
     gap: 1.5rem;
   }
@@ -254,7 +254,7 @@
     flex-direction: column;
     gap: 0.8rem;
   }
-  
+
   .footerLink {
     font-size: 0.85rem;
   }

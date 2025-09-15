@@ -1,9 +1,9 @@
-import styles from '../styles/components/LoadingSpinner.module.css';
+import styles from "../styles/components/LoadingSpinner.module.css";
 
-export default function LoadingSpinner({ 
-  size = 'medium', // 'small', 'medium', 'large'
-  text = '',
-  color = 'primary' // 'primary', 'white', 'dark'
+export default function LoadingSpinner({
+  size = "medium", // 'small', 'medium', 'large'
+  text = "",
+  color = "primary", // 'primary', 'white', 'dark'
 }) {
   return (
     <div className={`${styles.container} ${styles[size]}`}>
@@ -18,7 +18,7 @@ export default function LoadingSpinner({
 }
 
 // Composant pour un overlay de chargement pleine page
-export function LoadingOverlay({ text = 'Chargement...' }) {
+export function LoadingOverlay({ text = "Chargement..." }) {
   return (
     <div className={styles.overlay}>
       <div className={styles.overlayContent}>

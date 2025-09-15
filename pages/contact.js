@@ -13,7 +13,7 @@ export default function Contact() {
   // État pour les notifications au niveau de la page
   const [notification, setNotification] = useState(null);
 
-  const handleNotification = (message, type = 'success') => {
+  const handleNotification = (message, type = "success") => {
     setNotification({ message, type });
   };
 

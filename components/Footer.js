@@ -18,7 +18,10 @@ export default function Footer() {
             <Link href="/charte" className={styles.footerLink}>
               Charte éthique
             </Link>
-            <Link href="/politique-de-confidentialite" className={styles.footerLink}>
+            <Link
+              href="/politique-de-confidentialite"
+              className={styles.footerLink}
+            >
               Politique de confidentialité
             </Link>
           </div>

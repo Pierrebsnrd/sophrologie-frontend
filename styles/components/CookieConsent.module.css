@@ -99,12 +99,12 @@
     text-align: center;
     gap: 1.5rem;
   }
-  
+
   .cookieButtons {
     width: 100%;
     justify-content: center;
   }
-  
+
   .acceptButton,
   .refuseButton {
     flex: 1;
@@ -116,11 +116,11 @@
   .cookieBanner {
     padding: 1rem;
   }
-  
+
   .cookieText h3 {
     font-size: 1.1rem;
   }
-  
+
   .cookieText p {
     font-size: 0.9rem;
   }

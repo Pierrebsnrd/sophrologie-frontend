@@ -148,7 +148,9 @@
 
 /* Animations */
 @keyframes bounce {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0);
     opacity: 0.5;
   }
@@ -173,7 +175,7 @@
     padding: 1.5rem;
     margin: 1rem;
   }
-  
+
   .overlayText {
     font-size: 1rem;
   }

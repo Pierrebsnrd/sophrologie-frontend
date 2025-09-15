@@ -1,14 +1,14 @@
 // components/GoogleAnalytics.js
-import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import Script from "next/script";
+import { useEffect, useState } from "react";
 
 const GoogleAnalytics = ({ GA_MEASUREMENT_ID }) => {
   const [consentGiven, setConsentGiven] = useState(false);
 
   useEffect(() => {
     // Vérifier le consentement aux cookies
-    const consent = localStorage.getItem('cookieConsent');
-    setConsentGiven(consent === 'accepted');
+    const consent = localStorage.getItem("cookieConsent");
+    setConsentGiven(consent === "accepted");
   }, []);
 
   // Ne charger GA4 que si le consentement est donné

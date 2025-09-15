@@ -110,11 +110,11 @@
     min-width: auto;
     max-width: none;
   }
-  
+
   .content {
     padding: 0.8rem 1rem;
   }
-  
+
   .message {
     font-size: 0.9rem;
   }
@@ -122,7 +122,7 @@
 
 /* Barre de progression (optionnelle) */
 .notification::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
