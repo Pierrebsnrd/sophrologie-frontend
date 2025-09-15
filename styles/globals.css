@@ -4,6 +4,12 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden; /* Empêche le débordement horizontal */
+  width: 100%;
+  max-width: 100vw;
+}
+
 body {
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
