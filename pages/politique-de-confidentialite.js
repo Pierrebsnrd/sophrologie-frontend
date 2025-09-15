@@ -196,10 +196,9 @@ export default function PolitiqueDeConfidentialite() {
               Nous nous engageons à protéger votre vie privée avec le même soin
               que nous mettons dans nos accompagnements en sophrologie.
             </p>
-            <Link href="/contact">
-              <a className={styles.contactButton} >Contactez-nous </a>
+            <Link href="/contact" className={styles.contactButton}>
+              Contactez-nous
             </Link>
-            
           </div>
         </div>
       </main>
