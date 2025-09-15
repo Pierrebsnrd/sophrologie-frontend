@@ -26,6 +26,12 @@ export default function Header() {
     if (href === "/rdv") {
       trackEvents.clickRdv();
     }
+    
+    // Gestion spéciale pour "qui-suis-je"
+    if (href === "/qui-suis-je") {
+      sessionStorage.setItem("playMusic", "true");
+    }
+    
     setMenuOpen(false);
   };
 
@@ -51,7 +57,7 @@ export default function Header() {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`${styles.navLink} ${router.pathname === href ? styles.activeLink : ""}`}
+                  className={`${styles.navLink} ${router.pathname === href ? styles.active : ""}`}
                   onClick={() => handleNavClick(href, label)}
                 >
                   {label}
@@ -61,76 +67,55 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Réseaux sociaux à droite (desktop uniquement) */}
+        {/* Icônes sociales à droite desktop, à gauche mobile */}
         <div className={styles.socialIcons}>
           <a
-            href="https://www.facebook.com/profile.php?id=61566511205757"
+            href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.socialIcon}
+            aria-label="Facebook"
             onClick={() => handleSocialClick("Facebook")}
           >
             <FaFacebookF />
           </a>
           <a
-            href="https://www.instagram.com/stephanie_habert_sophrologue/"
+            href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.socialIcon}
+            aria-label="Instagram"
             onClick={() => handleSocialClick("Instagram")}
           >
             <FaInstagram />
           </a>
         </div>
 
-        {/* Bouton menu mobile */}
+        {/* Hamburger menu (visible uniquement mobile) */}
         <button
-          className={styles.menuToggle}
+          className={styles.hamburger}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Menu"
+          aria-expanded={menuOpen}
         >
           <FaBars />
         </button>
       </div>
 
-      {/* Menu mobile */}
+      {/* Menu mobile (dropdown) */}
       {menuOpen && (
-        <nav className={styles.mobileMenu}>
+        <nav className={styles.mobileNav}>
           <ul className={styles.mobileNavList}>
             {navLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}
-                  className={`${styles.mobileNavLink} ${router.pathname === href ? styles.activeMobileLink : ""}`}
                   onClick={() => handleNavClick(href, label)}
+                  className={`${styles.navLink} ${router.pathname === href ? styles.active : ""}`}
                 >
                   {label}
                 </Link>
               </li>
             ))}
           </ul>
-
-          {/* Réseaux sociaux mobile */}
-          <div className={styles.mobileSocialIcons}>
-            <a
-              href="https://www.facebook.com/profile.php?id=61566511205757"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.mobileSocialIcon}
-              onClick={() => handleSocialClick("Facebook")}
-            >
-              <FaFacebookF />
-            </a>
-            <a
-              href="https://www.instagram.com/stephanie_habert_sophrologue/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.mobileSocialIcon}
-              onClick={() => handleSocialClick("Instagram")}
-            >
-              <FaInstagram />
-            </a>
-          </div>
         </nav>
       )}
     </header>
