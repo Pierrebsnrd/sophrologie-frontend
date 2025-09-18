@@ -1,6 +1,4 @@
-import SEO from "../components/SEO";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { SEO, Header, Footer } from "../components/layout";
 import Image from "next/image";
 import styles from "../styles/pages/Tarifs.module.css";
 import Link from "next/link";

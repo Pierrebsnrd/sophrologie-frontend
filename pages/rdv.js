@@ -1,7 +1,5 @@
-import SEO from "../components/SEO";
-import Header from "../components/Header";
-import Resalib from "../components/Resalib";
-import Footer from "../components/Footer";
+import { SEO, Header, Footer } from "../components/layout";
+import { Resalib } from "../components/features";
 
 function RdvPage() {
   return (

@@ -1,5 +1,5 @@
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
-import styles from "../styles/components/ContactInfo.module.css";
+import styles from "../../styles/components/ContactInfo.module.css";
 
 export default function ContactInfo() {
   return (

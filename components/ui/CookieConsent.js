@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from "../styles/components/CookieConsent.module.css";
+import styles from "../../styles/components/CookieConsent.module.css";
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);

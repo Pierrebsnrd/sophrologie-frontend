@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "../styles/components/Resalib.module.css";
+import styles from "../../styles/components/Resalib.module.css";
 import Image from "next/image";
-import { trackEvents } from "../utils/analytics";
+import { trackEvents } from "../../utils/analytics";
 
 export default function Resalib() {
   // Fonction pour tracker les clics sur Resalib

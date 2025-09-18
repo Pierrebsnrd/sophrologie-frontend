@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
-import styles from "../styles/components/BackgroundMusic.module.css";
+import styles from "../../styles/components/BackgroundMusic.module.css";
 
 export default function BackgroundMusic({ autoPlay = false }) {
   const audioRef = useRef(null);

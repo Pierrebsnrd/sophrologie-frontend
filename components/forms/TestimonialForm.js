@@ -1,9 +1,8 @@
 import { useState } from "react";
-import styles from "../styles/components/TestimonialForm.module.css";
-import api from "../utils/api";
-import { trackEvents } from "../utils/analytics";
-import LoadingSpinner from "./LoadingSpinner";
-import Notification from "./Notification";
+import styles from "../../styles/components/TestimonialForm.module.css";
+import api from "../../utils/api";
+import { trackEvents } from "../../utils/analytics";
+import { LoadingSpinner, Notification } from "../ui";
 
 export default function TestimonialForm({ onTestimonialSubmitted }) {
   const [name, setName] = useState("");

@@ -1,6 +1,4 @@
-import SEO from "../components/SEO";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { SEO, Header, Footer } from "../components/layout";
 import styles from "../styles/pages/Charte.module.css";
 import Image from "next/image";
 

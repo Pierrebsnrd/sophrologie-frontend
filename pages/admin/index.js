@@ -3,8 +3,7 @@ import styles from "../../styles/pages/Index.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import api from "../../utils/api";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Notification from "../../components/Notification";
+import { LoadingSpinner, Notification } from "../../components/ui";
 
 export default function AdminDashboard() {
   // States

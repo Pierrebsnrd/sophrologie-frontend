@@ -1,8 +1,7 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import GoogleAnalytics from "../components/GoogleAnalytics";
-import CookieConsent from "../components/CookieConsent";
+import { GoogleAnalytics, CookieConsent } from "../components/ui";
 import { GA_MEASUREMENT_ID, pageview } from "../utils/analytics";
 import "../styles/globals.css";
 

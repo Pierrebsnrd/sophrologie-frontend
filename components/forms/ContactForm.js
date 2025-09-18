@@ -1,8 +1,8 @@
 import { useState } from "react";
-import styles from "../styles/components/ContactForm.module.css";
-import api from "../utils/api";
-import { trackEvents } from "../utils/analytics";
-import LoadingSpinner from "./LoadingSpinner";
+import styles from "../../styles/components/ContactForm.module.css";
+import api from "../../utils/api";
+import { trackEvents } from "../../utils/analytics";
+import { LoadingSpinner } from "../ui";
 
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

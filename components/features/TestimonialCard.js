@@ -1,4 +1,4 @@
-import styles from "../styles/components/TestimonialCard.module.css";
+import styles from "../../styles/components/TestimonialCard.module.css";
 
 const formatDate = (dateString) => {
   try {

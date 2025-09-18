@@ -1,11 +1,8 @@
 import { useState } from "react";
-import SEO from "../components/SEO";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import ContactInfo from "../components/ContactInfo";
-import ContactForm from "../components/ContactForm";
-import Map from "../components/Map";
-import Notification from "../components/Notification";
+import { SEO, Header, Footer } from "../components/layout";
+import { ContactInfo, Map } from "../components/features";
+import { ContactForm } from "../components/forms";
+import { Notification } from "../components/ui";
 import styles from "../styles/pages/Contact.module.css";
 import Image from "next/image";
 

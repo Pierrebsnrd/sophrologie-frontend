@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "../styles/components/Notification.module.css";
+import styles from "../../styles/components/Notification.module.css";
 
 export default function Notification({
   message,

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import SEO from "../components/SEO";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import TestimonialCard from "../components/TestimonialCard";
-import TestimonialForm from "../components/TestimonialForm";
+import { SEO, Header, Footer } from "../components/layout";
+import { TestimonialCard } from "../components/features";
+import { TestimonialForm } from "../components/forms";
 import Image from "next/image";
 import styles from "../styles/pages/Temoignages.module.css";
 import api from "../utils/api";

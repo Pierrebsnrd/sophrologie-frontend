@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FaFacebookF, FaInstagram, FaBars } from "react-icons/fa";
-import styles from "../styles/components/Header.module.css";
+import styles from "../../styles/components/Header.module.css";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { trackEvents } from "../utils/analytics";
+import { trackEvents } from "../../utils/analytics";
 
 const navLinks = [
   { href: "/", label: "Accueil" },

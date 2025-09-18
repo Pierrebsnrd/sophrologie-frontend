@@ -1,12 +1,12 @@
 import Link from "next/link";
-import SEO from "../components/SEO";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { SEO } from "../components/layout";
+import { Header } from "../components/layout";
+import { Footer } from "../components/layout";
 import Image from "next/image";
 import styles from "../styles/pages/QuiSuisJe.module.css";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
-import BackgroundMusic from "../components/BackgroundMusic";
+import { BackgroundMusic } from "../components/features";
 
 export default function QuiSuisJe() {
   const [shouldAutoPlay, setShouldAutoPlay] = useState(false);

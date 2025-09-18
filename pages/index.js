@@ -1,5 +1,5 @@
-import Home from "../components/Home";
-import SEO from "../components/SEO";
+import { Home } from "../components/features";
+import { SEO } from "../components/layout";
 
 function Index() {
   return (

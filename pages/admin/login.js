@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import api from "../../utils/api";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Notification from "../../components/Notification";
+import { LoadingSpinner, Notification } from "../../components/ui";
 import styles from "../../styles/pages/Login.module.css";
 
 export default function AdminLogin() {

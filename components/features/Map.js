@@ -1,4 +1,4 @@
-import styles from "../styles/components/Map.module.css";
+import styles from "../../styles/components/Map.module.css";
 
 export default function Map({
   embedUrl = "https://www.google.com/maps?q=38+ter+rue+des+Ursulines+78100+Saint-Germain-en-Laye&output=embed",
