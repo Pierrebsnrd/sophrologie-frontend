@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { FaInstagram, FaFacebookF } from "react-icons/fa";
 import styles from "../../styles/components/Footer.module.css";
+import { SOCIAL_LINKS } from "../../config/constants";
 
 export default function Footer() {
   return (
@@ -28,7 +29,7 @@ export default function Footer() {
         </div>
         <div className={styles.socialIcons}>
           <a
-            href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr"
+            href={SOCIAL_LINKS.INSTAGRAM}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -36,7 +37,7 @@ export default function Footer() {
             <FaInstagram className={styles.icon} />
           </a>
           <a
-            href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr"
+            href={SOCIAL_LINKS.FACEBOOK}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"

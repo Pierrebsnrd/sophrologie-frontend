@@ -5,16 +5,7 @@ import styles from "../../styles/components/Header.module.css";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { trackEvents } from "../../utils/analytics";
-
-const navLinks = [
-  { href: "/", label: "Accueil" },
-  { href: "/qui-suis-je", label: "Qui suis-je ?" },
-  { href: "/tarifs", label: "Tarifs" },
-  { href: "/rdv", label: "Prendre rendez-vous" },
-  { href: "/temoignages", label: "Témoignages" },
-  { href: "/contact", label: "Contact" },
-  { href: "/charte", label: "Charte éthique" },
-];
+import { NAV_LINKS, SOCIAL_LINKS, APP_CONFIG } from "../../config/constants";
 
 export default function Header() {
   const router = useRouter();
@@ -29,7 +20,7 @@ export default function Header() {
     
     // Gestion spéciale pour "qui-suis-je"
     if (href === "/qui-suis-je") {
-      sessionStorage.setItem("playMusic", "true");
+      sessionStorage.setItem(APP_CONFIG.SESSION_STORAGE_KEYS.PLAY_MUSIC, "true");
     }
     
     setMenuOpen(false);
@@ -53,7 +44,7 @@ export default function Header() {
         {/* Menu navigation centré (desktop uniquement) */}
         <nav className={styles.navbar}>
           <ul className={styles.navList}>
-            {navLinks.map(({ href, label }) => (
+            {NAV_LINKS.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}
@@ -70,7 +61,7 @@ export default function Header() {
         {/* Icônes sociales à droite desktop, à gauche mobile */}
         <div className={styles.socialIcons}>
           <a
-            href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr"
+            href={SOCIAL_LINKS.FACEBOOK}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
@@ -79,7 +70,7 @@ export default function Header() {
             <FaFacebookF />
           </a>
           <a
-            href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr"
+            href={SOCIAL_LINKS.INSTAGRAM}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -104,7 +95,7 @@ export default function Header() {
       {menuOpen && (
         <nav className={styles.mobileNav}>
           <ul className={styles.mobileNavList}>
-            {navLinks.map(({ href, label }) => (
+            {NAV_LINKS.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}

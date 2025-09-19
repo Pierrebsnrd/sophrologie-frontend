@@ -1,5 +1,6 @@
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import styles from "../../styles/components/ContactInfo.module.css";
+import { SOCIAL_LINKS, CONTACT_INFO, APP_CONFIG } from "../../config/constants";
 
 export default function ContactInfo() {
   return (
@@ -9,31 +10,31 @@ export default function ContactInfo() {
         <strong>Cabinet :</strong> Stéphanie Habert Sophrologue
       </p>
       <p>
-        <strong>Adresse :</strong> 38 ter, rue des Ursulines, 78100
-        Saint-Germain-en-Laye
+        <strong>Adresse :</strong> {CONTACT_INFO.ADDRESS.STREET}, {CONTACT_INFO.ADDRESS.POSTAL_CODE}{" "}
+        {CONTACT_INFO.ADDRESS.CITY}
       </p>
 
       <h3>Horaires d'ouverture</h3>
       <ul>
-        <li>Mardi : 9h30 - 17h30 au cabinet</li>
-        <li>Vendredi : 9h30 - 17h30 en visioconsultation</li>
+        <li>Mardi : {APP_CONFIG.SCHEDULE.TUESDAY}</li>
+        <li>Vendredi : {APP_CONFIG.SCHEDULE.FRIDAY}</li>
       </ul>
 
       <h3>Contact</h3>
       <p>
-        <strong>Téléphone :</strong> <a href="tel:0611421765">06 11 42 17 65</a>
+        <strong>Téléphone :</strong> <a href={`tel:${CONTACT_INFO.PHONE.replace(/\s/g, "")}`}>{CONTACT_INFO.PHONE}</a>
       </p>
       <p>
         <strong>Email :</strong>{" "}
-        <a href="mailto:stephaniehabert.sophrologue@gmail.com">
-          stephaniehabert.sophrologue@gmail.com
+        <a href={`mailto:${CONTACT_INFO.EMAIL}`}>
+          {CONTACT_INFO.EMAIL}
         </a>
       </p>
 
       <h3>Réseaux sociaux</h3>
       <div className={styles.socialIcons}>
         <a
-          href="https://www.facebook.com/share/1BnUXyDqhg/?mibextid=wwXIfr"
+          href={SOCIAL_LINKS.FACEBOOK}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Facebook"
@@ -41,7 +42,7 @@ export default function ContactInfo() {
           <FaFacebookF />
         </a>
         <a
-          href="https://www.instagram.com/sophrologuevillepreuxstephanie?igsh=MWdjdHQ5dml5NDB0bw%3D%3D&utm_source=qr"
+          href={SOCIAL_LINKS.INSTAGRAM}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram"

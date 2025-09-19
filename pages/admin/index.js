@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import api from "../../utils/api";
 import { LoadingSpinner, Notification } from "../../components/ui";
+import { EXTERNAL_SERVICES } from "../../config/constants";
 
 export default function AdminDashboard() {
   // States
@@ -376,7 +377,7 @@ export default function AdminDashboard() {
             Consultez votre tableau de bord Resalib pour voir vos réservations.
           </p>
           <a
-            href="https://www.resalib.fr/bo/home"
+            href={EXTERNAL_SERVICES.RESALIB_ADMIN}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.resalibLink}

@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../../styles/components/Resalib.module.css";
 import Image from "next/image";
 import { trackEvents } from "../../utils/analytics";
+import { EXTERNAL_SERVICES } from "../../config/constants";
 
 export default function Resalib() {
   // Fonction pour tracker les clics sur Resalib
@@ -35,7 +36,7 @@ export default function Resalib() {
 
         <div className={styles.resalibContainer}>
           <a
-            href="https://www.resalib.fr/praticien/115051-stephanie-habert-sophrologue-saint-germain-en-laye"
+            href={EXTERNAL_SERVICES.RESALIB_BOOKING}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleResalibClick}

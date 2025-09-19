@@ -8,7 +8,7 @@ const SEO = ({
   ogImageAlt = "Stéphanie Habert - Sophrologue à Villepreux",
   pageType = "website",
   specificJsonLd = null,
-  keywords = "sophrologie, Villepreux, bien-être, stress, relaxation, Stéphanie Habert, sophrologue, accompagnement, sommeil, confiance en soi",
+  keywords = "sophrologie, Villepreux, Saint-Germain-en-Laye, bien-être, stress, relaxation, Stéphanie Habert, sophrologue, accompagnement, sommeil, confiance en soi, sophrologue Saint-Germain-en-Laye, sophrologie Saint-Germain-en-Laye",
   noIndex = false,
 }) => {
   // JSON-LD Global - Organisation/Personne
@@ -28,8 +28,9 @@ const SEO = ({
         telephone: "+33611421765",
         address: {
           "@type": "PostalAddress",
-          addressLocality: "Villepreux",
-          postalCode: "78450",
+          streetAddress: "38 ter, rue des Ursulines",
+          addressLocality: "Saint-Germain-en-Laye",
+          postalCode: "78100",
           addressCountry: "FR",
         },
         sameAs: [
@@ -61,14 +62,15 @@ const SEO = ({
         openingHours: ["Mo 09:30-17:30", "Fr 09:30-17:30"],
         address: {
           "@type": "PostalAddress",
-          addressLocality: "Villepreux",
-          postalCode: "78450",
+          streetAddress: "38 ter, rue des Ursulines",
+          addressLocality: "Saint-Germain-en-Laye",
+          postalCode: "78100",
           addressCountry: "FR",
         },
         geo: {
           "@type": "GeoCoordinates",
-          latitude: "48.8283",
-          longitude: "1.9877",
+          latitude: "48.8986",
+          longitude: "2.0939",
         },
         image: "https://www.sophrologuevillepreux.fr/logo/logo.jpeg",
         logo: "https://www.sophrologuevillepreux.fr/logo/logo.jpeg",
@@ -139,7 +141,15 @@ const SEO = ({
         areaServed: [
           {
             "@type": "City",
+            name: "Saint-Germain-en-Laye",
+          },
+          {
+            "@type": "City",
             name: "Villepreux",
+          },
+          {
+            "@type": "AdministrativeArea",
+            name: "Yvelines",
           },
           {
             "@type": "State",
