@@ -48,7 +48,12 @@ yarn install
 Créer un fichier `.env.local` :
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
+# Development
+NEXT_PUBLIC_API_URL=http://localhost:3000
+
+# Production (example)
+NEXT_PUBLIC_API_URL=https://sophrologie-backend.vercel.app/
+NEXT_PUBLIC_GA_ID=your_google_analytics_id
 ```
 
 ### Démarrage
@@ -84,17 +89,21 @@ yarn postbuild
 ```
 frontend/
 ├── components/          # Composants React réutilisables
-│   ├── BackgroundMusic.js  # Lecteur de musique de fond
-│   ├── ContactForm.js   # Formulaire de contact
-│   ├── ContactInfo.js   # Informations de contact
-│   ├── Footer.js        # Pied de page
-│   ├── Header.js        # Navigation principale
-│   ├── Home.js          # Contenu page d'accueil
-│   ├── Map.js           # Carte Google Maps
-│   ├── Resalib.js       # Widget de réservation
-│   ├── SEO.js           # Gestion meta tags
-│   ├── TestimonialCard.js  # Carte témoignage
-│   └── TestimonialForm.js  # Formulaire témoignage
+│   ├── layout/         # Composants de mise en page
+│   │   ├── Header.js   # Navigation principale
+│   │   ├── Footer.js   # Pied de page
+│   │   └── SEO.js      # Gestion meta tags
+│   ├── forms/          # Formulaires
+│   │   ├── ContactForm.js     # Formulaire de contact
+│   │   └── TestimonialForm.js # Formulaire témoignage
+│   ├── features/       # Fonctionnalités spécifiques
+│   │   ├── BackgroundMusic.js # Lecteur de musique de fond
+│   │   ├── Map.js      # Carte Google Maps
+│   │   └── Resalib.js  # Widget de réservation
+│   ├── ui/             # Composants d'interface
+│   │   ├── TestimonialCard.js # Carte témoignage
+│   │   └── ContactInfo.js     # Informations de contact
+│   └── Home.js         # Contenu page d'accueil
 ├── pages/              # Pages Next.js (routing automatique)
 │   ├── admin/          # Interface d'administration
 │   │   ├── index.js    # Dashboard admin
@@ -112,14 +121,15 @@ frontend/
 │   ├── components/     # Styles des composants
 │   ├── pages/          # Styles des pages
 │   └── globals.css     # Styles globaux
-├── utils/
+├── utils/              # Utilitaires
 │   └── api.js          # Configuration Axios
 ├── public/             # Assets statiques
-    ├── bannieres/      # Images de bannières
-    ├── icons/          # Favicons et icônes
-    └── logo/           # Logos
-    ├── music/          # Musique backgroundMusic
-    └── profile/        # Image du profile
+│   ├── bannieres/      # Images de bannières
+│   ├── icons/          # Favicons et icônes
+│   ├── logo/           # Logos
+│   ├── music/          # Musique backgroundMusic
+│   └── profile/        # Images de profil
+└── tests/              # Tests unitaires (Jest + React Testing Library)
 ```
 
 ## 🌐 Pages du site
@@ -141,7 +151,7 @@ frontend/
 ### Navigation & Layout
 
 - **Header** : Navigation responsive avec menu mobile
-- **Footer** : Informations de contact et liens
+- je **Footer** : Informations de contact et liens
 - **SEO** : Meta tags dynamiques par page
 
 ### Contenu & Interaction
@@ -252,6 +262,7 @@ Le frontend est optimisé pour un déploiement sur Vercel :
 1. **Connecter le repository** à votre compte Vercel
 2. **Configurer les variables d'environnement** :
    ```env
-   NEXT_PUBLIC_API_URL=https://votre-api-backend.com
+   NEXT_PUBLIC_API_URL=https://sophrologie-backend.vercel.app/
+   NEXT_PUBLIC_GA_ID=your_google_analytics_id
    ```
 3. **Déploiement automatique** sur chaque push vers la branche main
