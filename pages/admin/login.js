@@ -40,7 +40,7 @@ export default function AdminLogin() {
       return;
     }
 
-    // 🔄 PHASE 1 : Démarrer le chargement
+    // PHASE 1 : Démarrer le chargement
     setLoading(true);
     setError("");
     setNotification(null);
@@ -53,7 +53,7 @@ export default function AdminLogin() {
         if (token) {
           localStorage.setItem("adminToken", token);
 
-          // 🎉 PHASE 2 : Notification de succès
+          // PHASE 2 : Notification de succès
           showNotification("Connexion réussie ! Redirection...", "success");
 
           // Petite pause pour voir la notification
@@ -82,7 +82,7 @@ export default function AdminLogin() {
       setError(errorMessage);
       showNotification("❌ " + errorMessage, "error");
     } finally {
-      // 🔄 PHASE 3 : Arrêter le chargement
+      // PHASE 3 : Arrêter le chargement
       setLoading(false);
     }
   };
@@ -94,7 +94,7 @@ export default function AdminLogin() {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      {/* 🎯 Notification toast */}
+      {/* Notification */}
       <Notification
         message={notification?.message}
         type={notification?.type}
@@ -140,7 +140,7 @@ export default function AdminLogin() {
               />
             </div>
 
-            {/* 🎯 Bouton avec LoadingSpinner */}
+            {/* Bouton avec LoadingSpinner */}
             <button
               type="submit"
               className={`${styles.submitButton} ${loading ? styles.loading : ""}`}

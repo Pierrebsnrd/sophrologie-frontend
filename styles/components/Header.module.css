@@ -217,7 +217,7 @@
   }
 }
 
-/* === RESPONSIVE MOBILE STABLE === */
+/* Mobile */
 @media (max-width: 768px) {
   .headerContainer {
     padding: 0 1rem !important;
@@ -233,7 +233,7 @@
     padding: 0;
   }
 
-  /* Logo parfaitement centré */
+  /* Logo centré */
   .logoContainer {
     position: absolute;
     left: 50%;

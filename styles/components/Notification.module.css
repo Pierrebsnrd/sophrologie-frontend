@@ -120,7 +120,7 @@
   }
 }
 
-/* Barre de progression (optionnelle) */
+/* Barre de progression */
 .notification::after {
   content: "";
   position: absolute;

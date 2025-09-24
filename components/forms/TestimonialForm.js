@@ -9,8 +9,6 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
   const [message, setMessage] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
   const [submitting, setSubmitting] = useState(false);
-
-  // 🎯 État pour les notifications toast
   const [notification, setNotification] = useState(null);
 
   const showNotification = (message, type = "success") => {
@@ -47,13 +45,13 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
 
     if (newErrors.length > 0) {
       setErrorMessages(newErrors);
-      // 🎯 Notification d'erreur de validation
+      // Notification d'erreur de validation
       showNotification("⚠️ Veuillez corriger les erreurs ci-dessous.", "error");
       return;
     }
 
     try {
-      // 🔄 PHASE 1 : Démarrer le chargement (LoadingSpinner)
+      // PHASE 1 : Démarrer le chargement (LoadingSpinner)
       setSubmitting(true);
 
       const response = await api.post("/temoignage", {
@@ -62,10 +60,10 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
       });
 
       if (response.data.success) {
-        // 🎯 Tracker l'événement
+        // Tracker l'événement
         trackEvents.testimonialSubmit();
 
-        // 🎉 PHASE 2 : Notification de succès + reset formulaire
+        // PHASE 2 : Notification de succès + reset formulaire
         showNotification(
           "🙏 Merci pour votre témoignage ! Il sera publié après validation.",
           "success",
@@ -102,14 +100,14 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
         );
       }
     } finally {
-      // 🔄 PHASE 3 : Arrêter le chargement
+      // PHASE 3 : Arrêter le chargement
       setSubmitting(false);
     }
   };
 
   return (
     <>
-      {/* 🎯 Notification toast flottante */}
+      {/* Notification toast flottante */}
       <Notification
         message={notification?.message}
         type={notification?.type}
@@ -146,7 +144,7 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
             onChange={handleNameChange}
             className={styles.textarea}
             style={{ height: "50px" }}
-            disabled={submitting} // 🔒 Désactiver pendant l'envoi
+            disabled={submitting} // Désactiver pendant l'envoi
           />
 
           <textarea
@@ -158,7 +156,7 @@ export default function TestimonialForm({ onTestimonialSubmitted }) {
             rows={5}
           />
 
-          {/* 🎯 Bouton avec LoadingSpinner intégré */}
+          {/* Bouton avec LoadingSpinner intégré */}
           <button
             className={`${styles.submitButton} ${submitting ? styles.loading : ""}`}
             onClick={submitTestimonial}

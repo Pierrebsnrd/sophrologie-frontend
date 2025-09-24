@@ -1,5 +1,3 @@
-// utils/analytics.js
-
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 // Vérifier si l'utilisateur a donné son consentement

@@ -1,4 +1,3 @@
-// components/GoogleAnalytics.js
 import Script from "next/script";
 import { useEffect, useState } from "react";
 

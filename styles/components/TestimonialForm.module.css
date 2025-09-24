@@ -158,7 +158,7 @@
   cursor: not-allowed;
 }
 
-/* 🎯 ÉTATS DE CHARGEMENT */
+/* ÉTATS DE CHARGEMENT */
 .submitButton.loading {
   cursor: wait;
   display: flex;

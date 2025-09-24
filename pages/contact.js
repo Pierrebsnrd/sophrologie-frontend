@@ -25,7 +25,7 @@ export default function Contact() {
         keywords="contact sophrologue Villepreux, rendez-vous, Stéphanie Habert, téléphone"
       />
 
-      {/* Notification toast au niveau de la page */}
+      {/* Notification au niveau de la page */}
       <Notification
         message={notification?.message}
         type={notification?.type}

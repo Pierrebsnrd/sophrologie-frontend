@@ -140,19 +140,19 @@
   margin-bottom: 0.5rem;
 }
 
-/* Inputs - CORRIGÉ */
+/* Inputs */
 .input {
   width: 100%;
   padding: 1rem;
   border: 2px solid rgba(72, 187, 120, 0.2);
   border-radius: 12px;
   font-size: 1rem;
-  background: white; /* CORRIGÉ : background blanc solide */
+  background: white;
   transition: all 0.3s ease;
   font-family: inherit;
   box-sizing: border-box;
-  position: relative; /* AJOUTÉ */
-  z-index: 2; /* AJOUTÉ : s'assurer que les inputs sont au dessus */
+  position: relative;
+  z-index: 2;
 }
 
 .input:focus {
@@ -170,13 +170,13 @@
 
 /* Inputs désactivés */
 .input:disabled {
-  background: #f7fafc; /* CORRIGÉ : couleur solide */
+  background: #f7fafc;
   cursor: not-allowed;
   opacity: 0.7;
   color: #6b7280;
 }
 
-/* Bouton submit - CORRIGÉ */
+/* Bouton submit */
 .submitButton {
   background: linear-gradient(135deg, #48bb78, #38a169);
   color: white;
@@ -192,7 +192,7 @@
   position: relative;
   overflow: hidden;
   margin-top: 1rem;
-  z-index: 2; /* AJOUTÉ : s'assurer que le bouton est cliquable */
+  z-index: 2;
 }
 
 .submitButton::before {
@@ -231,7 +231,7 @@
   transform: none;
 }
 
-/* 🎯 États de chargement */
+/* États de chargement */
 .submitButton.loading {
   cursor: wait;
   display: flex;

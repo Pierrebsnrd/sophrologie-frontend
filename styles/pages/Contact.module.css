@@ -106,7 +106,7 @@
   gap: 3rem;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: flex-start; /* par défaut à gauche */
+  justify-content: flex-start;
 }
 
 /* RESPONSIVE */
@@ -128,12 +128,12 @@
   .flexContainer {
     flex-direction: column;
     gap: 2rem;
-    align-items: center; /* centre horizontalement en colonne */
-    justify-content: center; /* centre verticalement si nécessaire */
+    align-items: center;
+    justify-content: center;
   }
 
   .mapContainer {
-    margin: 0 auto; /* assure le centrage si largeur < 100% */
+    margin: 0 auto;
   }
 }
 
