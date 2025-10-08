@@ -347,7 +347,7 @@ export default function AdminDashboard() {
           <div>
             <h1 className={styles.title}>Dashboard Admin</h1>
             <p className={styles.subtitle}>
-              Gestion des témoignages et messages
+              Gestion des témoignages et messages de contact
             </p>
             {adminProfile && (
               <p className={styles.profileInfo}>
@@ -371,7 +371,7 @@ export default function AdminDashboard() {
         {error && <div className={styles.errorMessage}>{error}</div>}
 
         {/* INFO BOX */}
-        <div className={styles.infoBox}>
+        {/* <div className={styles.infoBox}>
           <h3 className={styles.infoTitle}>Gestion des rendez-vous</h3>
           <p className={styles.infoText}>
             Consultez votre tableau de bord Resalib pour voir vos réservations.
@@ -384,7 +384,7 @@ export default function AdminDashboard() {
           >
             Ouvrir Resalib →
           </a>
-        </div>
+        </div> */}
 
         {/* TABS NAVIGATION */}
         <div className={styles.tabs}>
