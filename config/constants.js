@@ -40,7 +40,7 @@ export const APP_CONFIG = {
     PLAY_MUSIC: "playMusic"
   },
   SCHEDULE: {
-    TUESDAY: "9h30 - 17h30 à villepreux ou en visioconsultation",
+    TUESDAY: "9h30 - 17h30 à Villepreux ou en visioconsultation",
     FRIDAY: "9h30 - 17h30 au cabinet à Saint-Germain-en-Laye"
   }
 };
