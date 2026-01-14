@@ -10,7 +10,7 @@ export default function ContactInfo() {
         <strong>Cabinet :</strong> Stéphanie Habert Sophrologue
       </p>
       <p>
-        <strong>Adresse :</strong> {CONTACT_INFO.ADDRESS.STREET}, {CONTACT_INFO.ADDRESS.POSTAL_CODE}{" "}
+        <strong>Adresse :</strong> {CONTACT_INFO.ADDRESS.STREET} {CONTACT_INFO.ADDRESS.POSTAL_CODE}{" "}
         {CONTACT_INFO.ADDRESS.CITY}
       </p>
 

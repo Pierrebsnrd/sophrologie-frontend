@@ -28,9 +28,9 @@ export const CONTACT_INFO = {
   EMAIL: "stephaniehabert.sophrologue@gmail.com",
   PHONE: "06 11 42 17 65",
   ADDRESS: {
-    STREET: "38 ter, rue des Ursulines",
-    CITY: "Saint-Germain-en-Laye",
-    POSTAL_CODE: "78100"
+    /* STREET: "38 ter, rue des Ursulines", */
+    CITY: "Villepreux / Saint-Germain-en-Laye / Visio"
+    /* POSTAL_CODE: "78100" */
   }
 };
 
@@ -40,8 +40,8 @@ export const APP_CONFIG = {
     PLAY_MUSIC: "playMusic"
   },
   SCHEDULE: {
-    TUESDAY: "9h30 - 17h30 à Villepreux ou en visioconsultation",
-    FRIDAY: "9h30 - 17h30 au cabinet à Saint-Germain-en-Laye"
+    TUESDAY: "9h30 - 18h30 à Villepreux ou en visio",
+    FRIDAY: "9h30 - 18h30 au cabinet à Saint-Germain-en-Laye ou en visio"
   }
 };
 

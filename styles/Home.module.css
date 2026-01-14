@@ -178,9 +178,9 @@
   transition: all 0.3s ease-in-out;
 }
 
-.approachText p:hover {
+/* .approachText p:hover {
   transform: scale(1.01);
-}
+} */
 
 /* SIGNATURE */
 .signature {

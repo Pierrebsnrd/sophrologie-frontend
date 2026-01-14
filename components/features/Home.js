@@ -138,8 +138,9 @@ export default function Home() {
             <h2>Mon approche ou Comment se déroule mon accompagnement ?</h2>
             <div className={styles.approachText}>
               <p>
-                J’accompagne les adultes et les adolescents dans un cadre bienveillant et adapté à chacun, le vendredi en journée dans mon cabinet à Saint-Germain-en-Laye, et prochainement le mardi à Villepreux ou en visio, selon vos préférences.
+                J’accompagne les adultes et les adolescents dans un cadre bienveillant et personnalisé, pour cheminer vers plus de sérénité et d’alignement.
               </p>
+              <p>Les séances ont lieu le mardi à Villepreux (ou en visio) et le vendredi au sein d’un cabinet à Saint-Germain-en-Laye (ou en visio).</p>
               <p>
                 Chaque séance débute par un échange basé sur une écoute
                 inconditionnelle, afin de comprendre vos besoins et ce que vous
